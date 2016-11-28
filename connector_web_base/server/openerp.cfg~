@@ -1,0 +1,15 @@
+[XMLRPC]
+# XMLRPC startup parameters:
+host: localhost
+port: 8000
+
+# TODO manage an authentications?
+#user
+#password
+
+[ODOO]
+# ODOO Server connections parameters:
+host: localhost
+port: 8069
+user: admin
+password: password
