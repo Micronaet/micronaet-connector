@@ -52,7 +52,7 @@ class ProductProductWebServer(orm.Model):
         '''
         connector_proxy = self.browse(cr, uid, ids, context=context)
         product = connector_proxy.product_id
-        server = connector.connector_id
+        server = connector_proxy.connector_id
                 
         # Database access:        
         database = server.database
@@ -65,7 +65,8 @@ class ProductProductWebServer(orm.Model):
                 server.host, server.port), allow_none=True)
         uid = sock.login(database, username, password)
         sock = xmlrpclib.ServerProxy(
-            'http://%s:%s/xmlrpc/object' % (host, port), allow_none=True)
+            'http://%s:%s/xmlrpc/object' % (
+                server.host, server.port), allow_none=True)
 
         default_code = product.default_code
         product_ids = sock.execute(
