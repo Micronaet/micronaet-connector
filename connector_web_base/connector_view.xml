@@ -13,6 +13,9 @@
                             <field name="host" />                            
                             <field name="port" />
                             <field name="company_id" />                            
+                            <field name="database" />
+                            <field name="username" />
+                            <field name="password" widget="password" />
                         </group>
                     </sheet>        
                 </form>
@@ -26,7 +29,9 @@
                     <field name="name" />                            
                     <field name="host" />                            
                     <field name="port" />
+                    <field name="database" />
                     <field name="company_id" />                            
+                    <field name="username" />
                 </tree>
             </field>
         </record>        

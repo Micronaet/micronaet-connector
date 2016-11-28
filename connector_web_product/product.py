@@ -21,6 +21,7 @@ import os
 import sys
 import logging
 import openerp
+import xmlrpclib
 import openerp.netsvc as netsvc
 import openerp.addons.decimal_precision as dp
 from openerp.osv import fields, osv, expression, orm
@@ -49,6 +50,45 @@ class ProductProductWebServer(orm.Model):
     def publish_now(self, cr, uid, ids, context=None):
         ''' Publish now button
         '''
+        connector_proxy = self.browse(cr, uid, ids, context=context)
+        product = connector_proxy.product_id
+        server = connector.connector_id
+                
+        # Database access:        
+        database = server.database
+        username = server.username
+        password = server.password
+        
+        # Open socket:
+        sock = xmlrpclib.ServerProxy(
+            'http://%s:%s/xmlrpc/common' % (
+                connector.host, connector.port), allow_none=True)
+        uid = sock.login(database, username, password)
+        sock = xmlrpclib.ServerProxy(
+            'http://%s:%s/xmlrpc/object' % (host, port), allow_none=True)
+
+        default_code = product.default_code
+        product_ids = sock.execute(
+            'Fiam', uid, password, 'product.product', 'search', [
+                ('default_code', '=', default_code)])
+
+        if product_ids:        
+            product_ids = sock.execute(
+                'Fiam', uid, password, 'product.product', 'write', 
+                product_ids, {
+                    #'default_code': default_code,
+                    'website_published': connector_proxy.published,
+                    'name': connector_proxy.force_name or product.name,
+                    'image': product.image,
+                    })
+        else:
+            product_ids = sock.execute(
+                'Fiam', uid, password, 'product.product', 'create', {
+                    'default_code': default_code,
+                    'website_published': connector_proxy.published,
+                    'name': connector_proxy.force_name or product.name,
+                    'image': product.image,
+                    })
         return True
         
     _columns = {

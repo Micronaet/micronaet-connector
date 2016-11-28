@@ -57,38 +57,11 @@ class ConnectorServer(orm.Model):
                 res += '#'           
         return res
         
-    def get_xmlrpc_server(self, cr, uid, context=None):
-        ''' Connect with server and return obj
-        '''
-        server_ids = self.search(cr, uid, [], context=context)
-        if not server_ids:
-            return False
-        
-        server_proxy = self.browse(cr, uid, server_ids, context=context)[0]
-        
-        try:
-            xmlrpc_server = 'http://%s:%s' % (
-                server_proxy.host, server_proxy.port)
-        except:
-            return False
-        return xmlrpclib.ServerProxy(xmlrpc_server)
-
-    def get_default_company(self, cr, uid, context=None): 
-        ''' If only one use that
-        '''
-        try:
-            company_ids = self.pool.get('res.company').search(
-                cr, uid, [], context=context)            
-            if len(company_ids) == 1:
-                return company_ids[0]
-        except:    
-            pass
-        return False    
-        
     _columns = {
         'name': fields.char('Web server', size=64, required=True),
         'host': fields.char('Input filename', size=100, required=True),
         'port': fields.integer('Port', required=True),
+        'database': fields.char('Database', size=100, required=True),
         'username': fields.char('Username', size=100, required=True),
         'password': fields.char('Password', size=100, required=True),
 
