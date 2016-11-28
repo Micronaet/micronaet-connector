@@ -62,7 +62,7 @@ class ProductProductWebServer(orm.Model):
         # Open socket:
         sock = xmlrpclib.ServerProxy(
             'http://%s:%s/xmlrpc/common' % (
-                connector.host, connector.port), allow_none=True)
+                server.host, server.port), allow_none=True)
         uid = sock.login(database, username, password)
         sock = xmlrpclib.ServerProxy(
             'http://%s:%s/xmlrpc/object' % (host, port), allow_none=True)
