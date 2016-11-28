@@ -46,6 +46,11 @@ class ProductProductWebServer(orm.Model):
     _description = 'Product web'
     _rec_name = 'connector_id'
     
+    def publish_now(self, cr, uid, ids, context=None):
+        ''' Publish now button
+        '''
+        return True
+        
     _columns = {
         'published': fields.boolean('Published'),
         

@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="product.product_normal_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//notebook/page[1]">
-                    <page string="Web publish" position="after">
+                    <page string="Web publish">
                         <field name="web_server_ids">
                             <tree string="Server web" colors="red:published==False">
                                 <field name="published" />
