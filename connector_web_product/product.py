@@ -50,7 +50,7 @@ class ProductProductWebServer(orm.Model):
     def publish_now(self, cr, uid, ids, context=None):
         ''' Publish now button
         '''
-        connector_proxy = self.browse(cr, uid, ids, context=context)
+        connector_proxy = self.browse(cr, uid, ids, context=context)[0]
         product = connector_proxy.product_id
         server = connector_proxy.connector_id
                 
@@ -70,26 +70,33 @@ class ProductProductWebServer(orm.Model):
 
         default_code = product.default_code
         product_ids = sock.execute(
-            'Fiam', uid, password, 'product.product', 'search', [
+            database, uid, password, 'product.product', 'search', [
                 ('default_code', '=', default_code)])
 
         if product_ids:        
             product_ids = sock.execute(
-                'Fiam', uid, password, 'product.product', 'write', 
+                database, uid, password, 'product.product', 'write', 
                 product_ids, {
                     #'default_code': default_code,
                     'website_published': connector_proxy.published,
                     'name': connector_proxy.force_name or product.name,
                     'image': product.image,
+                    'product_price': connector_proxy.force_price,
+                    'lst_price': connector_proxy.force_price,
                     })
+            _logger.info('Update in database %s product %s' % (
+                database, default_code))        
         else:
             product_ids = sock.execute(
-                'Fiam', uid, password, 'product.product', 'create', {
+                database, uid, password, 'product.product', 'create', {
                     'default_code': default_code,
                     'website_published': connector_proxy.published,
                     'name': connector_proxy.force_name or product.name,
                     'image': product.image,
+                    'lst_price': connector_proxy.force_price,
                     })
+            _logger.info('Create in database %s product %s' % (
+                database, default_code))        
         return True
         
     _columns = {

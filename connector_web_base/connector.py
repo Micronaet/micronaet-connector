@@ -72,8 +72,8 @@ class ConnectorServer(orm.Model):
     _defaults = {
         'host': lambda *x: 'localhost',
         'port': lambda *x: 8069,
-        'company_id': lambda s, cr, uid, ctx: s.get_default_company(
-            cr, uid, ctx),
+        #'company_id': lambda s, cr, uid, ctx: s.get_default_company(
+        #    cr, uid, ctx),
         }    
         
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
