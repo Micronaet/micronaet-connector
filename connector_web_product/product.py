@@ -75,9 +75,18 @@ class ProductProductWebServer(orm.Model):
             'name': current_proxy.force_name or product.name,
             'image': product.image,
             'lst_price': current_proxy.force_price,
+            
+            # Update with product data:
+            # Dimension:
             'height': product.height,
             'width': product.width,
             'length': product.length,
+            # Pack dimension:
+            'pack_h': product.pack_h,
+            'pack_l': product.pack_l,
+            'pack_p': product.pack_p,
+            # Extra:
+            'q_x_pack': product.q_x_pack,            
             }
             
         if product_proxy:     
