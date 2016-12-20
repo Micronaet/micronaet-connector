@@ -1,4 +1,0 @@
-"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
-access_connector_server_user,connector.server,model_connector_server,base.group_user,1,1,1,1
-access_connector_operation_user,connector.operation,model_connector_operation,base.group_user,1,1,1,1
-
