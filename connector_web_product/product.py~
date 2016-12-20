@@ -21,7 +21,8 @@ import os
 import sys
 import logging
 import openerp
-import xmlrpclib
+import xmlrpclib # TODO remove
+import erppeek
 import openerp.netsvc as netsvc
 import openerp.addons.decimal_precision as dp
 from openerp.osv import fields, osv, expression, orm
@@ -50,51 +51,45 @@ class ProductProductWebServer(orm.Model):
     def publish_now(self, cr, uid, ids, context=None):
         ''' Publish now button
         '''
-        connector_proxy = self.browse(cr, uid, ids, context=context)[0]
-        product = connector_proxy.product_id
-        server = connector_proxy.connector_id
-                
-        # Database access:        
-        database = server.database
-        username = server.username
-        password = server.password
-        
-        # Open socket:
-        sock = xmlrpclib.ServerProxy(
-            'http://%s:%s/xmlrpc/common' % (
-                server.host, server.port), allow_none=True)
-        uid = sock.login(database, username, password)
-        sock = xmlrpclib.ServerProxy(
-            'http://%s:%s/xmlrpc/object' % (
-                server.host, server.port), allow_none=True)
+        current_proxy = self.browse(cr, uid, ids, context=context)[0]
+        product = current_proxy.product_id
+        parameter = current_proxy.connector_id
 
         default_code = product.default_code
-        product_ids = sock.execute(
-            database, uid, password, 'product.product', 'search', [
-                ('default_code', '=', default_code)])
+                
+        # Database access:        
+        server = 'http://%s:%s' % (parameter.host, parameter.port)
+        database = parameter.database
+        username = parameter.username
+        password = parameter.password
 
-        if product_ids:        
-            product_ids = sock.execute(
-                database, uid, password, 'product.product', 'write', 
+        client = erppeek.Client(server, database, username, password)
+        product_rpc = client.model('product.product')
+        
+        # Open socket:
+        product_proxy = product_rpc.browse([('default_code', '=', default_code)])
+
+        if product_proxy:     
+            product_ids = [item.id for item in product_proxy]       
+            product_ids = product_rpc.write(
                 product_ids, {
                     #'default_code': default_code,
-                    'website_published': connector_proxy.published,
-                    'name': connector_proxy.force_name or product.name,
+                    'website_published': current_proxy.published,
+                    'name': current_proxy.force_name or product.name,
                     'image': product.image,
-                    'product_price': connector_proxy.force_price,
-                    'lst_price': connector_proxy.force_price,
+                    'product_price': current_proxy.force_price,
+                    'lst_price': current_proxy.force_price,
                     })
             _logger.info('Update in database %s product %s' % (
                 database, default_code))        
         else:
-            product_ids = sock.execute(
-                database, uid, password, 'product.product', 'create', {
+            product_ids = product_rpc.create({
                     'default_code': default_code,
-                    'website_published': connector_proxy.published,
-                    'name': connector_proxy.force_name or product.name,
+                    'website_published': current_proxy.published,
+                    'name': current_proxy.force_name or product.name,
                     'image': product.image,
-                    'lst_price': connector_proxy.force_price,
-                    })
+                    'lst_price': current_proxy.force_price,
+                    })                    
             _logger.info('Create in database %s product %s' % (
                 database, default_code))        
         return True
