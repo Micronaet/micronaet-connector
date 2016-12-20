@@ -69,27 +69,25 @@ class ProductProductWebServer(orm.Model):
         # Open socket:
         product_proxy = product_rpc.browse([('default_code', '=', default_code)])
 
+        product_data = {
+            'default_code': default_code,
+            'website_published': current_proxy.published,
+            'name': current_proxy.force_name or product.name,
+            'image': product.image,
+            'lst_price': current_proxy.force_price,
+            'height': product.height,
+            'width': product.width,
+            'length': product.length,
+            }
+            
         if product_proxy:     
             product_ids = [item.id for item in product_proxy]       
             product_ids = product_rpc.write(
-                product_ids, {
-                    #'default_code': default_code,
-                    'website_published': current_proxy.published,
-                    'name': current_proxy.force_name or product.name,
-                    'image': product.image,
-                    'product_price': current_proxy.force_price,
-                    'lst_price': current_proxy.force_price,
-                    })
+                product_ids, product_data)
             _logger.info('Update in database %s product %s' % (
                 database, default_code))        
         else:
-            product_ids = product_rpc.create({
-                    'default_code': default_code,
-                    'website_published': current_proxy.published,
-                    'name': current_proxy.force_name or product.name,
-                    'image': product.image,
-                    'lst_price': current_proxy.force_price,
-                    })                    
+            product_ids = product_rpc.create(product_data)
             _logger.info('Create in database %s product %s' % (
                 database, default_code))        
         return True
