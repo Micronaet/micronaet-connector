@@ -68,13 +68,13 @@ class ProductProductWebServer(orm.Model):
         
         # Open socket:
         product_proxy = product_rpc.browse([('default_code', '=', default_code)])
-
+	force_price = current_proxy.force_price	
         product_data = {
             'default_code': default_code,
             'website_published': current_proxy.published,
             'name': current_proxy.force_name or product.name,
             'image': product.image,
-            'lst_price': current_proxy.force_price,
+            'lst_price': force_price,
             
             # Update with product data:
             # Dimension:
@@ -86,7 +86,10 @@ class ProductProductWebServer(orm.Model):
             'pack_l': product.pack_l,
             'pack_p': product.pack_p,
             # Extra:
-            'q_x_pack': product.q_x_pack,            
+            'q_x_pack': product.q_x_pack,
+            'fabric': product.fabric,
+            'type_of_material': product.type_of_material,
+            'vat_price': force_price * 1.22,  			            
             }
             
         if product_proxy:     
