@@ -81,18 +81,22 @@ class ProductProductWebServer(orm.Model):
                     }
                     
                 if parent.website_id in categ_db:
-                    # XXX no need to update, only for image
+                    # Web: update parent category:
                     categ_rpc.write(parent.website_id, data)
+                    
                     parent_website_id = parent.website_id
                 else:
+                    # Web: create parent element:
                     parent_website_id = categ_rpc.create(data).id
-                    # Save new category in backoffice
+                    
+                    # Save ID web in backoffice
                     categ_pool.write(cr, uid, parent.id, {
                         'website_id': parent_website_id}, context=context)
+                        
+                    # Update database:    
+                    categ_db.append(parent_website_id)
             else:
                 parent_website_id = False
-            if parent_website_id and parent_website_id not in categ_db:
-                categ_db.append(parent_website_id)
                                 
             # -----------------------------------------------------------------
             #                        Category analysis:
@@ -102,16 +106,19 @@ class ProductProductWebServer(orm.Model):
                 'parent_id': parent_website_id,
                 'sequence': item.sequence,
                 }
+                
             if item.website_id in categ_db:
                 categ_rpc.write(item.website_id, data)
                 website_id = item.website_id
             else:
+                # Web: create category
                 website_id = categ_rpc.create(data).id           
+                
                 # Save new category in backoffice
                 categ_pool.write(cr, uid, item.id, {
                     'website_id': website_id}, context=context)
-
-            if website_id and website_id not in categ_db:
+                
+                # Updata database:    
                 categ_db.append(website_id)
         return True
         
