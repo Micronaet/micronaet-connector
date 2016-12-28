@@ -62,7 +62,7 @@ class ProductProductWebServer(orm.Model):
         # Read backoffice category:                
         categ_pool = self.pool.get('product.public.category')        
         categ_ids = categ_pool.search(cr, uid, [], context=context)
-        import pdb; pdb.set_trace()
+
         for item in categ_pool.browse(cr, uid, categ_ids, context=context):
             # -----------------------------------------------------------------
             #                        Parent analysis:
