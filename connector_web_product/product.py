@@ -32,9 +32,9 @@ from openerp import SUPERUSER_ID, api
 from openerp import tools
 from openerp.tools.translate import _
 from openerp.tools.float_utils import float_round as round
-from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT, 
-    DEFAULT_SERVER_DATETIME_FORMAT, 
-    DATETIME_FORMATS_MAP, 
+from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
+    DEFAULT_SERVER_DATETIME_FORMAT,
+    DATETIME_FORMATS_MAP,
     float_compare)
 
 
@@ -43,11 +43,11 @@ _logger = logging.getLogger(__name__)
 class ProductProductWebServer(orm.Model):
     """ Model name: ProductProductWebServer
     """
-    
+
     _name = 'product.product.web.server'
     _description = 'Product web'
     _rec_name = 'connector_id'
-    
+
     def publish_now(self, cr, uid, ids, context=None):
         ''' Publish now button
         '''
@@ -56,8 +56,8 @@ class ProductProductWebServer(orm.Model):
         parameter = current_proxy.connector_id
 
         default_code = product.default_code
-                
-        # Database access:        
+
+        # Database access:
         server = 'http://%s:%s' % (parameter.host, parameter.port)
         database = parameter.database
         username = parameter.username
@@ -65,17 +65,18 @@ class ProductProductWebServer(orm.Model):
 
         client = erppeek.Client(server, database, username, password)
         product_rpc = client.model('product.product')
-        
+
         # Open socket:
-        product_proxy = product_rpc.browse([('default_code', '=', default_code)])
-	force_price = current_proxy.force_price	
+        product_proxy = product_rpc.browse(
+            [('default_code', '=', default_code)])
+        force_price = current_proxy.force_price
         product_data = {
             'default_code': default_code,
             'website_published': current_proxy.published,
             'name': current_proxy.force_name or product.name,
             'image': product.image,
             'lst_price': force_price,
-            
+
             # Update with product data:
             # Dimension:
             'height': product.height,
@@ -89,35 +90,35 @@ class ProductProductWebServer(orm.Model):
             'q_x_pack': product.q_x_pack,
             'fabric': product.fabric,
             'type_of_material': product.type_of_material,
-            'vat_price': force_price * 1.22,  			            
+            'vat_price': force_price * 1.22,              
             }
-            
-        if product_proxy:     
-            product_ids = [item.id for item in product_proxy]       
+
+        if product_proxy:
+            product_ids = [item.id for item in product_proxy]
             product_ids = product_rpc.write(
                 product_ids, product_data)
             _logger.info('Update in database %s product %s' % (
-                database, default_code))        
+                database, default_code))
         else:
             product_ids = product_rpc.create(product_data)
             _logger.info('Create in database %s product %s' % (
-                database, default_code))        
+                database, default_code))
         return True
-        
+
     _columns = {
         'published': fields.boolean('Published'),
-        
+
         'connector_id': fields.many2one(
             'connector.server', 'Web Server', required=True),
         'product_id': fields.many2one('product.product', 'Product'),
-            
-        # Force field    
+
+        # Force field
         'force_name': fields.char('Force Name', size=64),
         'force_description': fields.text('Force Description'),
         'force_price': fields.float('Force price', digits=(16, 2)),
         # TODO
         }
-    
+
     _defaults = {
        'published': lambda *a: True,
         }
@@ -125,12 +126,12 @@ class ProductProductWebServer(orm.Model):
 class ProductProduct(orm.Model):
     """ Model name: ProductProduct
     """
-    
+
     _inherit = 'product.product'
-    
+
     _columns = {
         'web_server_ids': fields.one2many(
             'product.product.web.server', 'product_id', 'Web server'),
         }
-    
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -54,11 +54,11 @@
         </record>
         <menuitem action="product_public_category_action" id="menu_product_public_category" parent="product.prod_config_main" sequence="10" />
         
-        <!--product.template-->
-        <record model="ir.ui.view" id="product_template_form_view">
-            <field name="name">product.template.product.website.form</field>
-            <field name="model">product.template</field>
-            <field name="inherit_id" ref="product.product_template_form_view"/>
+        <!--product.product-->
+        <record model="ir.ui.view" id="product_product_template_form_view">
+            <field name="name">product.product.product.website.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
             <field name="arch" type="xml">
                 <!-- add state field in header -->
                 <xpath expr="//page[1]" position="after">
@@ -71,6 +71,7 @@
                             <!--<field name="website_sequence"/>-->
                         </group>
                     </page>
+                </xpath>    
             </field>
         </record>
     </data>

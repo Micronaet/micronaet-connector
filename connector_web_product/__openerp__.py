@@ -31,6 +31,7 @@
         'base',
         'product',
         'connector_web_base',
+        'connector_web_product_category',
         ],
     'init_xml': [],
     'demo': [],
