@@ -48,6 +48,56 @@ class ProductProductWebServer(orm.Model):
     _description = 'Product web'
     _rec_name = 'connector_id'
 
+    def publish_category(self, cr, uid, ids, rpc, context=None):
+        ''' Publish category (usually before publish product
+        '''
+        categ_db = {} # convert name in ID published
+        categ_rpc = rpc.model('product.public.category')
+
+        # Read category from web site:
+        for categ in categ_rpc.browse([]):
+            categ_db[categ.name] = categ.id
+        # TODO keep in mind list for remove
+
+        # Read backoffice category:                
+        categ_pool = self.pool.get('product.public.category')        
+        categ_ids = categ_pool.search(cr, uid, [], context=context)
+        import pdb; pdb.set_trace()
+        for item in categ_pool.browse(cr, uid, categ_ids, context=context):
+            # -----------------------------------------------------------------
+            #                        Parent analysis:
+            # -----------------------------------------------------------------
+            if item.parent_id:
+                parent = item.parent_id.name
+                data = {
+                    'name': parent, 
+                    'parent_id': False,
+                    'sequence': item.parent_id.sequence,
+                    }
+                    
+                if parent in categ_db:
+                    # XXX no need to update, only for image
+                    categ_rpc.write(categ_db[parent], data)
+                else:
+                    categ_db[parent] = categ_rpc.create(data).id
+            else:
+                parent = False                
+                            
+            # -----------------------------------------------------------------
+            #                        Category analysis:
+            # -----------------------------------------------------------------
+            name = item.name
+            data = {
+                'name': name,
+                'parent_id': categ_db.get(parent, False),
+                'sequence': item.sequence,
+                }
+            if name in categ_db:
+                categ_rpc.write(categ_db[name], data)
+            else:
+                categ_db[name] = categ_rpc.create(data).id           
+        return categ_db
+        
     def publish_now(self, cr, uid, ids, context=None):
         ''' Publish now button
         '''
@@ -63,8 +113,15 @@ class ProductProductWebServer(orm.Model):
         username = parameter.username
         password = parameter.password
 
-        client = erppeek.Client(server, database, username, password)
-        product_rpc = client.model('product.product')
+        rpc = erppeek.Client(server, database, username, password)
+
+        # Publish category before:
+        categ_db = self.publish_category(cr, uid, ids, rpc, context=context)
+        public_categ_ids = [
+            categ_db.get(item.name, False) \
+                for item in product.public_categ_ids]
+
+        product_rpc = rpc.model('product.product')
 
         # Open socket:
         product_proxy = product_rpc.browse(
@@ -90,7 +147,8 @@ class ProductProductWebServer(orm.Model):
             'q_x_pack': product.q_x_pack,
             'fabric': product.fabric,
             'type_of_material': product.type_of_material,
-            'vat_price': force_price * 1.22,              
+            'vat_price': force_price * 1.22,      
+            'public_categ_ids': [(6, 0, public_categ_ids)],
             }
 
         if product_proxy:
