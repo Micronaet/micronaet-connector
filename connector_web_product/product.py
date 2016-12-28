@@ -47,6 +47,10 @@ class ProductProductWebServer(orm.Model):
     _name = 'product.product.web.server'
     _description = 'Product web'
     _rec_name = 'connector_id'
+    
+    # XXX Parematers:
+    _langs = ['it_IT', 'en_US']
+
 
     def publish_category(self, cr, uid, ids, rpc, context=None):
         ''' Publish category (usually before publish product
@@ -54,10 +58,6 @@ class ProductProductWebServer(orm.Model):
         categ_db = {} # convert name in ID published
         categ_rpc = rpc.model('product.public.category')
 
-        langs = ['it_IT', 'en_US']
-        
-        #for lang in langs:
-        
         # Read category from web site:
         for categ in categ_rpc.browse([]):
             categ_db[categ.name] = categ.id
@@ -131,10 +131,24 @@ class ProductProductWebServer(orm.Model):
         product_proxy = product_rpc.browse(
             [('default_code', '=', default_code)])
         force_price = current_proxy.force_price
+        
+        # Language data:
+        # TODO manage language:
+        product_lang_data = {
+            'name': current_proxy.force_name or product.name,
+            'fabric': product.fabric,
+            'type_of_material': product.type_of_material,
+            }
+        
+        # Standard data:    
         product_data = {
+            # TODO remove when manage language:
+            'name': current_proxy.force_name or product.name,
+            'fabric': product.fabric,
+            'type_of_material': product.type_of_material,
+
             'default_code': default_code,
             'website_published': current_proxy.published,
-            'name': current_proxy.force_name or product.name,
             'image': product.image,
             'lst_price': force_price,
 
@@ -143,14 +157,14 @@ class ProductProductWebServer(orm.Model):
             'height': product.height,
             'width': product.width,
             'length': product.length,
+
             # Pack dimension:
             'pack_h': product.pack_h,
             'pack_l': product.pack_l,
             'pack_p': product.pack_p,
+
             # Extra:
             'q_x_pack': product.q_x_pack,
-            'fabric': product.fabric,
-            'type_of_material': product.type_of_material,
             'vat_price': force_price * 1.22,      
             'public_categ_ids': [(6, 0, public_categ_ids)],
             }
@@ -165,6 +179,10 @@ class ProductProductWebServer(orm.Model):
             product_ids = product_rpc.create(product_data)
             _logger.info('Create in database %s product %s' % (
                 database, default_code))
+                
+        # Language update loop data:
+        for lang in self.langs:
+                    
         return True
 
     _columns = {
