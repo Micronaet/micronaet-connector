@@ -4,36 +4,35 @@
         <record model="ir.ui.view" id="view_product_web_publish_form">
             <field name="name">produc.product.form</field>
             <field name="model">product.product</field>
-            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="inherit_id" ref="connector_web_product_category.product_product_template_form_view"/>
             <field name="arch" type="xml">
-                <xpath expr="//notebook/page[1]" position="after">
-                    <page string="Web publish">
-                        <field name="web_server_ids">
-                            <tree string="Server web" colors="red:published==False">
-                                <field name="published" />
-                                <field name="connector_id" />
-                                <field name="force_name" />
-                                <field name="force_description" />
-                                <field name="force_price" />
-                                <button name="publish_now" string="Publish now" type="object" />
-                            </tree>
-                            <form string="Server web">
-                                <header>
-                                     <button name="publish_now" string="Publish now" type="object" />                                    
-                                </header>
-                                <sheet>
-                                    <group colspan="4" col="4">
-                                        <field name="published" />
-                                        <field name="connector_id" />
-                                        <field name="force_name" />
-                                        <field name="force_description" />
-                                        <field name="force_price" />
-                                    </group>    
-                                </sheet>
-                            </form>
-                        </field>
-                    </page>
-                </xpath>                
+                <field name="accessory_product_ids" position="after">
+                    <separator string="Web server:" colspan="4"/>
+                    <field name="web_server_ids" nolabel="1" colspan="4">
+                        <tree string="Server web" colors="red:published==False">
+                            <field name="published" />
+                            <field name="connector_id" />
+                            <field name="force_name" />
+                            <field name="force_description" />
+                            <field name="force_price" />
+                            <button name="publish_now" string="Publish now" type="object" />
+                        </tree>
+                        <form string="Server web">
+                            <header>
+                                 <button name="publish_now" string="Publish now" type="object" />                                    
+                            </header>
+                            <sheet>
+                                <group colspan="4" col="4">
+                                    <field name="published" />
+                                    <field name="connector_id" />
+                                    <field name="force_name" />
+                                    <field name="force_description" />
+                                    <field name="force_price" />
+                                </group>    
+                            </sheet>
+                        </form>
+                    </field>
+                </field>
             </field>
         </record>
     </data>
