@@ -54,6 +54,10 @@ class ProductProductWebServer(orm.Model):
         categ_db = {} # convert name in ID published
         categ_rpc = rpc.model('product.public.category')
 
+        langs = ['it_IT', 'en_US']
+        
+        #for lang in langs:
+        
         # Read category from web site:
         for categ in categ_rpc.browse([]):
             categ_db[categ.name] = categ.id
