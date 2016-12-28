@@ -55,52 +55,59 @@ class ProductProductWebServer(orm.Model):
     def publish_category(self, cr, uid, ids, rpc, context=None):
         ''' Publish category (usually before publish product
         '''
-        categ_db = {} # convert name in ID published
+        categ_db = [] # public ID for category
         categ_rpc = rpc.model('product.public.category')
 
         # Read category from web site:
         for categ in categ_rpc.browse([]):
-            categ_db[categ.name] = categ.id
+            categ_db.append(categ.id)
         # TODO keep in mind list for remove
 
         # Read backoffice category:                
         categ_pool = self.pool.get('product.public.category')        
         categ_ids = categ_pool.search(cr, uid, [], context=context)
+        import pdb; pdb.set_trace()
 
         for item in categ_pool.browse(cr, uid, categ_ids, context=context):
             # -----------------------------------------------------------------
             #                        Parent analysis:
             # -----------------------------------------------------------------
             if item.parent_id:
-                parent = item.parent_id.name
+                parent = item.parent_id
                 data = {
-                    'name': parent, 
-                    'parent_id': False,
-                    'sequence': item.parent_id.sequence,
+                    'name': parent.name, 
+                    #'parent_id': False,
+                    #'image': 
+                    'sequence': parent.sequence,
                     }
                     
-                if parent in categ_db:
+                if parent.website_id in categ_db:
                     # XXX no need to update, only for image
-                    categ_rpc.write(categ_db[parent], data)
+                    write(parent.website_id, data)
+                    parent_website_id = parent.website_id
                 else:
-                    categ_db[parent] = categ_rpc.create(data).id
+                    parent_website_id = categ_rpc.create(data).id
+                    categ_pool.write(cr, uid, parent.id, {
+                        'website_id': website_id}, context=context)
             else:
-                parent = False                
+                parent_website_id = False
                             
             # -----------------------------------------------------------------
             #                        Category analysis:
             # -----------------------------------------------------------------
-            name = item.name
             data = {
-                'name': name,
-                'parent_id': categ_db.get(parent, False),
+                'name': item.name,
+                'parent_id': parent_website_id,
                 'sequence': item.sequence,
                 }
-            if name in categ_db:
-                categ_rpc.write(categ_db[name], data)
+            if item.website_id in categ_db:
+                categ_rpc.write(item.website_id, data)
+                website_id = item.website_id
             else:
-                categ_db[name] = categ_rpc.create(data).id           
-        return categ_db
+                website_id = categ_rpc.create(data).id           
+                categ_pool.write(cr, uid, item.id, {
+                    'website_id': website_id}, context=context)
+        return True
         
     def publish_now(self, cr, uid, ids, context=None):
         ''' Publish now button
@@ -120,10 +127,9 @@ class ProductProductWebServer(orm.Model):
         rpc = erppeek.Client(server, database, username, password)
 
         # Publish category before:
-        categ_db = self.publish_category(cr, uid, ids, rpc, context=context)
+        self.publish_category(cr, uid, ids, rpc, context=context)
         public_categ_ids = [
-            categ_db.get(item.name, False) \
-                for item in product.public_categ_ids]
+            item.website_id for item in product.public_categ_ids]
 
         product_rpc = rpc.model('product.product')
 
@@ -181,7 +187,7 @@ class ProductProductWebServer(orm.Model):
                 database, default_code))
                 
         # Language update loop data:
-        # TODO for lang in self.langs:
+        # TODO for lang in self._langs:
                     
         return True
 
