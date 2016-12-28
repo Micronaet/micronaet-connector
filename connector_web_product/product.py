@@ -181,7 +181,7 @@ class ProductProductWebServer(orm.Model):
                 database, default_code))
                 
         # Language update loop data:
-        for lang in self.langs:
+        # TODO for lang in self.langs:
                     
         return True
 
