@@ -79,6 +79,13 @@
             parent="connector_web_base.menu_webserver_product" 
             id="menu_product_web_published" 
             action="action_product_published"
+            sequence="20"
+            />
+        <menuitem 
+            parent="connector_web_base.menu_webserver_product" 
+            id="menu_product_variants" 
+            action="product.product_normal_action_sell"
+            sequence="30"
             />
         
     </data>
