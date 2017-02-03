@@ -12,9 +12,25 @@
                 </field>
             </field>
         </record>
-        
+        <record model="ir.ui.view" id="view_product_web_server_search">
+            <field name="name">product.product.publish.search</field>
+            <field name="model">product.product.web.server</field>
+            <field name="arch" type="xml">
+                <search string="Web product" version="7.0">        
+                    <field name="product_id" />
+                    <field name="force_name" />
+                    <field name="force_description" />
+                    <filter name="published_on" string="Published" domain="[('published','=',True)]"/>
+                    <filter name="published_off" string="Not published" domain="[('published','=',False)]"/>
+                    <group expand="0" string="Group By...">
+                        <filter name="group_connector" string="Web server" context="{'group_by': 'connector_id'}"/>
+                        <filter name="group_product" string="Product" context="{'group_by': 'product_id'}"/>
+                    </group>                
+                </search>
+            </field>
+        </record>
         <record model="ir.ui.view" id="view_product_web_server_publish_tree">
-            <field name="name">produc.product.publish.tree</field>
+            <field name="name">product.product.publish.tree</field>
             <field name="model">product.product.web.server</field>
             <field name="arch" type="xml">
                 <tree string="Product" editable="bottom" color="red:published==False">
@@ -29,7 +45,7 @@
             </field>
         </record>
         <record model="ir.ui.view" id="view_product_web_server_publish_form">
-            <field name="name">produc.product.publish.form</field>
+            <field name="name">product.product.publish.form</field>
             <field name="model">product.product.web.server</field>
             <field name="arch" type="xml">
                 <form string="Server web">
@@ -55,11 +71,12 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_product_web_server_publish_tree"/>
+            <field name="search_view_id" ref="view_product_web_server_search"/>
             <field name="context">{}</field>
             <field name="domain">[]</field>
         </record>
         <menuitem 
-            parent="connector_web_base.menu_webserver_root" 
+            parent="connector_web_base.menu_webserver_product" 
             id="menu_product_web_published" 
             action="action_product_published"
             />
