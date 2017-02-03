@@ -46,17 +46,26 @@
         </record>
         
         <menuitem 
-            parent="base.menu_custom" 
-            id="menu_connector_server_root" 
-            name="Connector wed server"
-            sequence="30"
+            id="menu_webserver_root" 
+            sequence="20"
+            name="Web connector"
             />
             <menuitem 
-                parent="menu_connector_server_root" 
-                id="menu_connector_server" 
-                action="action_connector_server"
-                name="Server"
+                id="menu_webserver_product" 
                 sequence="10"
-                />                
+                name="Product"                
+                />
+            <menuitem 
+                id="menu_webserver_configuration" 
+                sequence="99"
+                name="Configuration"
+                />
+                <menuitem 
+                    parent="menu_webserver_configuration" 
+                    id="menu_connector_server" 
+                    action="action_connector_server"
+                    name="Server"
+                    sequence="10"
+                    />                
     </data>
 </openerp>

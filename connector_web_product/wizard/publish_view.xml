@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+       <!-- product.publish.website.wizard -->
+       <record id="product_publish_website_wizard_view" model="ir.ui.view">
+            <field name="name">Publish website</field>
+            <field name="model">product.publish.website.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Wizard" version="7.0">
+                   <header>
+                       <button string="Cancel" special="cancel" />
+                       <button name="action_publish" string="Publish" type="object" icon="gtk-jump-to" class="oe_highlight" />
+                   </header>                   
+                   <group colspan="4" col="4">
+                        <!--<separator string="Note" colspan="4"/>
+                        <field name="note" nolabel="1" colspan="4" readonly="1"/>-->
+                   </group>
+                </form>
+            </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="action_product_publish_website_wizard_form">
+          <field name="name">Publish wizard</field>
+          <field name="res_model">product.publish.website.wizard</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">form</field>
+          <field name="target">new</field>
+          <field name="view_id" ref="product_publish_website_wizard_view"/>
+      </record> 
+      <act_window
+          id="act_product_publish_website_wizard"
+          name="Web publish"
+          res_model="product.publish.website.wizard"
+          src_model="product.product"
+          view_mode="form"
+          view_type="form"
+          target="new"
+          key2="client_action_multi"
+          />
+    </data>
+</openerp>

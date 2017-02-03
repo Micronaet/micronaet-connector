@@ -8,33 +8,47 @@
             <field name="arch" type="xml">
                 <field name="accessory_product_ids" position="after">
                     <separator string="Web server:" colspan="4"/>
-                    <field name="web_server_ids" nolabel="1" colspan="4">
-                        <tree string="Server web" colors="red:published==False">
+                    <field name="web_server_ids" nolabel="1" colspan="4" context="{'embedded_view':True}" />
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_product_web_server_publish_tree">
+            <field name="name">produc.product.publish.tree</field>
+            <field name="model">product.product.web.server</field>
+            <field name="arch" type="xml">
+                <tree string="Product" editable="bottom" color="red:published==False">
+                    <field name="published" />
+                    <field name="product_id" readonly="1" invisible="context.get('embedded_view', False)"/>
+                    <field name="connector_id" />
+                    <field name="force_name" />
+                    <field name="force_description" />
+                    <field name="force_price" />
+                    <button name="publish_now" string="Publish now" type="object" />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_product_web_server_publish_form">
+            <field name="name">produc.product.publish.form</field>
+            <field name="model">product.product.web.server</field>
+            <field name="arch" type="xml">
+                <form string="Server web">
+                    <header>
+                         <button name="publish_now" string="Publish now" type="object" />                                    
+                    </header>
+                    <sheet>
+                        <group colspan="4" col="4">
                             <field name="published" />
                             <field name="connector_id" />
                             <field name="force_name" />
                             <field name="force_description" />
                             <field name="force_price" />
-                            <button name="publish_now" string="Publish now" type="object" />
-                        </tree>
-                        <form string="Server web">
-                            <header>
-                                 <button name="publish_now" string="Publish now" type="object" />                                    
-                            </header>
-                            <sheet>
-                                <group colspan="4" col="4">
-                                    <field name="published" />
-                                    <field name="connector_id" />
-                                    <field name="force_name" />
-                                    <field name="force_description" />
-                                    <field name="force_price" />
-                                </group>    
-                            </sheet>
-                        </form>
-                    </field>
-                </field>
+                        </group>    
+                    </sheet>
+                </form>
             </field>
         </record>
+        
     </data>
 </openerp>
 
