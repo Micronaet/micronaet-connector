@@ -51,11 +51,13 @@
             name="Web connector"
             />
             <menuitem 
+                parent="menu_webserver_root"
                 id="menu_webserver_product" 
                 sequence="10"
                 name="Product"                
                 />
             <menuitem 
+                parent="menu_webserver_root"
                 id="menu_webserver_configuration" 
                 sequence="99"
                 name="Configuration"
