@@ -128,29 +128,35 @@ class ProductProductWebServer(orm.Model):
     def publish_now(self, cr, uid, ids, context=None):
         ''' Publish now button
             Used also for more than one elements (not only button click)
+            Note all product must be published on the same web server!
+            
         '''
         import pdb; pdb.set_trace()
-        # Database access:
-        server = 'http://%s:%s' % (parameter.host, parameter.port)
-        database = parameter.database
-        username = parameter.username
-        password = parameter.password
         
-        # Connect to web server:
-        rpc = erppeek.Client(server, database, username, password)
-        product_rpc = rpc.model('product.product')
-
-        # Publish category before (only once):
-        self.publish_category(cr, uid, rpc, context=context)
-        
+        connected = False
         for item in self.browse(cr, uid, ids, context=context):
             # Readability:
             product = item.product_id
             parameter = item.connector_id
 
+            if not connected: # Connect only first time:
+                # Database access:
+                server = 'http://%s:%s' % (parameter.host, parameter.port)
+                database = parameter.database
+                username = parameter.username
+                password = parameter.password
+                
+                # Connect to web server:
+                rpc = erppeek.Client(server, database, username, password)
+                product_rpc = rpc.model('product.product')
+
+                # Publish category before (only once):
+                self.publish_category(cr, uid, rpc, context=context)
+                connected = True
+            
+            # Parameters:
             default_code = product.default_code
             force_price = item.force_price
-
             public_categ_ids = [c.website_id for c in product.public_categ_ids]
 
             # Open socket:

@@ -67,7 +67,6 @@ class ProductPublishWebsiteWizard(orm.TransientModel):
         
         # Create record if not present in product
         publish_ids = []
-        import pdb; pdb.set_trace()
         for product in product_pool.browse(
                 cr, uid, product_ids, context=context):
             if not product.default_code:
@@ -76,7 +75,6 @@ class ProductPublishWebsiteWizard(orm.TransientModel):
                     _('No default code for product: %s' % product.name),
                     )
             
-            server_id = False
             for server in product.web_server_ids:
                 if server.connector_id.id == webserver_id:
                     publish_ids.append(server.id)
