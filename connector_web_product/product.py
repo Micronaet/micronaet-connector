@@ -137,38 +137,33 @@ class ProductProductWebServer(orm.Model):
 
         # Read first element only for setup parameters:        
         first_proxy = self.browse(cr, uid, ids, context=context)[0]
+        parameter = first_proxy.connector_id
         context['album_id'] = first_proxy.connector_id.album_id.id
-        connected = False
+
+        # Database access:
+        rpc_server = 'http://%s:%s' % (parameter.host, parameter.port)
+        rpc_database = parameter.database
+        rpc_username = parameter.username
+        rpc_password = parameter.password
+        
+        # Connect to web server:
+        rpc = erppeek.Client(
+            rpc_server, rpc_database, rpc_username, rpc_password)
+        rpc_product = rpc.model('product.product')
+
+        # Publish category before (only once):
+        self.publish_category(cr, uid, rpc, context=context)
+                
         for item in self.browse(cr, uid, ids, context=context):
             # Readability:
             product = item.product_id
-            parameter = item.connector_id
-            
-            # Set parameter (XXX after erpeek don't work!!!):
+
             default_code = product.default_code
             price = item.force_price or product.lst_price # XXX correct?
             image = product.product_image_context # from album_id
-            
             description = \
                 item.force_description or product.large_description
             public_categ_ids = [c.website_id for c in product.public_categ_ids]
-
-            if not connected: # Connect only first time:
-                # Database access:
-                album_id = parameter.album_id.id
-                rpc_server = 'http://%s:%s' % (parameter.host, parameter.port)
-                rpc_database = parameter.database
-                rpc_username = parameter.username
-                rpc_password = parameter.password
-                
-                # Connect to web server:
-                rpc = erppeek.Client(
-                    rpc_server, rpc_database, rpc_username, rpc_password)
-                rpc_product = rpc.model('product.product')
-
-                # Publish category before (only once):
-                self.publish_category(cr, uid, rpc, context=context)
-                connected = True
             
             # Open socket:
             rpc_product_proxy = rpc_product.browse(
