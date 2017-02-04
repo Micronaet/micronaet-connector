@@ -52,26 +52,65 @@ class ProductPublishWebsiteWizard(orm.TransientModel):
     def action_publish(self, cr, uid, ids, context=None):
         ''' Event for button done
         '''
-        if context is None: 
+        if context is None:
             context = {}        
         
-        wizard_browse = self.browse(cr, uid, ids, context=context)[0]
-        product_ids = context.get('active_ids')
+        # Pool:
+        product_pool = self.pool.get('product.product')
+        connector_pool = self.pool.get('product.product.web.server')
         
-        return {
-            'type': 'ir.actions.act_window_close'
-            }
+        wizard_browse = self.browse(cr, uid, ids, context=context)[0]
+        
+        product_ids = context.get('active_ids')
+        webserver_id = wizard_browse.webserver_id.id
+        published = wizard_browse.published
+        
+        # Create record if not present in product
+        publish_ids = []
+        import pdb; pdb.set_trace()
+        for product in product_pool.browse(
+                cr, uid, product_ids, context=context):
+            if not product.default_code:
+                raise osv.except_osv(
+                    _('Product error'), 
+                    _('No default code for product: %s' % product.name),
+                    )
+            
+            server_id = False
+            for server in product.web_server_ids:
+                if server.connector_id.id == webserver_id:
+                    publish_ids.append(server.id)
+                    break
+            else: # only if not found:
+                publish_ids.append(
+                    connector_pool.create(cr, uid, {
+                        'connector_id': webserver_id,
+                        'product_id': product.id,
+                        }, context=context))
+            
+        if publish_ids:
+            # Set all record for publish:                    
+            connector_pool.write(cr, uid, publish_ids, {
+                'published': published,                
+                }, context=context)
+
+            # TODO publish category only one time!
+            # Update button:
+            connector_pool.publish_now(cr, uid, publish_ids, context=context)
+                    
+        return True #{'type': 'ir.actions.act_window_close'}
 
     _columns = {
-        'note': fields.text(
-            'Annotation',
-            help='Annotation about production opened with selected product'),
+        'webserver_id': fields.many2one(
+            'connector.server', 'Webserver', required=True),
+        'published': fields.boolean('Published', 
+            help='In not check remove article from web site'),            
         }
         
     _defaults = {
-        'note': lambda s, cr, uid, c: s.default_note(cr, uid, context=c),
+        'published': lambda *x: True,
         }    
-
+        
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 
 

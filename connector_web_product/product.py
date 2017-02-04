@@ -52,9 +52,11 @@ class ProductProductWebServer(orm.Model):
     _langs = ['it_IT', 'en_US']
 
 
-    def publish_category(self, cr, uid, ids, rpc, context=None):
-        ''' Publish category (usually before publish product
+    # Utility:
+    def publish_category(self, cr, uid, rpc, context=None):
+        ''' Publish category (usually before publish product)
         '''
+        _logger.info('Start publish category on web')
         categ_db = [] # public ID for category
         categ_rpc = rpc.model('product.public.category')
 
@@ -120,88 +122,94 @@ class ProductProductWebServer(orm.Model):
                 
                 # Updata database:    
                 categ_db.append(website_id)
+        _logger.info('End publish category on web')
         return True
         
     def publish_now(self, cr, uid, ids, context=None):
         ''' Publish now button
+            Used also for more than one elements (not only button click)
         '''
-        current_proxy = self.browse(cr, uid, ids, context=context)[0]
-        product = current_proxy.product_id
-        parameter = current_proxy.connector_id
-
-        default_code = product.default_code
-
+        import pdb; pdb.set_trace()
         # Database access:
         server = 'http://%s:%s' % (parameter.host, parameter.port)
         database = parameter.database
         username = parameter.username
         password = parameter.password
-
+        
+        # Connect to web server:
         rpc = erppeek.Client(server, database, username, password)
-
-        # Publish category before:
-        self.publish_category(cr, uid, ids, rpc, context=context)
-        public_categ_ids = [
-            item.website_id for item in product.public_categ_ids]
-
         product_rpc = rpc.model('product.product')
 
-        # Open socket:
-        product_proxy = product_rpc.browse(
-            [('default_code', '=', default_code)])
-        force_price = current_proxy.force_price
+        # Publish category before (only once):
+        self.publish_category(cr, uid, rpc, context=context)
         
-        # Language data:
-        # TODO manage language:
-        product_lang_data = {
-            'name': current_proxy.force_name or product.name,
-            'fabric': product.fabric,
-            'type_of_material': product.type_of_material,
-            }
-        
-        # Standard data:    
-        product_data = {
-            # TODO remove when manage language:
-            'name': current_proxy.force_name or product.name,
-            'fabric': product.fabric,
-            'type_of_material': product.type_of_material,
+        for item in self.browse(cr, uid, ids, context=context):
+            # Readability:
+            product = item.product_id
+            parameter = item.connector_id
 
-            'default_code': default_code,
-            'website_published': current_proxy.published,
-            'image': product.image,
-            'lst_price': force_price,
+            default_code = product.default_code
+            force_price = item.force_price
 
-            # Update with product data:
-            # Dimension:
-            'height': product.height,
-            'width': product.width,
-            'length': product.length,
+            public_categ_ids = [c.website_id for c in product.public_categ_ids]
 
-            # Pack dimension:
-            'pack_h': product.pack_h,
-            'pack_l': product.pack_l,
-            'pack_p': product.pack_p,
+            # Open socket:
+            product_rpc_proxy = product_rpc.browse(
+                [('default_code', '=', default_code)])
 
-            # Extra:
-            'q_x_pack': product.q_x_pack,
-            'vat_price': force_price * 1.22,      
-            'public_categ_ids': [(6, 0, public_categ_ids)],
-            }
+            # Language data:
+            # TODO manage language:
+            product_lang_data = {
+                'name': item.force_name or product.name,
+                'description_sale': product.large_description, # Emotional
+                'fabric': product.fabric,
+                'type_of_material': product.type_of_material,
+                }
+            
+            # Standard data:    
+            product_data = {
+                # TODO remove when manage language:
+                'name': item.force_name or product.name,
+                'description_sale': product.large_description, # Emotional
+                'fabric': product.fabric,
+                'type_of_material': product.type_of_material,
 
-        if product_proxy:
-            product_ids = [item.id for item in product_proxy]
-            product_ids = product_rpc.write(
-                product_ids, product_data)
-            _logger.info('Update in database %s product %s' % (
-                database, default_code))
-        else:
-            product_ids = product_rpc.create(product_data)
-            _logger.info('Create in database %s product %s' % (
-                database, default_code))
-                
-        # Language update loop data:
-        # TODO for lang in self._langs:
+                'default_code': default_code,
+                'website_published': item.published,
+                'image': product.image,
+                'lst_price': force_price,
+
+                # Update with product data:
+                # Dimension:
+                'height': product.height,
+                'width': product.width,
+                'length': product.length,
+
+                # Pack dimension:
+                'pack_h': product.pack_h,
+                'pack_l': product.pack_l,
+                'pack_p': product.pack_p,
+
+                # Extra:
+                'q_x_pack': product.q_x_pack,
+                'vat_price': force_price * 1.22,      
+                'public_categ_ids': [(6, 0, public_categ_ids)],
+                }
+
+            # Check Web presence for product:
+            if product_rpc_proxy:
+                product_ids = [p.id for p in product_rpc_proxy]
+                product_ids = product_rpc.write(
+                    product_ids, product_data)
+                _logger.info('Update web %s product %s' % (
+                    database, default_code))
+            else:
+                product_ids = product_rpc.create(product_data)
+                _logger.info('Create web %s product %s' % (
+                    database, default_code))
                     
+            # Language update loop data:
+            # TODO for lang in self._langs:                    
         return True
 
     _columns = {
