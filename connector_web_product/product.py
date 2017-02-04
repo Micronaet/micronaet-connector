@@ -130,44 +130,45 @@ class ProductProductWebServer(orm.Model):
             Used also for more than one elements (not only button click)
             Note all product must be published on the same web server!
             
-        '''
-        import pdb; pdb.set_trace()
-        
+        '''        
         connected = False
         for item in self.browse(cr, uid, ids, context=context):
             # Readability:
             product = item.product_id
             parameter = item.connector_id
+            
+            # Set parameter (XXX after erpeek don't work!!!):
+            default_code = product.default_code
+            price = item.force_price or product.lst_price # XXX correct?
+            description = \
+                item.force_description or product.large_description
+            public_categ_ids = [c.website_id for c in product.public_categ_ids]
 
             if not connected: # Connect only first time:
                 # Database access:
-                server = 'http://%s:%s' % (parameter.host, parameter.port)
-                database = parameter.database
-                username = parameter.username
-                password = parameter.password
+                rpc_server = 'http://%s:%s' % (parameter.host, parameter.port)
+                rpc_database = parameter.database
+                rpc_username = parameter.username
+                rpc_password = parameter.password
                 
                 # Connect to web server:
-                rpc = erppeek.Client(server, database, username, password)
-                product_rpc = rpc.model('product.product')
+                rpc = erppeek.Client(
+                    rpc_server, rpc_database, rpc_username, rpc_password)
+                rpc_product = rpc.model('product.product')
 
                 # Publish category before (only once):
                 self.publish_category(cr, uid, rpc, context=context)
                 connected = True
             
-            # Parameters:
-            default_code = product.default_code
-            force_price = item.force_price
-            public_categ_ids = [c.website_id for c in product.public_categ_ids]
-
             # Open socket:
-            product_rpc_proxy = product_rpc.browse(
+            rpc_product_proxy = rpc_product.browse(
                 [('default_code', '=', default_code)])
 
             # Language data:
             # TODO manage language:
             product_lang_data = {
                 'name': item.force_name or product.name,
-                'description_sale': product.large_description, # Emotional
+                'description_sale': description,
                 'fabric': product.fabric,
                 'type_of_material': product.type_of_material,
                 }
@@ -176,14 +177,14 @@ class ProductProductWebServer(orm.Model):
             product_data = {
                 # TODO remove when manage language:
                 'name': item.force_name or product.name,
-                'description_sale': product.large_description, # Emotional
+                'description_sale': description,
                 'fabric': product.fabric,
                 'type_of_material': product.type_of_material,
 
                 'default_code': default_code,
                 'website_published': item.published,
                 'image': product.image,
-                'lst_price': force_price,
+                'lst_price': price,
 
                 # Update with product data:
                 # Dimension:
@@ -198,21 +199,21 @@ class ProductProductWebServer(orm.Model):
 
                 # Extra:
                 'q_x_pack': product.q_x_pack,
-                'vat_price': force_price * 1.22,      
+                'vat_price': price * 1.22,      
                 'public_categ_ids': [(6, 0, public_categ_ids)],
                 }
 
             # Check Web presence for product:
-            if product_rpc_proxy:
-                product_ids = [p.id for p in product_rpc_proxy]
-                product_ids = product_rpc.write(
+            if rpc_product_proxy:
+                product_ids = [p.id for p in rpc_product_proxy]
+                product_ids = rpc_product.write(
                     product_ids, product_data)
                 _logger.info('Update web %s product %s' % (
-                    database, default_code))
+                    rpc_database, default_code))
             else:
-                product_ids = product_rpc.create(product_data)
+                product_ids = rpc_product.create(product_data)
                 _logger.info('Create web %s product %s' % (
-                    database, default_code))
+                    rpc_database, default_code))
                     
             # Language update loop data:
             # TODO for lang in self._langs:                    
