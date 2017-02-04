@@ -12,6 +12,7 @@
                             <field name="name" />                            
                             <field name="host" />                            
                             <field name="port" />
+                            <field name="album_id" />                            
                             <field name="company_id" />                            
                             <field name="database" />
                             <field name="username" />
@@ -30,6 +31,7 @@
                     <field name="host" />                            
                     <field name="port" />
                     <field name="database" />
+                    <field name="album_id" />                            
                     <field name="company_id" />                            
                     <field name="username" />
                 </tree>

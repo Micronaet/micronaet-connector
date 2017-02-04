@@ -131,7 +131,13 @@ class ProductProductWebServer(orm.Model):
             Used also for more than one elements (not only button click)
             Note all product must be published on the same web server!
             
-        '''        
+        '''    
+        if context is None:    
+            context = {}
+
+        # Read first element only for setup parameters:        
+        first_proxy = self.browse(cr, uid, ids, context=context)[0]
+        context['album_id'] = first_proxy.connector_id.album_id.id
         connected = False
         for item in self.browse(cr, uid, ids, context=context):
             # Readability:
@@ -141,12 +147,15 @@ class ProductProductWebServer(orm.Model):
             # Set parameter (XXX after erpeek don't work!!!):
             default_code = product.default_code
             price = item.force_price or product.lst_price # XXX correct?
+            image = product.product_image_context # from album_id
+            
             description = \
                 item.force_description or product.large_description
             public_categ_ids = [c.website_id for c in product.public_categ_ids]
 
             if not connected: # Connect only first time:
                 # Database access:
+                album_id = parameter.album_id.id
                 rpc_server = 'http://%s:%s' % (parameter.host, parameter.port)
                 rpc_database = parameter.database
                 rpc_username = parameter.username
@@ -184,7 +193,7 @@ class ProductProductWebServer(orm.Model):
 
                 'default_code': default_code,
                 'website_published': item.published,
-                'image': product.image,
+                'image': image,
                 'lst_price': price,
 
                 # Update with product data:
