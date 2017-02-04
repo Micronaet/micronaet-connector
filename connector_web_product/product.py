@@ -57,11 +57,12 @@ class ProductProductWebServer(orm.Model):
         ''' Publish category (usually before publish product)
         '''
         _logger.info('Start publish category on web')
+        
         categ_db = [] # public ID for category
-        categ_rpc = rpc.model('product.public.category')
+        rpc_categ = rpc.model('product.public.category')
 
         # Read category from web site:
-        for categ in categ_rpc.browse([]):
+        for categ in rpc_categ.browse([]):
             categ_db.append(categ.id)
         # TODO keep in mind list for remove
 
@@ -84,12 +85,12 @@ class ProductProductWebServer(orm.Model):
                     
                 if parent.website_id in categ_db:
                     # Web: update parent category:
-                    categ_rpc.write(parent.website_id, data)
+                    rpc_categ.write(parent.website_id, data)
                     
                     parent_website_id = parent.website_id
                 else:
                     # Web: create parent element:
-                    parent_website_id = categ_rpc.create(data).id
+                    parent_website_id = rpc_categ.create(data).id
                     
                     # Save ID web in backoffice
                     categ_pool.write(cr, uid, parent.id, {
@@ -110,11 +111,11 @@ class ProductProductWebServer(orm.Model):
                 }
                 
             if item.website_id in categ_db:
-                categ_rpc.write(item.website_id, data)
+                rpc_categ.write(item.website_id, data)
                 website_id = item.website_id
             else:
                 # Web: create category
-                website_id = categ_rpc.create(data).id           
+                website_id = rpc_categ.create(data).id           
                 
                 # Save new category in backoffice
                 categ_pool.write(cr, uid, item.id, {

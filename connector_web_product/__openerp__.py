@@ -32,6 +32,7 @@
         'product',
         'connector_web_base',
         'connector_web_product_category',        
+        'product_image_base', # for image management
         ],
     'init_xml': [],
     'demo': [],
