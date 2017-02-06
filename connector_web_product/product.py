@@ -51,78 +51,59 @@ class ProductProductWebServer(orm.Model):
     # XXX Parematers:
     _langs = ['it_IT', 'en_US']
 
-
     # Utility:
     def publish_category(self, cr, uid, rpc, context=None):
         ''' Publish category (usually before publish product)
         '''
-        _logger.info('Start publish category on web')
-        
-        categ_db = [] # public ID for category
-        rpc_categ = rpc.model('product.public.category')
+        _logger.info('Start publish category on web')        
 
+        # Pool web and rpc:
+        rpc_categ = rpc.model('product.public.category')
+        categ_pool = self.pool.get('product.public.category')        
+
+        # Database used (every connector reset this database):
+        self.odoo_web_db = {} # odoo ID VS web ID (update instance DB)
+        rpc_categ_db = {} # web: name = ID
+        
         # Read category from web site:
         for categ in rpc_categ.browse([]):
-            categ_db.append(categ.id)
+            rpc_categ_db[categ.name] = categ.id
+            
         # TODO keep in mind list for remove
 
-        # Read backoffice category:                
-        categ_pool = self.pool.get('product.public.category')        
-        categ_ids = categ_pool.search(cr, uid, [], context=context)
-
+        # ---------------------------------------------------------------------
+        # Create backoffice category on RPC web:
+        # ---------------------------------------------------------------------
+        import pdb; pdb.set_trace()
+        categ_ids = categ_pool.search(cr, uid, [], context=context)        
         for item in categ_pool.browse(cr, uid, categ_ids, context=context):
-            # -----------------------------------------------------------------
-            #                        Parent analysis:
-            # -----------------------------------------------------------------
-            if item.parent_id:
-                parent = item.parent_id
-                data = {
-                    'name': parent.name, 
-                    #'parent_id': False,
-                    #'image': 
-                    'sequence': parent.sequence,
-                    }
-                    
-                if parent.website_id in categ_db:
-                    # Web: update parent category:
-                    rpc_categ.write(parent.website_id, data)
-                    
-                    parent_website_id = parent.website_id
-                else:
-                    # Web: create parent element:
-                    parent_website_id = rpc_categ.create(data).id
-                    
-                    # Save ID web in backoffice
-                    categ_pool.write(cr, uid, parent.id, {
-                        'website_id': parent_website_id}, context=context)
-                        
-                    # Update database:    
-                    categ_db.append(parent_website_id)
-            else:
-                parent_website_id = False
-                                
-            # -----------------------------------------------------------------
-            #                        Category analysis:
-            # -----------------------------------------------------------------
             data = {
-                'name': item.name,
-                'parent_id': parent_website_id,
+                'name': item.name, 
+                'parent_id': False,
+                #'image': 
                 'sequence': item.sequence,
                 }
                 
-            if item.website_id in categ_db:
-                rpc_categ.write(item.website_id, data)
-                website_id = item.website_id
+            if item.name in rpc_categ:
+                odoo_web_db[item.id] = rpc_categ[item.name]
             else:
-                # Web: create category
-                website_id = rpc_categ.create(data).id           
+                odoo_web_db[item.id] = rpc_categ.create(data).id
+                rpc_categ_db[item.name] = odoo_web_db[item.id] # update DB
+
+        # ---------------------------------------------------------------------
+        # Update hieratic parent on RPC web:
+        # ---------------------------------------------------------------------
+        categ_ids = categ_pool.search(cr, uid, [
+            ('parent_id', '!=', False)], context=context)        
+        for item in categ_pool.browse(cr, uid, categ_ids, context=context):
+            try: 
+                rpc_categ.write(self.odoo_web_db[item.id], {
+                    'parent_id': self.odoo_web_db[item.parent_id.id],
+                    })
+            except:
+                _logger.error('No parent web ID for category %s' % item.name)
+                continue
                 
-                # Save new category in backoffice
-                categ_pool.write(cr, uid, item.id, {
-                    'website_id': website_id}, context=context)
-                
-                # Updata database:    
-                categ_db.append(website_id)
         _logger.info('End publish category on web')
         return True
         
@@ -163,7 +144,8 @@ class ProductProductWebServer(orm.Model):
             image = product.product_image_context # from album_id
             description = \
                 item.force_description or product.large_description
-            public_categ_ids = [c.website_id for c in product.public_categ_ids]
+            public_categ_ids = [self.odoo_web_db.get(
+                c.id) for c in product.public_categ_ids]
             
             # Open socket:
             rpc_product_proxy = rpc_product.browse(
