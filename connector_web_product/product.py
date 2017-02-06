@@ -84,11 +84,11 @@ class ProductProductWebServer(orm.Model):
                 'sequence': item.sequence,
                 }
                 
-            if item.name in rpc_categ:
-                odoo_web_db[item.id] = rpc_categ[item.name]
+            if item.name in rpc_categ_db:
+                self.odoo_web_db[item.id] = rpc_categ_db[item.name]
             else:
-                odoo_web_db[item.id] = rpc_categ.create(data).id
-                rpc_categ_db[item.name] = odoo_web_db[item.id] # update DB
+                self.odoo_web_db[item.id] = rpc_categ.create(data).id
+                rpc_categ_db[item.name] = self.odoo_web_db[item.id] # update DB
 
         # ---------------------------------------------------------------------
         # Update hieratic parent on RPC web:
