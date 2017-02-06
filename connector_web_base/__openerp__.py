@@ -34,7 +34,9 @@
     'init_xml': [],
     'demo': [],
     'data': [
+        'security/connector_group.xml',
         'security/ir.model.access.csv',
+        
         'connector_view.xml',
         ],
     'active': False,

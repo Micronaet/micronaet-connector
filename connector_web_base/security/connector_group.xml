@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+   <data>
+        <record id="connector_group_category" model="ir.module.category">
+            <field name="name">Website Connector</field>
+            <field name="sequence">10</field>
+            <field name="description">Website connector management.</field>
+            <field name="visible" eval="1" />
+        </record>    
+   
+        <record id="group_connector_web_manager" model="res.groups">
+            <field name="name">Website connector Manager</field>
+            <field name="category_id" ref="connector_group_category" />
+        </record>
+        <record id="group_connector_web_user" model="res.groups">
+            <field name="name">Website connector User</field>
+            <field name="category_id" ref="connector_group_category" />
+        </record>
+   </data>
+</openerp>

@@ -51,6 +51,7 @@
             id="menu_webserver_root" 
             sequence="20"
             name="Web connector"
+            groups="connector_web_base.group_connector_web_manager,connector_web_base.group_connector_web_user"
             />
             <menuitem 
                 parent="menu_webserver_root"
@@ -63,6 +64,7 @@
                 id="menu_webserver_configuration" 
                 sequence="99"
                 name="Configuration"
+                groups="connector_web_base.group_connector_web_manager"
                 />
                 <menuitem 
                     parent="menu_webserver_configuration" 
