@@ -62,6 +62,7 @@ class ProductPublishWebsiteWizard(orm.TransientModel):
         wizard_browse = self.browse(cr, uid, ids, context=context)[0]
         
         product_ids = context.get('active_ids')
+        mode = wizard_browse.mode
         webserver_id = wizard_browse.webserver_id.id
         published = wizard_browse.published
         
@@ -94,11 +95,17 @@ class ProductPublishWebsiteWizard(orm.TransientModel):
 
             # TODO publish category only one time!
             # Update button:
-            connector_pool.publish_now(cr, uid, publish_ids, context=context)
+            if mode == 'publish':
+                 connector_pool.publish_now(
+                    cr, uid, publish_ids, context=context)
                     
         return True #{'type': 'ir.actions.act_window_close'}
 
     _columns = {
+        'mode': fields.selection([
+            ('selection', 'Only selection'),
+            ('publish', 'Publish'),
+            ], 'Mode', required=True),
         'webserver_id': fields.many2one(
             'connector.server', 'Webserver', required=True),
         'published': fields.boolean('Published', 
@@ -107,6 +114,7 @@ class ProductPublishWebsiteWizard(orm.TransientModel):
         
     _defaults = {
         'published': lambda *x: True,
+        'mode': lambda *x: 'selection',
         }    
         
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

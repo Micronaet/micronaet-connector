@@ -64,7 +64,6 @@ class ProductProductWebServer(orm.Model):
         # Context used here:    
         db_context = context.copy()
 
-
         # Pool web and rpc:
         rpc_categ = rpc.model('product.public.category')
         categ_pool = self.pool.get('product.public.category')        
@@ -152,6 +151,10 @@ class ProductProductWebServer(orm.Model):
         '''    
         if context is None:    
             context = {}
+            
+        # Context used here:    
+        db_context = context.copy()
+        db_context['lang'] = self._lang_db
 
         # Read first element only for setup parameters:        
         first_proxy = self.browse(cr, uid, ids, context=context)[0]
@@ -171,16 +174,15 @@ class ProductProductWebServer(orm.Model):
 
         # Publish category before (only once):
         self.publish_category(cr, uid, rpc, context=context)
-                
-        for item in self.browse(cr, uid, ids, context=context):
+
+        rpc_default_code = {}
+        for item in self.browse(cr, uid, ids, context=db_context):
             # Readability:
             product = item.product_id
 
             default_code = product.default_code
             price = item.force_price or product.lst_price # XXX correct?
             image = product.product_image_context # from album_id
-            description = \
-                item.force_description or product.large_description
             public_categ_ids = [self.odoo_web_db.get(
                 c.id) for c in product.public_categ_ids]
             
@@ -188,20 +190,12 @@ class ProductProductWebServer(orm.Model):
             rpc_product_proxy = rpc_product.browse(
                 [('default_code', '=', default_code)])
 
-            # Language data:
-            # TODO manage language:
-            product_lang_data = {
-                'name': item.force_name or product.name,
-                'description_sale': description,
-                'fabric': product.fabric,
-                'type_of_material': product.type_of_material,
-                }
-            
             # Standard data:    
             product_data = {
-                # TODO remove when manage language:
+                # Language data:
                 'name': item.force_name or product.name,
-                'description_sale': description,
+                'description_sale': 
+                    item.force_description or product.large_description,
                 'fabric': product.fabric,
                 'type_of_material': product.type_of_material,
 
@@ -230,17 +224,43 @@ class ProductProductWebServer(orm.Model):
             # Check Web presence for product:
             if rpc_product_proxy:
                 product_ids = [p.id for p in rpc_product_proxy]
-                product_ids = rpc_product.write(
+                rpc_product.write(
                     product_ids, product_data)
                 _logger.info('Update web %s product %s' % (
                     rpc_database, default_code))
             else:
-                product_ids = rpc_product.create(product_data)
+                product_ids = rpc_product.create(product_data).id
                 _logger.info('Create web %s product %s' % (
                     rpc_database, default_code))
+            rpc_default_code[default_code] = product_ids
                     
             # Language update loop data:
             # TODO for lang in self._langs:                    
+        _logger.info('Update other product lang:')
+
+        for lang in self._langs:  
+            if lang == self._lang_db:
+                continue # no default lang, that create object!
+                
+            db_context['lang'] = lang
+            rpc.context = db_context
+            for item in self.browse(cr, uid, ids, context=db_context):
+                product = item.product_id
+                default_code = product.default_code
+                # Get product ID from database:
+                product_ids = rpc_default_code.get(default_code, [])
+                
+                # Update language:
+                if not product_ids:
+                    _logger.warning('No lang %s for %s' % (lang, default_code))
+                    continue
+                rpc_product.write(product_ids, {
+                    'name': item.force_name or product.name,
+                    'description_sale': 
+                        item.force_description or product.large_description,
+                    'fabric': product.fabric,
+                    'type_of_material': product.type_of_material,
+                    })
         return True
 
     _columns = {
