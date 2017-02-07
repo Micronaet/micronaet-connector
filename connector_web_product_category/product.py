@@ -113,7 +113,7 @@ class ProductPublicCategory(osv.osv):
             help='Small-sized image of the category. It is automatically '\
                  'resized as a 64x64px image, with aspect ratio preserved. '\
                  'Use this field anywhere a small image is required.'),
-        'website_id': fields.integer('Publish ID'),
+        'website_id': fields.integer('Publish ID'), # XXX no more used!
     }
     
 class ProductTemplate(orm.Model):

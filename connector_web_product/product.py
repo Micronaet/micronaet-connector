@@ -50,22 +50,35 @@ class ProductProductWebServer(orm.Model):
     
     # XXX Parematers:
     _langs = ['it_IT', 'en_US']
+    _lang_db = 'en_US'
 
     # Utility:
     def publish_category(self, cr, uid, rpc, context=None):
         ''' Publish category (usually before publish product)
         '''
+        if context is None:
+            context = {}
+        
         _logger.info('Start publish category on web')        
+
+        # Context used here:    
+        db_context = context.copy()
+
 
         # Pool web and rpc:
         rpc_categ = rpc.model('product.public.category')
         categ_pool = self.pool.get('product.public.category')        
 
-        # Database used (every connector reset this database):
+        # Database used (every connector reset this database), default lang!:
         self.odoo_web_db = {} # odoo ID VS web ID (update instance DB)
-        rpc_categ_db = {} # web: name = ID
+        rpc_categ_db = {} # web: name = ID > in default DB lang
         
+        # ---------------------------------------------------------------------
         # Read category from web site:
+        # ---------------------------------------------------------------------
+        # Set lang db for website:
+        # TODO 
+        #rpc.context = db_context
         for categ in rpc_categ.browse([]):
             rpc_categ_db[categ.name] = categ.id
             
@@ -74,9 +87,14 @@ class ProductProductWebServer(orm.Model):
         # ---------------------------------------------------------------------
         # Create backoffice category on RPC web:
         # ---------------------------------------------------------------------
-        import pdb; pdb.set_trace()
-        categ_ids = categ_pool.search(cr, uid, [], context=context)        
-        for item in categ_pool.browse(cr, uid, categ_ids, context=context):
+        db_context['lang'] = self._lang_db # set default lang for read
+        
+        # --------------------------
+        # Language default lang: it:
+        # --------------------------
+        _logger.info('Create category elements:')
+        categ_ids = categ_pool.search(cr, uid, [], context=db_context)        
+        for item in categ_pool.browse(cr, uid, categ_ids, context=db_context):
             data = {
                 'name': item.name, 
                 'parent_id': False,
@@ -89,10 +107,29 @@ class ProductProductWebServer(orm.Model):
             else:
                 self.odoo_web_db[item.id] = rpc_categ.create(data).id
                 rpc_categ_db[item.name] = self.odoo_web_db[item.id] # update DB
+        
+        # -----------------------
+        # Update other languages:
+        # -----------------------
+        _logger.info('Update other category lang:')
+        for lang in self._langs:            
+            if lang == self._lang_db:
+                continue # no default lang, that create object!
+            db_context['lang'] = lang
+            rpc.context = db_context #{'lang': lang}
+            for item in categ_pool.browse(
+                    cr, uid, categ_ids, context=db_context):
+                rpc_categ.write(self.odoo_web_db[item.id], {
+                    'name': item.name,
+                    })
 
         # ---------------------------------------------------------------------
         # Update hieratic parent on RPC web:
         # ---------------------------------------------------------------------
+        _logger.info('Update category parent information:')
+
+        # Note: No need lang in this operations:
+        rpc.context = False
         categ_ids = categ_pool.search(cr, uid, [
             ('parent_id', '!=', False)], context=context)        
         for item in categ_pool.browse(cr, uid, categ_ids, context=context):

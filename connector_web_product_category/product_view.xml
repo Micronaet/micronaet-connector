@@ -53,6 +53,7 @@
             </field>
         </record>
         <menuitem action="product_public_category_action" id="menu_product_public_category" parent="product.prod_config_main" sequence="10" />
+        <menuitem parent="connector_web_base.menu_webserver_configuration" id="menu_connector_public_category_website" action="product_public_category_action" name="Web category" sequence="20" />
         
         <!--product.product-->
         <record model="ir.ui.view" id="product_product_template_form_view">
