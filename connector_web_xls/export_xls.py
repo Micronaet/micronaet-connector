@@ -62,7 +62,7 @@ class ConnectorServer(orm.Model):
         # ---------------------------------------------------------------------
         # XLS file:
         # ---------------------------------------------------------------------
-        xls_file = '/home/administrator/photo/xls/connector/product.xls'
+        xls_file = '/home/administrator/photo/xls/connector/product.xlsx'
         _logger.warning('Start connector export: %s' % xls_file)        
 
         WB = xlsxwriter.Workbook(xls_file)
