@@ -7,6 +7,7 @@
             <field name="model">connector.server</field>
             <field name="arch" type="xml">
                 <form string="Connector Server" version="7.0">        
+                    <header></header>
                     <sheet>
                         <group col="4" colspan="4">
                             <field name="name" />                            
