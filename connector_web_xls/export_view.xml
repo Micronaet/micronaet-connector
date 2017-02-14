@@ -7,11 +7,9 @@
             <field name="model">connector.server</field>
             <field name="inherit_id" ref="connector_web_base.view_connector_server_form"/>
             <field name="arch" type="xml">
-                <!--<xpath expr="//header" position="inside">
+                <field name="name" position="before">
                     <button name="export_xls_file" string="Web product XLS" type="object" />
-                </xpath>-->
-                <field name="name" position="after">
-                    <button name="export_xls_file" string="Web product XLS" type="object" />
+                    <newline/>
                 </field>                
             </field>
         </record>         
