@@ -71,6 +71,7 @@ class ConnectorServer(orm.Model):
         
         # Write header:
         self.write_xls_line([                
+            # TODO image #WS.insert_image('B5', 'logo.png')
             'Web',
             'Codice',
             'Nome',
@@ -85,8 +86,6 @@ class ConnectorServer(orm.Model):
             'Esist. lorda',
             'Categorie',
             ])
-        
-        #WS.insert_image('B5', 'logo.png')
         
         # ---------------------------------------------------------------------
         # Start export product:
