@@ -130,7 +130,7 @@ class ConnectorServer(orm.Model):
                 force_description,
                 product.mx_net_qty,
                 product.mx_lord_qty,
-                '%s' % (public_categ_ids, )
+                '%s' % (public_categ_name, ),
                 ])
 
         WB.close()                

@@ -10,7 +10,7 @@
                 <field name="name" position="before">
                     <button name="export_xls_file" string="Web product XLS" type="object" />
                     <newline/>
-                </field>                
+                </field> 
             </field>
         </record>         
     </data>
