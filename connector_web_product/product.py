@@ -183,7 +183,6 @@ class ProductProductWebServer(orm.Model):
 
             default_code = product.default_code
             price = item.force_price or product.lst_price # XXX correct?
-            import pdb; pdb.set_trace()
             image = product.product_image_context # from album_id
             public_categ_ids = [self.odoo_web_db.get(
                 c.id) for c in product.public_categ_ids]
