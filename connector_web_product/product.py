@@ -159,7 +159,8 @@ class ProductProductWebServer(orm.Model):
         # Read first element only for setup parameters:        
         first_proxy = self.browse(cr, uid, ids, context=context)[0]
         parameter = first_proxy.connector_id
-        context['album_id'] = first_proxy.connector_id.album_id.id
+        db_context['album_id'] = first_proxy.connector_id.album_id.id
+        #context['album_id'] = first_proxy.connector_id.album_id.id
 
         # Database access:
         rpc_server = 'http://%s:%s' % (parameter.host, parameter.port)
