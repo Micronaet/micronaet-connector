@@ -95,7 +95,7 @@ class ConnectorServer(orm.Model):
         # Select only product in web server:
         ws_pool = self.pool.get('product.product.web.server')
         ws_ids = ws_pool.search(cr, uid, [
-            ('server_id', '=', ids[0]),
+            ('connector_id', '=', ids[0]),
             ], context=context)
         product_ids = [item.product_id.id for item in ws_pool.browse(
             cr, uid, ws_ids, context=context)]    
