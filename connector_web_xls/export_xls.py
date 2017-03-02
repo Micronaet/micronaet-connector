@@ -91,10 +91,14 @@ class ConnectorServer(orm.Model):
         # Start export product:
         # ---------------------------------------------------------------------
         product_pool = self.pool.get('product.product')
-        product_ids = product_pool.search(cr, uid, [
-            #('statistic_category', 'in', (
-            #    'I01', 'I02', 'I03', 'I04', 'I05', 'I06')),
+        
+        # Select only product in web server:
+        ws_pool = self.pool.get('product.product.web.server')
+        ws_ids = ws_pool.search(cr, uid, [
+            ('server_id', '=', ids[0]),
             ], context=context)
+        product_ids = [item.product_id.id for item in ws_pool.browse(
+            cr, uid, ws_ids, context=context)]    
             
         for product in product_pool.browse(
                 cr, uid, product_ids, context=context):
