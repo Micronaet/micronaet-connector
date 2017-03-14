@@ -73,6 +73,7 @@ class ConnectorServer(orm.Model):
         self.write_xls_line([                
             # TODO image #WS.insert_image('B5', 'logo.png')
             'Web',
+            'Immagine',
             'Codice',
             'Nome',
             'Nome forzato',
@@ -97,13 +98,20 @@ class ConnectorServer(orm.Model):
         ws_ids = ws_pool.search(cr, uid, [
             ('connector_id', '=', ids[0]),
             ], context=context)
-        product_ids = [item.product_id.id for item in ws_pool.browse(
-            cr, uid, ws_ids, context=context)]    
-            
+        ws_proxy = ws_pool.browse(cr, uid, ws_ids, context=context)
+        product_ids = [item.product_id.id for item in ws_proxy]    
+
+        # Read album on connector from first product
+        if not product_ids:
+            return False                    
+        db_context = context.copy()
+        db_context['album_id'] = ws_proxy[0].connector_id.album_id.id
+    
         for product in product_pool.browse(
-                cr, uid, product_ids, context=context):
+                cr, uid, product_ids, context=db_context):
             # Fields:    
-            published = ''    
+            published = ''
+            image = bool(product.product_image_context or '')
             force_name = ''
             force_description = ''
             force_price = ''
@@ -123,7 +131,8 @@ class ConnectorServer(orm.Model):
             public_categ_name = [
                 item.name for item in product.public_categ_ids]
             self.write_xls_line([                
-                published, 
+                published,
+                image,
                 product.default_code,
                 product.name,
                 force_name,
