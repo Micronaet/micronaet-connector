@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_prestashop_category_tree">
+            <field name="name">product.public.category.tree</field>
+            <field name="model">product.public.category</field>
+            <field name="inherit_id" ref="connector_web_product_category.product_public_category_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="sequence" position="before">
+                    <field name="prestashop" />
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>
+

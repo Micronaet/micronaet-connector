@@ -18,22 +18,25 @@
 ###############################################################################
 
 {
-    'name': '',
+    'name': 'Prestashop connector',
     'version': '0.1',
-    'category': '',
-    'description': '''        
+    'category': 'Connector',
+    'description': '''  
+        Prestashop integration on connector used for ODOO web service      
         ''',
     'author': 'Micronaet S.r.l. - Nicola Riolini',
     'website': 'http://www.micronaet.it',
     'license': 'AGPL-3',
     'depends': [
         'base',
+        'connector_web_base',
+        'connector_web_product_category',
         ],
     'init_xml': [],
     'demo': [],
     'data': [
         #'security/ir.model.access.csv',    
-        #'_view.xml',
+        'prestashop_view.xml',
         ],
     'active': False,
     'installable': True,
