@@ -30,7 +30,8 @@
     'depends': [
         'base',
         'connector_web_base',
-        'connector_web_product_category',
+        'connector_web_product_category', # for category import
+        'connector_web_product', # override action!
         ],
     'init_xml': [],
     'demo': [],

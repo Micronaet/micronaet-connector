@@ -20,6 +20,11 @@
                 <field name="name" position="before">
                     <field name="prestashop" />
                 </field>
+                <xpath expr="//sheet" position="before">
+                    <header>
+                        <button name="prestashop_import_category" string="Load category" type="object" attrs="{'invisible': [('prestashop','=',False)]}"/>
+                    </header>
+                </xpath>
             </field>
         </record>
         

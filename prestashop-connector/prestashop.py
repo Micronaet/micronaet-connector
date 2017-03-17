@@ -39,12 +39,37 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 
 _logger = logging.getLogger(__name__)
 
+class ProductProductWebServer(orm.Model):
+    """ Model name: ProductProductWebServer
+    """
+    _inherit = 'product.product.web.server'
+
+    def publish_now_prestashop(self, cr, uid, ids, context=None):
+        ''' Publish procedure for prestashop element
+        '''
+        return True
+        
+    # Override action for test if prestashop product
+    def publish_now(self, cr, uid, ids, context=None):
+        ''' Call original function for no prestashop product
+        '''
+        prestashop_ids = []
+        odoo_ids = []
+        for product in self.browse(cr, uid, ids, context=context)
+            if product.connector_id.prestashop:
+                prestashop_ids.append(product.id)
+            else:
+                odoo_ids.append(product.id)
+        super(ProductProductWebServer, self).publish_now(
+            cr, uid, odoo_ids, context=context)
+        
+
 class ConnectorServer(orm.Model):
     """ Model name: ConnectorServer
     """    
     _inherit = 'connector.server'
     
-    def get_prestashop_connector(self, cr, uid, context=None):
+    def get_prestashop_connector(self, cr, uid, ids, context=None):
         ''' Return XMLRPC connector with server
         '''
         assert len(ids) == 1, 'Works only with one record a time'
@@ -64,12 +89,46 @@ class ConnectorServer(orm.Model):
         #res = sock.execute('system', 'log', True)        
         return sock
 
-    def prestashop_import_category(self, cr, iud, ids, context=None):
+    def prestashop_import_category(self, cr, uid, ids, context=None):
         ''' Prestashop import category
         '''
-        sock = self.get_prestashop_connector(cr, uid, context=context)
-        category_list = sock.execute('category', 'list')
+        assert len(ids) == 1, 'Works only with one record a time'
 
+        # Pool used:
+        category_pool = self.pool.get('product.public.category')
+        
+        # Load current in ODOO database:
+        category_ids = category_pool.search(cr, uid, [
+            ('connector_id', '=', ids[0]),
+            ], context=context)
+        website_ids = [item.website_id for item in category_pool.browse(
+            cr, uid, category_ids, context=context)]
+        
+        sock = self.get_prestashop_connector(cr, uid, ids, context=context)
+        
+        try:
+            category_list = sock.execute('category', 'list')
+        except:
+            raise osv.except_osv(
+                _('XMRLPC'), 
+                _('Error connecting server, check xmlrpc listner!'),
+                )
+        import pdb; pdb.set_trace()
+        for website_id, name in category_list:
+            if website_id in website_ids:
+                website_ids.remove(website_id)
+                continue
+            category_pool.create(cr, uid, {
+                'name': name,
+                'website_id': website_id,
+                'connector_id': ids[0],
+                #'sequence': 
+                }, context=context)
+                
+        # Remove no more present category
+        if website_ids:
+            category_pool.unlink(cr, uid, website_ids, context=context)
+            
         return True
 
     _columns = {
