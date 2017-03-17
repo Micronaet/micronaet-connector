@@ -114,7 +114,10 @@ class ProductPublicCategory(osv.osv):
                  'resized as a 64x64px image, with aspect ratio preserved. '\
                  'Use this field anywhere a small image is required.'),
         'website_id': fields.integer('Publish ID'), # XXX no more used!
-    }
+        'connector_id': fields.many2one(
+            'connector.server', 'Linked connector', 
+            help='Connector linked where category was imported (no ODOO web)'),
+        }
     
 class ProductTemplate(orm.Model):
     ''' Model name: Product template extra for website

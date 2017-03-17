@@ -1,7 +1,29 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
-        <record model="ir.ui.view" id="view_prestashop_category_tree">
+        <!--connector_web_base.view_connector_server_tree-->
+        <record model="ir.ui.view" id="view_prestashop_connector_tree">
+            <field name="name">connector.server.tree</field>
+            <field name="model">connector.server</field>
+            <field name="inherit_id" ref="connector_web_base.view_connector_server_tree"/>
+            <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <field name="prestashop" />
+                </field>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_prestashop_connector_form">
+            <field name="name">connector.server.form</field>
+            <field name="model">connector.server</field>
+            <field name="inherit_id" ref="connector_web_base.view_connector_server_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <field name="prestashop" />
+                </field>
+            </field>
+        </record>
+        
+        <!--<record model="ir.ui.view" id="view_prestashop_category_tree">
             <field name="name">product.public.category.tree</field>
             <field name="model">product.public.category</field>
             <field name="inherit_id" ref="connector_web_product_category.product_public_category_tree_view"/>
@@ -11,6 +33,16 @@
                 </field>
             </field>
         </record>
+        <record model="ir.ui.view" id="view_prestashop_category_form">
+            <field name="name">product.public.category.form</field>
+            <field name="model">product.public.category</field>
+            <field name="inherit_id" ref="connector_web_product_category.product_public_category_form_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <field name="prestashop" />
+                </field>
+            </field>
+        </record>-->
     </data>
 </openerp>
 

@@ -21,6 +21,7 @@ import os
 import sys
 import logging
 import openerp
+import xmlrpclib
 import openerp.netsvc as netsvc
 import openerp.addons.decimal_precision as dp
 from openerp.osv import fields, osv, expression, orm
@@ -38,13 +39,54 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 
 _logger = logging.getLogger(__name__)
 
+class ConnectorServer(orm.Model):
+    """ Model name: ConnectorServer
+    """    
+    _inherit = 'connector.server'
+    
+    def get_prestashop_connector(self, cr, uid, context=None):
+        ''' Return XMLRPC connector with server
+        '''
+        assert len(ids) == 1, 'Works only with one record a time'
+        
+        current_proxy = self.browse(cr, uid, ids, context=context)[0]
+
+        # XMLRPC connection for autentication (UID) and proxy 
+        sock = xmlrpclib.ServerProxy(
+            'http://%s:%s/RPC2' % (
+                current_proxy.host,       
+                current_proxy.port,
+                ), 
+            allow_none=True,
+            )
+
+        # Log enable:
+        #res = sock.execute('system', 'log', True)        
+        return sock
+
+    def prestashop_import_category(self, cr, iud, ids, context=None):
+        ''' Prestashop import category
+        '''
+        sock = self.get_prestashop_connector(cr, uid, context=context)
+        category_list = sock.execute('category', 'list')
+
+        return True
+
+    _columns = {
+        'prestashop': fields.boolean(
+            'Prestashop', help='Prestashop web server'),
+        }
+
 class ProductPublicCategory(orm.Model):
     """ Model name: ProductPublicCategory
     """
     
     _inherit = 'product.public.category'
     
+    
     _columns = {
-        'prestashop': fields.boolean('Prestashop', help='Prestashop category'),
+        #'prestashop': fields.boolean('Prestashop', help='Prestashop category'),
+        # Use website_id!
+        #'prestashop_id': fields.integer('ID prestashop'),
         }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

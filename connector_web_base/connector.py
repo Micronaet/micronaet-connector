@@ -58,8 +58,8 @@ class ConnectorServer(orm.Model):
         return res
         
     _columns = {
-        'name': fields.char('Web server', size=64, required=True),
-        'host': fields.char('Input filename', size=100, required=True),
+        'name': fields.char('Web server name', size=64, required=True),
+        'host': fields.char('Host', size=100, required=True),
         'port': fields.integer('Port', required=True),
         'database': fields.char('Database', size=100, required=True),
         'username': fields.char('Username', size=100, required=True),
