@@ -20,11 +20,22 @@
                 <field name="name" position="before">
                     <field name="prestashop" />
                 </field>
+                
                 <xpath expr="//sheet" position="before">
                     <header>
                         <button name="prestashop_import_category" string="Load category" type="object" attrs="{'invisible': [('prestashop','=',False)]}"/>
                     </header>
                 </xpath>
+
+                <field name="password" position="after"> 
+                    <group colspan="4" col="4" attrs="{'invisible': [('prestashop','=',False)]}">
+                        <field name="rsync_user" />
+                        <field name="rsync_port" />
+                        <field name="rsync_chmod" />
+                        <field name="rsync_chown" />                        
+                        <field name="rsync_path" colspan="4" />
+                    </group>
+                </field>
             </field>
         </record>
         

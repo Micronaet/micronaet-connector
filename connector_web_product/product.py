@@ -146,8 +146,7 @@ class ProductProductWebServer(orm.Model):
     def publish_now(self, cr, uid, ids, context=None):
         ''' Publish now button
             Used also for more than one elements (not only button click)
-            Note all product must be published on the same web server!
-            
+            Note all product must be published on the same web server!            
         '''    
         if context is None:    
             context = {}
