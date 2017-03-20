@@ -301,7 +301,7 @@ class mysql_connector():
         # Check if insert or update
         update_where = self._search_table_key(
             'image_shop', [
-                ('id_product', id_image),
+                ('id_image', id_image),
                 ('id_shop', self.id_shop),
                 ('id_product', id_product),
                 ])
