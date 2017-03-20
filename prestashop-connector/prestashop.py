@@ -94,7 +94,6 @@ class ProductProductWebServer(orm.Model):
                     connector.host,
                     connector.rsync_path,
                     )
-            import pdb; pdb.set_trace()
             os.system(rsync_command)
 
             price = item.force_price or product.lst_price # XXX correct?
@@ -142,7 +141,6 @@ class ProductProductWebServer(orm.Model):
                 'price': price,        
                 }
                 
-            import pdb; pdb.set_trace()
             id_product = sock.execute(
                 # List parameters:
                 'product', 'create', record, record_lang, category, True, # update_image
