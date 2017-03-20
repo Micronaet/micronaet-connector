@@ -242,7 +242,7 @@ class mysql_connector():
             # id_image
             'id_product': 0,
             'position': 1,
-            'cover': 0, # XXX ???
+            'cover': 1, # XXX ???
             }
         record.update(record_data)
 
@@ -294,7 +294,7 @@ class mysql_connector():
         record = { # Direct not updated:
             'id_image': id_image,
             'id_shop': self.id_shop,
-            'cover': 0,
+            'cover': 1,
             'id_product': id_product,
             }           
 
