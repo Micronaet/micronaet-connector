@@ -88,13 +88,10 @@ class mysql_connector():
                 where += ' and '
             quote = '\'' if type(value) in (str, ) else ''
             where += '`%s` = %s%s%s' % (
-                field, quote, value, quote)
-        print where
-        import pdb; pdb.set_trace()
+                field, quote, value, quote)        
         query = query % (table, where)
         
         # Check if present
-
         if not self._connection:
             return False
         cr = self._connection.cursor()
@@ -105,7 +102,7 @@ class mysql_connector():
                 if extra_field:
                     return where, res[0][extra_field]
                 else:
-                    return where, False
+                    return where
         except:
             return False    
                 
@@ -585,6 +582,7 @@ class mysql_connector():
                     ])
             
             # Prepare and run query:
+            import pdb; pdb.set_trace()
             query = self._prepare_mysql_query(update_where,
                 record_lang_data, 'product_lang', field_quote)                
             cr = self._connection.cursor()
