@@ -255,7 +255,7 @@ class mysql_connector():
             )
                 
         query = self._prepare_mysql_query(
-            update_where, record, 'image', field_quote, search_id=True)
+            update_where, record, 'image', field_quote)
         cr = self._connection.cursor()
         cr.execute(query)
         if update_where:
