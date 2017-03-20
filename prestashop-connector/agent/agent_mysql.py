@@ -341,7 +341,7 @@ class mysql_connector():
         update_where = self._search_table_key(
             'category_product', [
                 ('id_product', id_product),
-                ('id_category', self.id_category),
+                ('id_category', id_category),
                 ])
                 
         query = self._prepare_mysql_query(update_where,
