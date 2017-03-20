@@ -89,6 +89,8 @@ class mysql_connector():
             quote = '\'' if type(value) in (str, ) else ''
             where += '`%s` = %s%s%s' % (
                 field, quote, value, quote)
+        print where
+        import pdb; pdb.set_trace()
         query = query % (table, where)
         
         # Check if present
@@ -106,8 +108,7 @@ class mysql_connector():
                     return where, False
         except:
             return False    
-        
-        
+                
     def _prepare_mysql_query(
             self, update_where, record, table, field_quote=None):
         ''' Prepare insert query passing record and quoted field list
@@ -258,7 +259,7 @@ class mysql_connector():
         cr.execute(query)
         if update_where:
             id_image = search_id # from search query            
-        else:
+        else:1
             id_image = self._connection.insert_id()
         
         self._connection.commit()        
