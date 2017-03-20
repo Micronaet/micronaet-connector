@@ -60,14 +60,14 @@ class ProductProductWebServer(orm.Model):
         # Read first element only for setup parameters:        
         first_proxy = self.browse(cr, uid, ids, context=context)[0]
         connector = first_proxy.connector_id
-        rpc_server = connector_pool.get_prestashop_connector(
+        sock = connector_pool.get_prestashop_connector(
             cr, uid, [connector.id], context=context)
 
         album_id = first_proxy.connector_id.album_id.id
         #context['album_id'] = first_proxy.connector_id.album_id.id
         
         rpc_default_code = {}
-        path_image_in = './' # TODO from album
+        path_image_in = '/home/thebrush/images/Varie Roberta/FOTO OK/SCONTORNATE/' # TODO from album
         for item in self.browse(cr, uid, ids, context=db_context):
             # Readability:
             product = item.product_id
@@ -75,20 +75,26 @@ class ProductProductWebServer(orm.Model):
             # TODO publish all!!
             
             default_code = product.default_code
-            image_in = product.default_code.replace(' ', '_')
+            image_in = '%s.%s' % (
+                product.default_code.replace(' ', '_'),
+                'jpg',
+                )
+            # Enable log:
+            sock.execute('system', 'log', True)
             
             # Rsync data image file: XXX choose if needed
-            import pdb; pdb.set_trace()
             rsync_command = \
-                'rsync --chown %s --chmod %s -avh -e \'ssh -p %s\' %s%s %s:%s' % (
+                'rsync --chown %s --chmod %s -avh -e \'ssh -p %s\' \'%s%s\' %s@%s:%s' % (
                     connector.rsync_chown,
                     connector.rsync_chmod,
-                    connector.host,
+                    connector.rsync_port,
                     path_image_in, 
                     image_in, 
                     connector.rsync_user, 
+                    connector.host,
                     connector.rsync_path,
                     )
+            import pdb; pdb.set_trace()
             os.system(rsync_command)
 
             price = item.force_price or product.lst_price # XXX correct?
@@ -97,48 +103,49 @@ class ProductProductWebServer(orm.Model):
             #    c.id) for c in product.public_categ_ids]
             
             # Standard data:    
+            record = {
+                'reference': default_code or '', 
+                'ean13': product.ean13 or '',
+                'weight': product.weight,
+                'height': product.height,
+                'width': product.width,
+                'depth': product.height,
+                'active': item.published,
+                # Extra:
+                #'q_x_pack': product.q_x_pack,
+                #'vat_price': price * 1.22,      
+                #'public_categ_ids': [(6, 0, public_categ_ids)],
+                } 
+                
+            record_lang = {
+                'it_IT': {
+                    'name': item.force_name or product.name or '', # title
+                    'meta_title': item.force_name or product.name or '', # XXX
+                    'meta_description': 
+                        item.force_description or product.large_description or '',
+                #'fabric': product.fabric,
+                #'type_of_material': product.type_of_material,
+                    }, 
+                # TODO lang:                        
+                'en_US': {
+                    'name': 'ENCon immagine',
+                    'meta_title': 'ENTitolo della sedia di prova con misure',
+                    'meta_description': 'ENDescrizione della sedia di prova',
+                    },
+                }
+                
+            category = {
+                # id_product
+                'id_category': product.public_categ_ids[0].website_id if \
+                    product.public_categ_ids else 0, # TODO Stock-Sottocosto 62
+                'position': 1000,
+                'price': price,        
+                }
+                
+            import pdb; pdb.set_trace()
             id_product = sock.execute(
                 # List parameters:
-                'product', 
-                'create', 
-                {
-                    'reference': default_code, 
-                    'ean13': product.ean13 or '',
-                    'weight': product.weight,
-                    'height': product.height,
-                    'width': product.width,
-                    'depth': product.height,
-                    'active': item.published,
-                    # Extra:
-                    #'q_x_pack': product.q_x_pack,
-                    #'vat_price': price * 1.22,      
-                    #'public_categ_ids': [(6, 0, public_categ_ids)],
-                    }, 
-                {
-                    'it_IT': {
-                        'name': item.force_name or product.name, # title
-                        'meta_title': item.force_name or product.name, # XXX
-                        'meta_description': 
-                            item.force_description or product.large_description,
-                    #'fabric': product.fabric,
-                    #'type_of_material': product.type_of_material,
-                        }, 
-                    # TODO lang:                        
-                    'en_US': {
-                        'name': 'ENCon immagine',
-                        'meta_title': 'ENTitolo della sedia di prova con misure',
-                        'meta_description': 'ENDescrizione della sedia di prova',
-                        },
-                    },
-                {
-                    # id_product
-                    'id_category': product.public_categ_ids[0] if \
-                        product.public_categ else 0, # TODO Stock-Sottocosto 62
-                    'position': 1000,
-                    'price': price,        
-                    },
-                    
-                True, # update_image
+                'product', 'create', record, record_lang, category, True, # update_image
                 )
 
         _logger.info('Update other product lang:')
