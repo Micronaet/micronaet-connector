@@ -83,7 +83,7 @@ class mysql_connector():
             if where:
                 where += ' and '
             quote = '\'' if type(value) in (str, ) else ''
-            where += '%s = %s%s%s' % (
+            where += '`%s` = %s%s%s' % (
                 field, quote, value, quote)
         query = query % (table, where)
         
@@ -93,11 +93,12 @@ class mysql_connector():
             return False
         cr = self._connection.cursor()
         cr.execute(query)
-        import pdb; pdb.set_trace()
         res = cr.fetchall()
-        if res: 
-            return where
-        else:
+        import pdb; pdb.set_trace()
+        try: 
+            if res[0]['count(*)'] > 0:
+                return where
+        except:
             return False    
         
         
