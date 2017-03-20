@@ -104,9 +104,12 @@ class mysql_connector():
                 else:
                     return where
             else:
-                return False
         except:
-            return False    
+            pass
+        if extra_field:
+            return False, False
+        else:
+            return False
                 
     def _prepare_mysql_query(
             self, update_where, record, table, field_quote=None):
