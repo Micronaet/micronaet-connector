@@ -279,7 +279,7 @@ class mysql_connector():
             import pdb; pdb.set_trace()
             update_where = self._search_table_key(
                 'image_lang', [
-                    ('id_product', id_image),
+                    ('id_image', id_image),
                     ('id_lang', id_lang),
                     ])
                 
