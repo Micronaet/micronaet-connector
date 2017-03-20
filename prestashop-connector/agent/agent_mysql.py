@@ -285,7 +285,7 @@ class mysql_connector():
                 
             #record.update(record_data)  
             query = self._prepare_mysql_query(
-                'update_where', record, 'image_lang', field_quote)
+                update_where, record, 'image_lang', field_quote)
             cr = self._connection.cursor()
             cr.execute(query)
             self._connection.commit()        
