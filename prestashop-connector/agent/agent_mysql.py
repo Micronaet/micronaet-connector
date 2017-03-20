@@ -263,7 +263,7 @@ class mysql_connector():
             update_where = self._search_table_key(
                 'image_lang', [
                     ('id_product', id_image),
-                    ('id_lang',id_lang),
+                    ('id_lang', id_lang),
                     ])
                 
             #record.update(record_data)  
@@ -288,7 +288,7 @@ class mysql_connector():
             'image_shop', [
                 ('id_product', id_image),
                 ('id_shop', self.id_shop),
-                ('id_product': id_product),
+                ('id_product', id_product),
                 ])
                  
         #record.update(record_data)  
