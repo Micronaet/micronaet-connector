@@ -72,6 +72,35 @@ class mysql_connector():
             
         return True
         
+    def _search_table_key(self, table, keys):
+        ''' Search table key for get insert/update mode
+        '''
+        query = 'select count(*) from %s where %s;'
+        where = ''
+        table = '%s_%s' % (self._prefix, table)
+        
+        for key, value in keys:
+            if where:
+                where += ' and '
+            quote = '\'' if type(value) in (str, ) else ''
+            where += '%s = %s%s%s' % (
+                quote, value, quote
+        query = query % (table, where)
+        
+        # Check if present
+
+        if not self._connection:
+            return False
+        cr = self._connection.cursor()
+        cr.execute(query)
+        import pdb; pdb.set_trace()
+        res = cr.fetchall()
+        if res: 
+            return where
+        else:
+            return False    
+        
+        
     def _prepare_mysql_query(self, mode, record, table, field_quote=None):
         ''' Prepare insert query passing record and quoted field list
         '''
@@ -417,6 +446,13 @@ class mysql_connector():
             }        
         record.update(record_data) # Add field passed from ODOO
 
+        # Check if insert or update
+        import pdb; pdb.set_trace()
+        update_where = self._search_table_key(
+            'product', 
+            [('reference', reference)],
+            )
+        
         query = self._prepare_mysql_query('insert', record, 'product', field_quote)
         cr = self._connection.cursor()
         cr.execute(query)
