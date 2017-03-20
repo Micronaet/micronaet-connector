@@ -136,7 +136,7 @@ class mysql_connector():
                 update_where,
                 )   
             if self._log:
-                print query            
+                print '[INFO] UPDATE: ', query            
         else: 
             # insert
             table = '%s_%s' % (self._prefix, table)
@@ -154,7 +154,7 @@ class mysql_connector():
             query = 'INSERT INTO %s(%s) VALUES (%s);' % (
                 table, fields, values)        
             if self._log:
-                print query
+                print '[INFO] INSERT: ', query
         return query
         
     def _expand_lang_data(self, data):
