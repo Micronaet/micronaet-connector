@@ -72,10 +72,14 @@ class mysql_connector():
             
         return True
         
-    def _search_table_key(self, table, key):
+    def _search_table_key(self, table, key, extra_field, search_id=False):
         ''' Search table key for get insert/update mode
         '''
-        query = 'select count(*) from %s where %s;'
+        if extra_field:
+            query = 'select count(*), ' + extra_field + ' from %s where %s;'
+        else:
+            query = 'select count(*) from %s where %s;'
+        
         where = ''
         table = '%s_%s' % (self._prefix, table)
         
@@ -96,12 +100,21 @@ class mysql_connector():
         res = cr.fetchall()
         try: 
             if res[0]['count(*)'] > 0:
-                return where
+                if extra_field:
+                    item_id = res[0][extra_field]
+                else:
+                    item_id = False
+
+                if search_id:
+                    return where, item_id
+                else:
+                    return where
         except:
             return False    
         
         
-    def _prepare_mysql_query(self, update_where, record, table, field_quote=None):
+    def _prepare_mysql_query(
+            self, update_where, record, table, field_quote=None):
         ''' Prepare insert query passing record and quoted field list
             update_where: if present means that is the key search filter so
                 need to be updated not created
@@ -238,16 +251,22 @@ class mysql_connector():
 
         # Check if insert or update # TODO correct the filter?
         import pdb; pdb.set_trace()
-        update_where = self._search_table_key(
-            'image', [
-                ('id_product', id_product),
-                ])
+        update_where, search_id = self._search_table_key(
+            'image', 
+            [('id_product', id_product)],
+            'id_product', # extra field
+            search_id=True,
+            )
                 
         query = self._prepare_mysql_query(
-            update_where, record, 'image', field_quote)
+            update_where, record, 'image', field_quote, search_id=True)
         cr = self._connection.cursor()
         cr.execute(query)
-        id_image = self._connection.insert_id()
+        if update_where:
+            id_image = search_id # from search query            
+        else:
+            id_image = self._connection.insert_id()
+        
         self._connection.commit()        
         
         # ---------------------------------------------------------------------
@@ -511,14 +530,20 @@ class mysql_connector():
 
         # Check if insert or update
         import pdb; pdb.set_trace()
-        update_where = self._search_table_key(
-            'product', [('reference', reference)])
+        update_where, search_id = self._search_table_key(
+            'product', 
+            [('reference', reference)], 
+            search_id=True,
+            )
         
         query = self._prepare_mysql_query(
             update_where, record, 'product', field_quote)
         cr = self._connection.cursor()
         cr.execute(query)
-        id_product = self._connection.insert_id()
+        if update_where:
+            id_product = search_id
+        else:
+            id_product = self._connection.insert_id()
         self._connection.commit()
         
         # ---------------------------------------------------------------------
