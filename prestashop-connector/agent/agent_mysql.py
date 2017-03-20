@@ -94,7 +94,6 @@ class mysql_connector():
         cr = self._connection.cursor()
         cr.execute(query)
         res = cr.fetchall()
-        import pdb; pdb.set_trace()
         try: 
             if res[0]['count(*)'] > 0:
                 return where
@@ -102,13 +101,34 @@ class mysql_connector():
             return False    
         
         
-    def _prepare_mysql_query(self, mode, record, table, field_quote=None):
+    def _prepare_mysql_query(self, update_where, record, table, field_quote=None):
         ''' Prepare insert query passing record and quoted field list
+            update_where: if present means that is the key search filter so
+                need to be updated not created
         '''
         if field_quote is None:
             field_quote = []
-        
-        if mode == 'insert':
+            
+        if update_where: 
+            # update
+            table = '%s_%s' % (self._prefix, table)
+            fields = ''
+            for field, value in record.iteritems():
+                if fields:
+                    fields += ', '
+                quote = '\'' if field in field_quote else ''
+
+                fields += '`%s` = %s%s%s' % (field, quote, value, quote)
+                
+            query = 'UPDATE %s SET %s WHERE %s;' % (
+                table,
+                fields,
+                update_where,
+                )   
+            if self._log:
+                print query            
+        else: 
+            # insert
             table = '%s_%s' % (self._prefix, table)
             fields = values = ''
             for field, value in record.iteritems():
@@ -125,8 +145,6 @@ class mysql_connector():
                 table, fields, values)        
             if self._log:
                 print query
-        elif mode == 'update':        
-            pass
         return query
         
     def _expand_lang_data(self, data):
@@ -216,9 +234,16 @@ class mysql_connector():
             'position': 1,
             'cover': 0, # XXX ???
             }
-        record.update(record_data)  
+        record.update(record_data)
+
+        # Check if insert or update # TODO correct the filter?
+        update_where = self._search_table_key(
+            'image', [
+                ('id_product', id_product),
+                ])
+                
         query = self._prepare_mysql_query(
-            'insert', record, 'image', field_quote)
+            update_where, record, 'image', field_quote)
         cr = self._connection.cursor()
         cr.execute(query)
         id_image = self._connection.insert_id()
@@ -233,9 +258,17 @@ class mysql_connector():
                 'id_lang': id_lang,
                 'legend': '',
                 }                
+
+            # Check if insert or update
+            update_where = self._search_table_key(
+                'image_lang', [
+                    ('id_product', id_image),
+                    ('id_lang',id_lang),
+                    ])
+                
             #record.update(record_data)  
             query = self._prepare_mysql_query(
-                'insert', record, 'image_lang', field_quote)
+                'update_where', record, 'image_lang', field_quote)
             cr = self._connection.cursor()
             cr.execute(query)
             self._connection.commit()        
@@ -248,10 +281,19 @@ class mysql_connector():
             'id_shop': self.id_shop,
             'cover': 0,
             'id_product': id_product,
-            }                
+            }           
+
+        # Check if insert or update
+        update_where = self._search_table_key(
+            'image_shop', [
+                ('id_product', id_image),
+                ('id_shop', self.id_shop),
+                ('id_product': id_product),
+                ])
+                 
         #record.update(record_data)  
         query = self._prepare_mysql_query(
-            'insert', record, 'image_shop', field_quote)
+            update_where, record, 'image_shop', field_quote)
         cr = self._connection.cursor()
         cr.execute(query)
         self._connection.commit()        
@@ -290,7 +332,15 @@ class mysql_connector():
             'id_category': id_category,
             'position': position,
             }
-        query = self._prepare_mysql_query('insert',
+            
+        # Check if insert or update
+        update_where = self._search_table_key(
+            'category_product', [
+                ('id_product', id_product),
+                ('id_category', self.id_category),
+                ])
+                
+        query = self._prepare_mysql_query(update_where,
             record, 'category_product', field_quote)
 
         cr = self._connection.cursor()
@@ -337,9 +387,16 @@ class mysql_connector():
 	        'date_upd': '2013-10-01 00:00:00',
 	        'pack_stock_type': self.pack_stock_type,
 	        }	
-	        
+
+        # Check if insert or update
+        update_where = self._search_table_key(
+            'product_shop', [
+                ('id_product', id_product),
+                ('id_shop', self.id_shop),
+                ])
+        
         # Crete and execute query:
-        query = self._prepare_mysql_query('insert',
+        query = self._prepare_mysql_query(update_where,
             record, 'product_shop', field_quote)
         cr = self._connection.cursor()
         cr.execute(query)
@@ -448,13 +505,11 @@ class mysql_connector():
         record.update(record_data) # Add field passed from ODOO
 
         # Check if insert or update
-        import pdb; pdb.set_trace()
         update_where = self._search_table_key(
-            'product', 
-            [('reference', reference)],
-            )
+            'product', [('reference', reference)])
         
-        query = self._prepare_mysql_query('insert', record, 'product', field_quote)
+        query = self._prepare_mysql_query(
+            update_where, record, 'product', field_quote)
         cr = self._connection.cursor()
         cr.execute(query)
         id_product = self._connection.insert_id()
@@ -473,7 +528,7 @@ class mysql_connector():
 
             # Default data:
             record_lang_data = {
-                # Fixed field:
+                # Fixed key field:
                 'id_product': id_product,
                 'id_shop': self.id_shop,
                 'id_lang': id_lang,
@@ -493,9 +548,17 @@ class mysql_connector():
             # Generate extra data and integrate:
             self._expand_lang_data(lang_data)
             record_lang_data.update(lang_data)
+
+            # Check if insert or update
+            update_where = self._search_table_key(
+                'product_lang', [
+                    ('id_product', id_product),
+                    ('id_shop', self.id_shop),
+                    ('id_lang', id_lang),
+                    ])
             
             # Prepare and run query:
-            query = self._prepare_mysql_query('insert',
+            query = self._prepare_mysql_query(update_where,
                 record_lang_data, 'product_lang', field_quote)                
             cr = self._connection.cursor()
             cr.execute(query)
