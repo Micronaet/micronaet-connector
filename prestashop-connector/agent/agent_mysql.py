@@ -237,6 +237,7 @@ class mysql_connector():
         record.update(record_data)
 
         # Check if insert or update # TODO correct the filter?
+        import pdb; pdb.set_trace()
         update_where = self._search_table_key(
             'image', [
                 ('id_product', id_product),
@@ -260,6 +261,7 @@ class mysql_connector():
                 }                
 
             # Check if insert or update
+            import pdb; pdb.set_trace()
             update_where = self._search_table_key(
                 'image_lang', [
                     ('id_product', id_image),
@@ -284,6 +286,7 @@ class mysql_connector():
             }           
 
         # Check if insert or update
+        import pdb; pdb.set_trace()
         update_where = self._search_table_key(
             'image_shop', [
                 ('id_product', id_image),
@@ -333,7 +336,8 @@ class mysql_connector():
             'position': position,
             }
             
-        # Check if insert or update
+        # Check if insert or update        
+        import pdb; pdb.set_trace()
         update_where = self._search_table_key(
             'category_product', [
                 ('id_product', id_product),
@@ -389,6 +393,7 @@ class mysql_connector():
 	        }	
 
         # Check if insert or update
+        import pdb; pdb.set_trace()
         update_where = self._search_table_key(
             'product_shop', [
                 ('id_product', id_product),
@@ -505,6 +510,7 @@ class mysql_connector():
         record.update(record_data) # Add field passed from ODOO
 
         # Check if insert or update
+        import pdb; pdb.set_trace()
         update_where = self._search_table_key(
             'product', [('reference', reference)])
         
@@ -550,6 +556,7 @@ class mysql_connector():
             record_lang_data.update(lang_data)
 
             # Check if insert or update
+            import pdb; pdb.set_trace()
             update_where = self._search_table_key(
                 'product_lang', [
                     ('id_product', id_product),
