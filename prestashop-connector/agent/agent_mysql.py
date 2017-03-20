@@ -242,7 +242,7 @@ class mysql_connector():
             # id_image
             'id_product': 0,
             'position': 1,
-            'cover': 1, # XXX ???
+            'cover': 1, # Show as default for list view
             }
         record.update(record_data)
 

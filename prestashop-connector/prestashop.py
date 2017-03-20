@@ -57,11 +57,11 @@ class ProductProductWebServer(orm.Model):
         # Context used here:    
         db_context = context.copy()
         db_context['lang'] = self._lang_db
-
         # Read first element only for setup parameters:        
         first_proxy = self.browse(cr, uid, ids, context=context)[0]
+        connector = first_proxy.connector_id
         rpc_server = connector_pool.get_prestashop_connector(
-            cr, uid, [first_proxy.connector_id], context=context)
+            cr, uid, [connector.id], context=context)
 
         album_id = first_proxy.connector_id.album_id.id
         #context['album_id'] = first_proxy.connector_id.album_id.id
@@ -78,15 +78,16 @@ class ProductProductWebServer(orm.Model):
             image_in = product.default_code.replace(' ', '_')
             
             # Rsync data image file: XXX choose if needed
+            import pdb; pdb.set_trace()
             rsync_command = \
                 'rsync --chown %s --chmod %s -avh -e \'ssh -p %s\' %s%s %s:%s' % (
-                    first_proxy.rsync_chown,
-                    first_proxy.rsync_chmod,
-                    first_proxy.host,
+                    connector.rsync_chown,
+                    connector.rsync_chmod,
+                    connector.host,
                     path_image_in, 
                     image_in, 
-                    first_proxy.rsync_user, 
-                    first_proxy.rsync_path,
+                    connector.rsync_user, 
+                    connector.rsync_path,
                     )
             os.system(rsync_command)
 
@@ -211,6 +212,11 @@ class ConnectorServer(orm.Model):
         #res = sock.execute('system', 'log', True)        
         return sock
 
+    def prestashop_rsync_photo(self, cr, uid, ids, context=None):
+        ''' Read folder image and publich
+        '''
+        return True
+        
     def prestashop_import_category(self, cr, uid, ids, context=None):
         ''' Prestashop import category
         '''
