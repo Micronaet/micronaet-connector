@@ -103,6 +103,8 @@ class mysql_connector():
                     return where, res[0][extra_field]
                 else:
                     return where
+            else:
+                return False
         except:
             return False    
                 
