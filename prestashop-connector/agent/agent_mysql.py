@@ -259,7 +259,7 @@ class mysql_connector():
         cr.execute(query)
         if update_where:
             id_image = search_id # from search query            
-        else:1
+        else:
             id_image = self._connection.insert_id()
         
         self._connection.commit()        
