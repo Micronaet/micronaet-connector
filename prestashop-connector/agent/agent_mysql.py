@@ -84,7 +84,7 @@ class mysql_connector():
                 where += ' and '
             quote = '\'' if type(value) in (str, ) else ''
             where += '%s = %s%s%s' % (
-                quote, value, quote
+                quote, value, quote)
         query = query % (table, where)
         
         # Check if present
