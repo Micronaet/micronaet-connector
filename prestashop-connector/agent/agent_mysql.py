@@ -72,19 +72,19 @@ class mysql_connector():
             
         return True
         
-    def _search_table_key(self, table, keys):
+    def _search_table_key(self, table, key):
         ''' Search table key for get insert/update mode
         '''
         query = 'select count(*) from %s where %s;'
         where = ''
         table = '%s_%s' % (self._prefix, table)
         
-        for key, value in keys:
+        for field, value in key:
             if where:
                 where += ' and '
             quote = '\'' if type(value) in (str, ) else ''
             where += '%s = %s%s%s' % (
-                quote, value, quote)
+                field, quote, value, quote)
         query = query % (table, where)
         
         # Check if present
