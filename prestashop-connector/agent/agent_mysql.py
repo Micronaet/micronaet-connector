@@ -72,7 +72,7 @@ class mysql_connector():
             
         return True
         
-    def _search_table_key(self, table, key, extra_field, search_id=False):
+    def _search_table_key(self, table, key, extra_field=False):
         ''' Search table key for get insert/update mode
         '''
         if extra_field:
@@ -101,14 +101,9 @@ class mysql_connector():
         try: 
             if res[0]['count(*)'] > 0:
                 if extra_field:
-                    item_id = res[0][extra_field]
+                    return where, res[0][extra_field]
                 else:
-                    item_id = False
-
-                if search_id:
-                    return where, item_id
-                else:
-                    return where
+                    return where, False
         except:
             return False    
         
@@ -254,8 +249,7 @@ class mysql_connector():
         update_where, search_id = self._search_table_key(
             'image', 
             [('id_product', id_product)],
-            'id_product', # extra field
-            search_id=True,
+            'id_image', # extra field
             )
                 
         query = self._prepare_mysql_query(
@@ -532,8 +526,8 @@ class mysql_connector():
         import pdb; pdb.set_trace()
         update_where, search_id = self._search_table_key(
             'product', 
-            [('reference', reference)], 
-            search_id=True,
+            [('reference', reference)],
+            'id_product',
             )
         
         query = self._prepare_mysql_query(
