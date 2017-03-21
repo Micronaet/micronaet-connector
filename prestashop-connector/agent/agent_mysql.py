@@ -249,7 +249,7 @@ class mysql_connector():
         # Check if insert or update # TODO correct the filter?
         update_where, search_id = self._search_table_key(
             'image', 
-            [('id_product', id_product),('cover','=',1)], # cover is key
+            [('id_product', id_product),('cover', 1)], # cover is key
             'id_image', # extra field
             )
                 
