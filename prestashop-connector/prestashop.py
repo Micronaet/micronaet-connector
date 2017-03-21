@@ -39,6 +39,17 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 
 _logger = logging.getLogger(__name__)
 
+'''class ProductProduct(orm.Model):
+    """ Model name: ProductProduct
+    """
+    _inherit = 'product.product'
+    
+    _columns = {
+        'prestashop_categ_id': fields.many2many(
+            'product.public.category', string='Public Category', 
+            help='Master cagegory for prestashop'),
+        }    
+'''
 class ProductProductWebServer(orm.Model):
     """ Model name: ProductProductWebServer
     """
