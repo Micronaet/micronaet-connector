@@ -59,6 +59,7 @@ class ProductProductWebServer(orm.Model):
         ''' Publish procedure for prestashop element
         '''
         langs = ['it_IT', 'en_US']
+        vat_included = 1.22
         # No category publish (get from Prestashop not created here!)
         _logger.info('Start publish prestashop product')        
         connector_pool = self.pool.get('connector.server')
@@ -110,6 +111,7 @@ class ProductProductWebServer(orm.Model):
             _logger.info('Launched: %s' % rsync_command)
 
             price = item.force_price or product.lst_price # XXX correct?
+            price *= vat_included # VAT price included
             #image = product.product_image_context # from album_id
             #public_categ_ids = [self.odoo_web_db.get(
             #    c.id) for c in product.public_categ_ids]

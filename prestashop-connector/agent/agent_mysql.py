@@ -246,6 +246,8 @@ class mysql_connector():
             }
         record.update(record_data)
 
+        # Delete previous all product image?
+        
         # Check if insert or update # TODO correct the filter?
         update_where, search_id = self._search_table_key(
             'image', 
