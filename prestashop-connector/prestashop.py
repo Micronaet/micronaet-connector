@@ -112,7 +112,7 @@ class ProductProductWebServer(orm.Model):
             # Rsync data image file: XXX choose if needed
             chown = ' --chown %s' % connector.rsync_chown if \
                 connector.rsync_chown else '',
-            chmod ' --chmod %s' % connector.rsync_chmod if \
+            chmod = ' --chmod %s' % connector.rsync_chmod if \
                 connector.rsync_chmod else '',
             rsync_command = \
                 'rsync%s%s -avh -e \'ssh -p %s\' \'%s\' %s@%s:%s' % (
