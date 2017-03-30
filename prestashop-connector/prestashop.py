@@ -145,13 +145,7 @@ class ProductProductWebServer(orm.Model):
                 #'vat_price': price * 1.22,      
                 #'public_categ_ids': [(6, 0, public_categ_ids)],
                 }
-            try:    
-                campaign = product.mx_campaign_out
-            except:
-                campaign = 0    
-                
-            availability = product.mx_net_qty - product.mx_oc_out - campaign
-            # TODO product.mx_net_mrp_qty (for materials)?
+
             # -----------------------------------------------------------------
             # Lang record: 
             # -----------------------------------------------------------------
@@ -193,7 +187,16 @@ class ProductProductWebServer(orm.Model):
                 'position': 1000,
                 'price': price,        
                 }
+
+            # Generate availability:                
+            try:    
+                campaign = product.mx_campaign_out
+            except:
+                campaign = 0    
                 
+            availability = product.mx_net_qty - product.mx_oc_out - campaign
+            # TODO product.mx_net_mrp_qty (for materials)?
+
             id_product = sock.execute(
                 # List parameters:
                 'product', 'create', # Operation

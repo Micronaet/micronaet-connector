@@ -83,8 +83,8 @@ class ConnectorServer(orm.Model):
             'Descrizione forzata',
             'Cat. stat.',
             'Fornitore',
-            'Esist. netta',
-            'Esist. lorda',
+            'Magaz. - OC - camp',
+            #'Esist. lorda',
             'Categorie',
             ])
         
@@ -130,6 +130,12 @@ class ConnectorServer(orm.Model):
             # TODO public_categ_ ids    
             public_categ_name = [
                 item.name for item in product.public_categ_ids]
+            try:     
+                campaign = product.mx_campaign_out 
+            except:
+                campaign = 0.0    
+            availability = product.mx_net_qty - product.mx_oc_out - campaign
+            
             self.write_xls_line([                
                 published,
                 image,
@@ -143,8 +149,8 @@ class ConnectorServer(orm.Model):
                 product.statistic_category,
                 product.first_supplier_id.name \
                     if product.first_supplier_id else '',
-                product.mx_net_qty,
-                product.mx_lord_qty,
+                availability,
+                #product.mx_lord_qty,
                 '%s' % (public_categ_name, ),
                 ])
 
