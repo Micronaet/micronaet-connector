@@ -55,6 +55,17 @@ class ProductProductWebServer(orm.Model):
     """
     _inherit = 'product.product.web.server'
 
+    def clean_metatags(self, value):
+        ''' Clean meta tags for problems with some char
+        '''
+        replace_list = {
+            '\'', '\'\'',
+            ',', '',
+            }
+        for from_char, to_char in replace_list.iteritems(): 
+            value = value.replace(from_char, to_char)
+        return value
+
     def publish_now_prestashop(self, cr, uid, ids, context=None):
         ''' Publish procedure for prestashop element
         '''
@@ -150,12 +161,13 @@ class ProductProductWebServer(orm.Model):
                     cr, uid, item.id, context=context_lang)
                     
                 # Read data:    
-                name = item_lang.force_name or \
-                    item_lang.product_id.name or ''
-                meta_title = item_lang.force_name or \
-                    item_lang.product_id.name or ''
-                meta_description = item_lang.force_description or \
-                    item_lang.product_id.large_description or ''
+                name = clean_metatags(item_lang.force_name or \
+                    item_lang.product_id.name or '')
+                meta_title = clean_metatags(item_lang.force_name or \
+                    item_lang.product_id.name or '')
+                meta_description = clean_metatags(
+                    item_lang.force_description or \
+                    item_lang.product_id.large_description or '')
                     
                 # Generate record:    
                 record_lang[lang] = {
