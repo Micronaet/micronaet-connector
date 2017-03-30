@@ -148,16 +148,21 @@ class ProductProductWebServer(orm.Model):
                 context_lang['lang'] = lang
                 item_lang = self.browse(
                     cr, uid, item.id, context=context_lang)
+                    
+                # Read data:    
+                name = item_lang.force_name or \
+                    item_lang.product_id.name or ''
+                meta_title = item_lang.force_name or \
+                    item_lang.product_id.name or ''
+                meta_description = item_lang.force_description or \
+                    item_lang.product_id.large_description or ''
+                    
+                # Generate record:    
                 record_lang[lang] = {
                     # Title:
-                    'name': item_lang.force_name or \
-                        item_lang.product_id.name or '',
-                    'meta_title':
-                        item_lang.force_name or \
-                            item_lang.product_id.name or '',
-                    'meta_description': 
-                        item_lang.force_description or \
-                            item_lang.product_id.large_description or '',
+                    'name': name.replace('\'', '\'\''),
+                    'meta_title': meta_title.replace('\'', '\'\''),
+                    'meta_description': meta_description.replace('\'', '\'\''),
                     #'fabric': product.fabric,
                     #'type_of_material': product.type_of_material,
                     }
