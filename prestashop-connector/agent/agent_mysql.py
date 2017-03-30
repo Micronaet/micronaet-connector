@@ -164,15 +164,18 @@ class mysql_connector():
         def clean_metatags(value):
             ''' Clean meta tags for problems with some char
             '''
+            if not value:
+                return ''
             replace_list = {
+                '  ', '-',
+                ' ', '-',
                 ',': ' ',
                 '.': ' ',
-                #'\'': '\'\'',
-                #'  ': ' ',
+                '\'': '',
                 }
             for from_char, to_char in replace_list.iteritems(): 
                 value = value.replace(from_char, to_char)
-            return value
+            return value.lower()
             
         if not data:
             return {}        
@@ -181,9 +184,7 @@ class mysql_connector():
         data['description'] = '<p>%s</p>' % (meta_title or name)
 
         meta_description = data.get('meta_description', '')
-        #link_rewrite = meta_description.lower(
-        link_rewrite = clean_metatags(name.lower(
-            ).replace(' ', '-').replace('\'', ''))
+        link_rewrite = clean_metatags(name)
         data['link_rewrite'] = link_rewrite
         data['meta_keywords'] = meta_description
         data['description_short'] = '<p>%s</p>' % (meta_description)
