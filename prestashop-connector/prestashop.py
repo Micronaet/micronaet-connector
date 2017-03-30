@@ -186,8 +186,10 @@ class ProductProductWebServer(orm.Model):
             # -----------------------------------------------------------------
             category = {
                 # id_product
-                'id_category': product.public_categ_ids[0].website_id if \
-                    product.public_categ_ids else 0, # TODO Stock-Sottocosto 62
+                #'id_category': product.public_categ_ids[0].website_id if \
+                #    product.public_categ_ids else 0,
+                'id_category': item.public_categ_id.website_id if \
+                    item.public_categ_id else 0,
                 'position': 1000,
                 'price': price,        
                 }
