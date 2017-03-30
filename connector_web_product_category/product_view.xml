@@ -12,6 +12,7 @@
                         <field name="image_medium" widget='image' class="oe_avatar oe_right"/>
                         <div class="oe_left">
                             <group>
+                                <field name="enabled" />
                                 <field name="name"/>
                                 <field name="parent_id"/>
                                 <field name="sequence"/>
@@ -27,7 +28,8 @@
             <field name="model">product.public.category</field>
             <field name="field_parent" eval="False"/>
             <field name="arch" type="xml">
-                <tree string="Product Product Categories">
+                <tree string="Product Product Categories" colors="grey:enabled==False">
+                    <field name="enabled" />
                     <field name="sequence" invisible="1"/>
                     <field name="complete_name"/>
                     <field name="connector_id" />

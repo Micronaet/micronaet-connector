@@ -269,7 +269,10 @@ class ProductProductWebServer(orm.Model):
         'connector_id': fields.many2one(
             'connector.server', 'Web Server', required=True),
         'product_id': fields.many2one('product.product', 'Product'),
-
+        'public_categ_id': fields.many2one(
+            'product.public.category', 'Category'),
+        # TODO extra list of category?    
+        
         # Force field
         'force_name': fields.char('Force Name', size=64),
         'force_description': fields.text('Force Description'),

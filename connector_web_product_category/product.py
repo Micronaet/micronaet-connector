@@ -77,6 +77,7 @@ class ProductPublicCategory(osv.osv):
             'image': tools.image_resize_image_big(value)}, context=context)
 
     _columns = {
+        'enabled': fields.boolean('Enabled'),
         'name': fields.char('Name', required=True, translate=True),
         'complete_name': fields.function(
             _name_get_fnc, type='char', string='Name'),

@@ -20,10 +20,13 @@
                     <field name="product_id" />
                     <field name="force_name" />
                     <field name="force_description" />
+                    <field name="connector_id" />
+                    <field name="public_categ_id" />
                     <filter name="published_on" string="Published" domain="[('published','=',True)]"/>
                     <filter name="published_off" string="Not published" domain="[('published','=',False)]"/>
                     <group expand="0" string="Group By...">
                         <filter name="group_connector" string="Web server" context="{'group_by': 'connector_id'}"/>
+                        <filter name="group_category" string="Web category" context="{'group_by': 'public_categ_id'}"/>
                         <filter name="group_product" string="Product" context="{'group_by': 'product_id'}"/>
                     </group>                
                 </search>
@@ -37,6 +40,7 @@
                     <field name="published" />
                     <field name="product_id" readonly="1" invisible="context.get('embedded_view', False)"/>
                     <field name="connector_id" />
+                    <field name="public_categ_id" domain="[('connector_id', '=', connector_id), ('enabled', '=', True)]" />
                     <field name="force_name" />
                     <field name="force_description" />
                     <field name="force_price" />
@@ -56,6 +60,7 @@
                         <group colspan="4" col="4">
                             <field name="published" />
                             <field name="connector_id" />
+                            <field name="public_categ_id" />
                             <field name="force_name" />
                             <field name="force_description" />
                             <field name="force_price" />
