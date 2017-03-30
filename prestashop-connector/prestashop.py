@@ -60,9 +60,9 @@ class ProductProductWebServer(orm.Model):
         '''
         replace_list = {
             '\'': '\'\'',
-            ',': ' ', # XXX
-            '.': ' ',# XXX
-            '  ': ' ',# XXX
+            #',': ' ', # XXX
+            #'.': ' ',# XXX
+            '  ': ' ',
             }
         for from_char, to_char in replace_list.iteritems(): 
             value = value.replace(from_char, to_char)

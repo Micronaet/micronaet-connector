@@ -161,17 +161,29 @@ class mysql_connector():
         ''' Generate extra data for SEO management
             mandatory: name, meta_title, meta_description            
         '''
+        def clean_metatags(value):
+            ''' Clean meta tags for problems with some char
+            '''
+            replace_list = {
+                #'\'': '\'\'',
+                ',': ' ',
+                '.': ' ',
+                #'  ': ' ',
+                }
+            for from_char, to_char in replace_list.iteritems(): 
+                value = value.replace(from_char, to_char)
+            return value
+            
         if not data:
-            return {}
-        
+            return {}        
         name = data.get('name', '')
         meta_title = data.get('meta_title', '')
         data['description'] = '<p>%s</p>' % (meta_title or name)
 
         meta_description = data.get('meta_description', '')
         #link_rewrite = meta_description.lower(
-        link_rewrite = name.lower(
-            ).replace(' ', '-').replace('\'', '')
+        link_rewrite = clean_metatags(name.lower(
+            ).replace(' ', '-').replace('\'', ''))
         data['link_rewrite'] = link_rewrite
         data['meta_keywords'] = meta_description
         data['description_short'] = '<p>%s</p>' % (meta_description)
