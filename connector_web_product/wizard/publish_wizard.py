@@ -19,8 +19,6 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ###############################################################################
-
-
 import os
 import sys
 import logging
@@ -37,9 +35,7 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
     DATETIME_FORMATS_MAP, 
     float_compare)
 
-
 _logger = logging.getLogger(__name__)
-
 
 class ProductPublishWebsiteWizard(orm.TransientModel):
     ''' Wizard for publish wizard 
@@ -118,5 +114,3 @@ class ProductPublishWebsiteWizard(orm.TransientModel):
         }    
         
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-
-

@@ -196,7 +196,9 @@ class mysql_connector():
     def update_image_file(self, reference, id_image):
         ''' Update image reference in rsync folder to prestashop path        
         '''
-        root_path = '/var/www/html/2015.redesiderio.it/site/public/https' 
+        #root_path = '/var/www/html/2015.redesiderio.it/site/public/https' 
+        root_path = '/home/redesiderio/public_html'
+        # TODO 
 
         path_in = os.path.join(root_path, 'img/odoo')        
         path_out = os.path.join(root_path, 'img/p',)

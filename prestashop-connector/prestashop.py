@@ -59,7 +59,7 @@ class ProductProductWebServer(orm.Model):
         ''' Clean meta tags for problems with some char
         '''
         replace_list = {
-            '\'': '\'\'',
+            '\'': '\'\'', # SQL problem with '
             #',': ' ', # XXX
             #'.': ' ',# XXX
             '  ': ' ',
@@ -142,7 +142,7 @@ class ProductProductWebServer(orm.Model):
                 'active': item.published,
                 # Extra:
                 #'q_x_pack': product.q_x_pack,
-                #'vat_price': price * 1.22,      
+                #'vat_price': price,
                 #'public_categ_ids': [(6, 0, public_categ_ids)],
                 }
 
@@ -193,7 +193,7 @@ class ProductProductWebServer(orm.Model):
                 campaign = product.mx_campaign_out
             except:
                 campaign = 0    
-                
+
             availability = product.mx_net_qty - product.mx_oc_out - campaign
             # TODO product.mx_net_mrp_qty (for materials)?
 
