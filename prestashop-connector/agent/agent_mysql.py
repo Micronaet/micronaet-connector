@@ -356,7 +356,7 @@ class mysql_connector():
         query = '''
             UPDATE %s
             SET `quantity` = 0 
-            WHERE `product_id` = %s;
+            WHERE `id_product` = %s;
             ''' % (table, id_product)
         if self._log:
             print query
