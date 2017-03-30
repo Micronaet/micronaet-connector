@@ -59,8 +59,8 @@ class ProductProductWebServer(orm.Model):
         ''' Clean meta tags for problems with some char
         '''
         replace_list = {
-            '\'', '\'\'',
-            ',', '',
+            '\'': '\'\'',
+            ',': '',
             }
         for from_char, to_char in replace_list.iteritems(): 
             value = value.replace(from_char, to_char)
