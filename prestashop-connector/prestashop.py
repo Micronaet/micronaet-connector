@@ -110,10 +110,14 @@ class ProductProductWebServer(orm.Model):
             sock.execute('system', 'log', True)
             
             # Rsync data image file: XXX choose if needed
+            chown = ' --chown %s' % connector.rsync_chown if \
+                connector.rsync_chown else '',
+            chmod ' --chmod %s' % connector.rsync_chmod if \
+                connector.rsync_chmod else '',
             rsync_command = \
-                'rsync --chown %s --chmod %s -avh -e \'ssh -p %s\' \'%s\' %s@%s:%s' % (
-                    connector.rsync_chown,
-                    connector.rsync_chmod,
+                'rsync%s%s -avh -e \'ssh -p %s\' \'%s\' %s@%s:%s' % (
+                    chown,
+                    chmod,
                     connector.rsync_port,
                     os.path.join(path_image_in, image_in), 
                     connector.rsync_user, 

@@ -239,7 +239,7 @@ class mysql_connector():
                 
             if self._log:
                 print '[INFO] Image %s > %s' % (image_in, image_out)
-        os.system('chown -R www-data:www-data %s' % path_image_out)
+        os.system('chown -R redesiderio:redesiderio %s' % path_image_out)
         os.system('chmod -R 775 %s' % path_image_out)
             
         return True
