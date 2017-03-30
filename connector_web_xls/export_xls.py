@@ -84,8 +84,7 @@ class ConnectorServer(orm.Model):
             'Cat. stat.',
             'Fornitore',
             'Magaz. - OC - camp',
-            #'Esist. lorda',
-            'Categorie',
+            'Categoria principale',
             ])
         
         # ---------------------------------------------------------------------
@@ -115,6 +114,7 @@ class ConnectorServer(orm.Model):
             force_name = ''
             force_description = ''
             force_price = ''
+            public_categ_name = ''
             for connector in product.web_server_ids:
                 if connector.connector_id.id != ids[0]:
                     continue
@@ -125,11 +125,13 @@ class ConnectorServer(orm.Model):
                 force_price = connector.force_price
                 force_description = connector.force_description
                 force_price = connector.force_price
+                public_categ_name = connector.public_categ_id.name if \
+                    connector.public_categ_id else ''
                 break
 
             # TODO public_categ_ ids    
-            public_categ_name = [
-                item.name for item in product.public_categ_ids]
+            #public_categ_name = [
+            #    item.name for item in product.public_categ_ids]
             try:     
                 campaign = product.mx_campaign_out 
             except:
@@ -150,8 +152,7 @@ class ConnectorServer(orm.Model):
                 product.first_supplier_id.name \
                     if product.first_supplier_id else '',
                 availability,
-                #product.mx_lord_qty,
-                '%s' % (public_categ_name, ),
+                public_categ_name,
                 ])
 
         WB.close()                
