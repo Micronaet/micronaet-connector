@@ -167,8 +167,8 @@ class mysql_connector():
             if not value:
                 return ''
             replace_list = {
-                '  ', '-',
-                ' ', '-',
+                '  ': '-',
+                ' ': '-',
                 ',': ' ',
                 '.': ' ',
                 '\'': '',
