@@ -330,7 +330,7 @@ class mysql_connector():
             search product_id with attribute 0
         ''' 
         import pdb; pdb.set_trace()
-        table = 'ps_stock_available'
+        table = 'stock_available'
         # ---------------------------------------------------------------------
         # Generate record data
         # ---------------------------------------------------------------------
@@ -355,10 +355,10 @@ class mysql_connector():
             return False
         cr = self._connection.cursor()
         query = '''
-            UPDATE %s
+            UPDATE %s_%s
             SET `quantity` = 0 
             WHERE `id_product` = %s;
-            ''' % (table, id_product)
+            ''' % (self._prefix, table, id_product)
         if self._log:
             print query
         cr.execute(query)
@@ -369,9 +369,9 @@ class mysql_connector():
         # ---------------------------------------------------------------------
         query = '''
             SELECT id_stock_available
-            FROM %s
+            FROM %s_%s
             WHERE `id_product` = %s and `id_product_attribute` = 0;
-            ''' % (table, id_product)
+            ''' % (self._prefix, table, id_product)
         if self._log:
             print query
         cr.execute(query)
@@ -386,7 +386,7 @@ class mysql_connector():
                 ('%s' % item_ids)[1:-1])
 
         query = self._prepare_mysql_query(
-            update_where, record, table, field_quote=None)
+            update_where, record, table, [])
         if self._log:
             print query
         cr.execute(query)
