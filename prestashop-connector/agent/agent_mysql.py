@@ -329,6 +329,7 @@ class mysql_connector():
             record_data has product and quantity elements
             search product_id with attribute 0
         ''' 
+        import pdb; pdb.set_trace()
         table = 'ps_stock_available'
         # ---------------------------------------------------------------------
         # Generate record data
