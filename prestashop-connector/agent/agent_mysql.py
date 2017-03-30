@@ -43,16 +43,16 @@ class mysql_connector():
 
     id_image_type = {
         '': False, # empty default image no resize for now
-     	'cart_default': (80, 80),
-	    'small_default': (98, 98),
-	    'medium_default': (125, 125),
-	    'home_default': (250, 250),
-	    'large_default': (458, 458),
-	    'thickbox_default': (800, 800),
-	    'category_default': (870, 217),
-	    'scene_default': (870, 270),
-	    'm_scene_default': (161 ,58),
-	    }
+        'cart_default': (80, 80),
+        'small_default': (98, 98),
+        'medium_default': (125, 125),
+        'home_default': (250, 250),
+        'large_default': (458, 458),
+        'thickbox_default': (800, 800),
+        'category_default': (870, 217),
+        'scene_default': (870, 270),
+        'm_scene_default': (161 ,58),
+        }
     # -------------------------------------------------------------------------
     #                              Utility function:
     # -------------------------------------------------------------------------
@@ -324,6 +324,74 @@ class mysql_connector():
             self.update_image_file(reference, id_image)
         return id_image
         
+    def write_availability(self, record_data):
+        ''' Update stock available
+            record_data has product and quantity elements
+            search product_id with attribute 0
+        ''' 
+        table = 'ps_stock_available'
+        # ---------------------------------------------------------------------
+        # Generate record data
+        # ---------------------------------------------------------------------
+        record = {
+            #'id_stock_available':,
+            #'id_product':,
+            #'quantity': 0,
+            'id_product_attribute': 0,
+            'id_shop': 1,
+            'id_shop_group': 0,
+            'depends_on_stock': 0,
+            'out_of_stock': 2,
+            }
+        record.update(record_data)
+        id_product = record.get('id_product', 0)
+        # TODO test 0
+
+        # ---------------------------------------------------------------------
+        # Reset all product selected:
+        # ---------------------------------------------------------------------
+        if not self._connection:
+            return False
+        cr = self._connection.cursor()
+        query = '''
+            UPDATE %s
+            SET `quantity` = 0 
+            WHERE `product_id` = %s;
+            ''' % (table, id_product)
+        if self._log:
+            print query
+        cr.execute(query)
+        self._connection.commit()        
+
+        # ---------------------------------------------------------------------
+        # Search default attribute
+        # ---------------------------------------------------------------------
+        query = '''
+            SELECT id_stock_available
+            FROM %s
+            WHERE `id_product` = %s and `id_product_attribute` = 0;
+            ''' % (table, id_product)
+        if self._log:
+            print query
+        cr.execute(query)
+        item_ids = [item['id_stock_available'] for item in cr.fetchall()]
+        
+        # ---------------------------------------------------------------------
+        # Create or update
+        # ---------------------------------------------------------------------
+        update_where = ''
+        if item_ids: # Update
+            update_where = 'id_stock_available in (%s)' % (
+                ('%s' % item_ids)[1:-1])
+
+        query = self._prepare_mysql_query(
+            update_where, record, table, field_quote=None)
+        if self._log:
+            print query
+        cr.execute(query)
+        self._connection.commit()        
+        return True
+            
     def write_category(self, record_data):
         ''' Update product - category link if present or create
             product_shop: id_product, id_category, position  
@@ -376,36 +444,36 @@ class mysql_connector():
         # TODO write date     
         record = {
             'id_product': id_product,
-	        'id_shop': self.id_shop,
-	        'id_category_default': id_category,
-	        'id_tax_rules_group': 1,
-	        'on_sale': 0,
-	        'online_only': 0,
-	        'ecotax': 0.0,
-	        'minimal_quantity': 1,
-	        'price': price,
-	        'wholesale_price': 0.0,
-	        'unity': '',
-	        'unit_price_ratio': 0.0,
-	        'additional_shipping_cost': 0.0,
-	        'customizable': 0,
-	        'uploadable_files': 0,
-	        'text_fields': 0,
-	        'active': 1,
-	        'redirect_type': '404',
-	        'id_product_redirected': 0,
-	        'available_for_order': 1,
-	        'available_date': '2013-01-01',
-	        'condition': 'new',
-	        'show_price': 1,
-	        'indexed': 1,
-	        'visibility': 'both',
-	        'cache_default_attribute': 0,
-	        'advanced_stock_management': 0,
-	        'date_add': '2013-10-01 00:00:00',
-	        'date_upd': '2013-10-01 00:00:00',
-	        'pack_stock_type': self.pack_stock_type,
-	        }	
+            'id_shop': self.id_shop,
+            'id_category_default': id_category,
+            'id_tax_rules_group': 1,
+            'on_sale': 0,
+            'online_only': 0,
+            'ecotax': 0.0,
+            'minimal_quantity': 1,
+            'price': price,
+            'wholesale_price': 0.0,
+            'unity': '',
+            'unit_price_ratio': 0.0,
+            'additional_shipping_cost': 0.0,
+            'customizable': 0,
+            'uploadable_files': 0,
+            'text_fields': 0,
+            'active': 1,
+            'redirect_type': '404',
+            'id_product_redirected': 0,
+            'available_for_order': 1,
+            'available_date': '2013-01-01',
+            'condition': 'new',
+            'show_price': 1,
+            'indexed': 1,
+            'visibility': 'both',
+            'cache_default_attribute': 0,
+            'advanced_stock_management': 0,
+            'date_add': '2013-10-01 00:00:00',
+            'date_upd': '2013-10-01 00:00:00',
+            'pack_stock_type': self.pack_stock_type,
+            }    
 
         # Check if insert or update
         update_where = self._search_table_key(
@@ -420,7 +488,6 @@ class mysql_connector():
         cr = self._connection.cursor()
         cr.execute(query)
         self._connection.commit()
-	        
         return True
 
     def create(self, *parameter, **parameter_args):
@@ -433,6 +500,7 @@ class mysql_connector():
         lang_record_db = parameter[1] 
         record_category = parameter[2]
         update_image = parameter[3]
+        availability = parameter[4]
         
         # Parameter name-value explode:
         #update_image = parameter_args.get('update_image', False)
@@ -603,6 +671,14 @@ class mysql_connector():
             #'position': 1,
             #'cover': '',
             }, reference, update_image=update_image)
+            
+        # ---------------------------------------------------------------------
+        # Update availability block:
+        # ---------------------------------------------------------------------
+        self.write_availability({
+            'id_product': id_product,
+            'quantity': availability,
+            })    
         return id_product
 
     def write(self, **parameter):

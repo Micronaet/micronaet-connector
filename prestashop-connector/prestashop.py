@@ -131,8 +131,14 @@ class ProductProductWebServer(orm.Model):
                 #'q_x_pack': product.q_x_pack,
                 #'vat_price': price * 1.22,      
                 #'public_categ_ids': [(6, 0, public_categ_ids)],
-                } 
-            
+                }
+            try:    
+                campaign = product.mx_campaign_out
+            except:
+                campaign = 0    
+                
+            availability = product.mx_net_qty - product.mx_oc_out - campaign
+            # TODO product.mx_net_mrp_qty (for materials)?
             # -----------------------------------------------------------------
             # Lang record: 
             # -----------------------------------------------------------------
@@ -157,7 +163,7 @@ class ProductProductWebServer(orm.Model):
                     }
 
             # -----------------------------------------------------------------
-            # Categoryy record
+            # Category record
             # -----------------------------------------------------------------
             category = {
                 # id_product
@@ -169,7 +175,10 @@ class ProductProductWebServer(orm.Model):
                 
             id_product = sock.execute(
                 # List parameters:
-                'product', 'create', record, record_lang, category, True, # update_image
+                'product', 'create', # Operation
+                record, record_lang, category, # Dict data
+                True, # update_image
+                availability, # availability
                 )
 
         _logger.info('Update other product lang:')

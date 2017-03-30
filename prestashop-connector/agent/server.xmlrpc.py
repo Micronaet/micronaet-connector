@@ -63,6 +63,8 @@ try:
 
             if param[0] == '_DB_SERVER_':
                 server = param[1]
+                if server == 'localhost':
+                    server = '127.0.0.1'
             if param[0] == '_DB_NAME_':
                 database = param[1]
 
