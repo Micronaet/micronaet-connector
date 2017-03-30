@@ -165,9 +165,9 @@ class mysql_connector():
             ''' Clean meta tags for problems with some char
             '''
             replace_list = {
-                #'\'': '\'\'',
                 ',': ' ',
                 '.': ' ',
+                #'\'': '\'\'',
                 #'  ': ' ',
                 }
             for from_char, to_char in replace_list.iteritems(): 
