@@ -329,7 +329,6 @@ class mysql_connector():
             record_data has product and quantity elements
             search product_id with attribute 0
         ''' 
-        import pdb; pdb.set_trace()
         table = 'stock_available'
         # ---------------------------------------------------------------------
         # Generate record data
@@ -384,6 +383,7 @@ class mysql_connector():
         if item_ids: # Update
             update_where = 'id_stock_available in (%s)' % (
                 ('%s' % item_ids)[1:-1])
+            update_where = update_where.replace('L', '')
 
         query = self._prepare_mysql_query(
             update_where, record, table, [])
