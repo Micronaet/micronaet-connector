@@ -72,7 +72,7 @@ class ProductProductWebServer(orm.Model):
         ''' Publish procedure for prestashop element
         '''
         langs = ['it_IT', 'en_US']
-        vat_included = 1.0 #.22
+        vat_included = 1.22 #.22
         # No category publish (get from Prestashop not created here!)
         _logger.info('Start publish prestashop product')        
         connector_pool = self.pool.get('connector.server')
