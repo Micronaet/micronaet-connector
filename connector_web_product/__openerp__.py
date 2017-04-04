@@ -40,7 +40,7 @@
         'security/ir.model.access.csv',    
         'product_view.xml',
         'wizard/publish_view.xml',
-        'scheduler.xml',
+        #'scheduler.xml',
         ],
     'active': False,
     'installable': True,

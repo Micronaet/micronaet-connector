@@ -25,6 +25,7 @@
                     <header>
                         <button name="prestashop_import_category" string="Load category" type="object" attrs="{'invisible': [('prestashop','=',False)]}"/>
                         <button name="prestashop_rsync_photo" string="Upload all photo" type="object" attrs="{'invisible': [('prestashop','=',False)]}"/>
+                        <button name=" publish_all_connector" string="Publish all" type="object" attrs="{'invisible': [('prestashop','=',False)]}"/>                       
                     </header>
                 </xpath>
 

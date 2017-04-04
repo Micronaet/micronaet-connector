@@ -38,6 +38,7 @@
     'data': [
         #'security/ir.model.access.csv',    
         'prestashop_view.xml',
+        'scheduler.xml',
         ],
     'active': False,
     'installable': True,

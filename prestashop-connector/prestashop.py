@@ -67,16 +67,22 @@ class ProductProductWebServer(orm.Model):
         for from_char, to_char in replace_list.iteritems(): 
             value = value.replace(from_char, to_char)
         return value
-
+        
     def schedule_publish_prestashop_now_all(self, cr, uid, context=None):
-        ''' Search web server and publish
+        ''' Search web server and publish 
+            context: force_one is used for publish a connector via button
         '''
+        force_one = context.get('force_one', False)
+        
         # TODO move in connector
         server_pool = self.pool.get('connector.server')
-        server_ids = server_pool.search(cr, uid, [
-            ('scheduled', '=', True),
-            ], context=context)
-           
+        if force_one:
+            server__ids = force_one
+        else:
+            server_ids = server_pool.search(cr, uid, [
+                ('scheduled', '=', True),
+                ], context=context)
+               
         for connector_id in server_ids:    
             product_ids = self.search(cr, uid, [
                 ('connector_id', 'in', server_ids),
@@ -286,6 +292,21 @@ class ConnectorServer(orm.Model):
     """ Model name: ConnectorServer
     """    
     _inherit = 'connector.server'
+    
+    def publish_all_connector(self, cr, uid, context=None):
+        ''' Force publish all this elements
+        '''
+        assert len(ids) == 1, 'Works only with one record a time'
+        
+        if context is None:
+            context = {}
+            
+        context_force = context.copy()
+        context_force['force_one'] = ids
+        
+        product_pool = self.pool.get('product.product.web.server')
+        product_pool.schedule_publish_prestashop_now_all(
+            cr, uid, context=context_force)
     
     def get_prestashop_connector(self, cr, uid, ids, context=None):
         ''' Return XMLRPC connector with server
