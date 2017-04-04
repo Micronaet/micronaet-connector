@@ -108,6 +108,7 @@ class ProductProductWebServer(orm.Model):
         sock = connector_pool.get_prestashop_connector(
             cr, uid, [connector.id], context=context)
 
+        import pdb; pdb.set_trace()
         connector = first_proxy.connector_id 
         album = connector.album_id
         
@@ -116,14 +117,14 @@ class ProductProductWebServer(orm.Model):
         else:    
             vat_included = 1            
         min_price = connector.min_price # Publish only >=
-        discount = connector.discount
+        discount = 1.0 - connector.discount
 
         album_id = album.id
         #context['album_id'] = first_proxy.connector_id.album_id.id
         
         rpc_default_code = {}
         path_image_in = os.path.expanduser(album.path)
-        import pdb; pdb.set_trace()
+
         for item in self.browse(cr, uid, ids, context=db_context):
             # Readability:
             product = item.product_id
@@ -156,19 +157,23 @@ class ProductProductWebServer(orm.Model):
             os.system(rsync_command)
             _logger.info('Launched: %s' % rsync_command)
 
-            price = item.force_price or product.lst_price # XXX correct?
-            if price < min_price:
+            # -----------------------------------------------------------------
+            # Price evaulation:
+            # -----------------------------------------------------------------
+            # Price forced or pricelist:
+            price = item.force_price or (product.lst_price * discount)
+
+            # Vat add or not:
+            price *= vat_included
+
+            # Vat min price check:
+            if price <= min_price:
                 _logger.error('Price %s is under minimal, jump product: %s' % (
                     price,
                     default_code, 
                     ))
                 continue # jump    
                 
-            price *= vat_included # VAT price included
-            #image = product.product_image_context # from album_id
-            #public_categ_ids = [self.odoo_web_db.get(
-            #    c.id) for c in product.public_categ_ids]
-            
             # -----------------------------------------------------------------
             # Standard record data:    
             # -----------------------------------------------------------------
@@ -225,7 +230,7 @@ class ProductProductWebServer(orm.Model):
                 'id_category': item.public_categ_id.website_id if \
                     item.public_categ_id else 0,
                 'position': 1000,
-                'price': price,        
+                'price': price, # TODO here?!?!   
                 }
 
             # Generate availability:                
