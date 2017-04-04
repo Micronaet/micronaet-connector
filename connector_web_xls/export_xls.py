@@ -77,6 +77,7 @@ class ConnectorServer(orm.Model):
             'Codice',
             'Nome',
             'Nome forzato',
+            'Prezzo pubblicato',
             'EAN',
             'Prezzo ODOO',
             'Prezzo forzato',
@@ -106,7 +107,12 @@ class ConnectorServer(orm.Model):
             return False                    
         db_context = context.copy()
         db_context['album_id'] = ws_proxy[0].connector_id.album_id.id
-    
+        
+        # Read parameter from connector:
+        discount = 1.0 - ws_proxy[0].connector_id.discount
+        vat_included = 1.0 + ws_proxy[0].connector_id.add_vat
+        min_price = ws_proxy[0].connector_id.min_price
+         
         for product in product_pool.browse(
                 cr, uid, product_ids, context=db_context):
             # Fields:    
@@ -139,6 +145,11 @@ class ConnectorServer(orm.Model):
                 campaign = 0.0    
             availability = product.mx_net_qty - product.mx_oc_out - campaign
             
+            price = force_price or (product.lst_price * discount)
+            price *= vat_included
+            if price <= min_price:
+                price = 'MIN'
+            
             self.write_xls_line([                
                 published,
                 image,
@@ -148,6 +159,8 @@ class ConnectorServer(orm.Model):
                 product.ean13,
                 product.lst_price,
                 force_price,
+                price, # published
+                
                 product.large_description,
                 force_description,
                 product.statistic_category,
