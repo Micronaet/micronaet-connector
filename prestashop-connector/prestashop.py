@@ -22,6 +22,7 @@ import sys
 import logging
 import openerp
 import xmlrpclib
+import xlsxwriter
 import openerp.netsvc as netsvc
 import openerp.addons.decimal_precision as dp
 from openerp.osv import fields, osv, expression, orm
@@ -98,6 +99,20 @@ class ProductProductWebServer(orm.Model):
         '''
         langs = ['it_IT', 'en_US']
 
+        # ---------------------------------------------------------------------
+        # Log file:
+        # ---------------------------------------------------------------------
+        filename = '/home/administrator/photo/xls/connector/log.xls'
+        
+        # Open file and write header
+        WB = xlsxwriter.Workbook(filename)
+        WS = WB.add_worksheet('Prodotti')
+        WS.write(0, 0, 'Codice')
+        WS.write(0, 1, 'Prezzo')
+        WS.write(0, 2, 'Categoria')
+        WS.write(0, 3, 'Disponibilita')
+        WS.write(0, 4, 'Errore')
+
         # No category publish (get from Prestashop not created here!)
         _logger.info('Start publish prestashop product')        
         connector_pool = self.pool.get('connector.server')
@@ -114,7 +129,6 @@ class ProductProductWebServer(orm.Model):
         sock = connector_pool.get_prestashop_connector(
             cr, uid, [connector.id], context=context)
 
-        import pdb; pdb.set_trace()
         connector = first_proxy.connector_id 
         album = connector.album_id
         
@@ -131,10 +145,14 @@ class ProductProductWebServer(orm.Model):
         rpc_default_code = {}
         path_image_in = os.path.expanduser(album.path)
 
+        i = 0
         for item in self.browse(cr, uid, ids, context=db_context):
-            import pdb; pdb.set_trace()
+            i += 1
+
             # Readability:
             product = item.product_id
+
+            WS.write(i, 0, product.default_code or '?')
 
             # TODO publish all!!
             
@@ -145,15 +163,18 @@ class ProductProductWebServer(orm.Model):
                 )
             image_in_fullname = os.path.join(path_image_in, image_in)
             if not os.path.isfile(image_in_fullname):
-                _logger.error('Image not found: %s' % image_in_fullname)
+                WS.write(
+                    i, 4, 'Image not found: %s' % image_in_fullname)
                 continue
             
             if not item.product_id.large_description:    
-                _logger.error('Image description not found: %s' % default_code)
+                WS.write(
+                    i, 4, 'Image description not found: %s' % default_code)
                 continue
             
             if not item.public_categ_id:
-                _logger.error('No category: %s' % default_code)
+                WS.write(
+                    i, 4, 'No category: %s' % default_code)
                 continue                
                             
             # Enable log:
@@ -188,12 +209,15 @@ class ProductProductWebServer(orm.Model):
 
             # Vat min price check:
             if price <= min_price:
-                _logger.error('Price %s is under minimal, jump product: %s' % (
+                WS.write(
+                    i, 4, 'Price %s is under minimal, jump product: %s' % (
                     price,
                     default_code, 
                     ))
                 continue # jump    
                 
+            WS.write(i, 1, price)
+            
             # -----------------------------------------------------------------
             # Standard record data:    
             # -----------------------------------------------------------------
@@ -243,6 +267,10 @@ class ProductProductWebServer(orm.Model):
             # -----------------------------------------------------------------
             # Category record
             # -----------------------------------------------------------------
+            if not item.public_categ_id:
+                WS.write(i, 4, 'No category')
+                continue
+                
             category = {
                 # id_product
                 #'id_category': product.public_categ_ids[0].website_id if \
@@ -253,6 +281,8 @@ class ProductProductWebServer(orm.Model):
                 'price': price, # TODO here?!?!   
                 }
 
+            WS.write(i, 2, item.public_categ_id.name)
+
             # Generate availability:                
             try:    
                 campaign = product.mx_campaign_out
@@ -262,6 +292,8 @@ class ProductProductWebServer(orm.Model):
             availability = product.mx_net_qty - product.mx_oc_out - campaign
             # TODO product.mx_net_mrp_qty (for materials)?
 
+            WS.write(i, 3, availability)
+
             id_product = sock.execute(
                 # List parameters:
                 'product', 'create', # Operation
@@ -269,6 +301,7 @@ class ProductProductWebServer(orm.Model):
                 True, # update_image
                 availability, # availability
                 )
+
 
         _logger.info('Update other product lang:')
         return True
