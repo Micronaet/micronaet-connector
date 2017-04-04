@@ -293,7 +293,7 @@ class ConnectorServer(orm.Model):
     """    
     _inherit = 'connector.server'
     
-    def publish_all_connector(self, cr, uid, context=None):
+    def publish_all_connector(self, cr, uid, ids, context=None):
         ''' Force publish all this elements
         '''
         assert len(ids) == 1, 'Works only with one record a time'
