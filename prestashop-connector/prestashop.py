@@ -151,6 +151,10 @@ class ProductProductWebServer(orm.Model):
             if not item.product_id.large_description:    
                 _logger.error('Image description not found: %s' % default_code)
                 continue
+            
+            if not item.public_categ_id:
+                _logger.error('No category: %s' % default_code)
+                continue                
                             
             # Enable log:
             sock.execute('system', 'log', True)
