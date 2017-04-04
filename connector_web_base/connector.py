@@ -62,10 +62,16 @@ class ConnectorServer(orm.Model):
             'Scheduled', help='Auto import schedule operation'),
         'name': fields.char('Web server name', size=64, required=True),
         'host': fields.char('Host', size=100, required=True),
-        'port': fields.integer('Port', required=True),
+        'port': fields.integer('Port', required=True),        
         'database': fields.char('Database', size=100, required=True),
         'username': fields.char('Username', size=100, required=True),
         'password': fields.char('Password', size=100, required=True),
+        'discount': fields.float('Discount', digits=(16, 3), 
+            help='Discount on price not forced'),            
+        'add_vat': fields.float('Add vat', digits=(16, 3), 
+            help='If price need to be aumented with vat'),
+        'min_price': fields.float('Min price', digits=(16, 3), 
+            help='Min price for uploaded product'),            
 
         'company_id': fields.many2one('res.company', 'Company', required=True),         
         'note': fields.text('Note'),
@@ -76,6 +82,7 @@ class ConnectorServer(orm.Model):
     _defaults = {
         'host': lambda *x: 'localhost',
         'port': lambda *x: 8069,
+        'min_price': lambda *x: 10.0,
         #'company_id': lambda s, cr, uid, ctx: s.get_default_company(
         #    cr, uid, ctx),
         }    

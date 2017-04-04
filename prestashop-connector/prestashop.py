@@ -71,15 +71,27 @@ class ProductProductWebServer(orm.Model):
     def schedule_publish_prestashop_now_all(self, cr, uid, context=None):
         ''' Search web server and publish
         '''
-        self.search(cr, uid, [], context=context)
-        return True
+        # TODO move in connector
+        server_pool = self.pool.get('connector.server')
+        server_ids = server_pool.search(cr, uid, [
+            ('scheduled', '=', True),
+            ], context=context)
+           
+        for connector_id in server_ids:    
+            product_ids = self.search(cr, uid, [
+                ('connector_id', 'in', server_ids),
+                ], context=context)
+            if not product_ids:
+                _logger.error('No product tu publish, check scheduled in server!')
+                return False
+        return self.publish_now_prestashop(
+            cr, uid, product_ids, context=context)        
         
     def publish_now_prestashop(self, cr, uid, ids, context=None):
         ''' Publish procedure for prestashop element
         '''
         langs = ['it_IT', 'en_US']
-        vat_included = 1.22 #.22
-        min_price = 10.0 # no article under this price
+
         # No category publish (get from Prestashop not created here!)
         _logger.info('Start publish prestashop product')        
         connector_pool = self.pool.get('connector.server')
@@ -96,12 +108,22 @@ class ProductProductWebServer(orm.Model):
         sock = connector_pool.get_prestashop_connector(
             cr, uid, [connector.id], context=context)
 
-        album = first_proxy.connector_id.album_id
+        connector = first_proxy.connector_id 
+        album = connector.album_id
+        
+        if connector.add_vat:
+            vat_included = 1 + connector.add_vat
+        else:    
+            vat_included = 1            
+        min_price = connector.min_price # Publish only >=
+        discount = connector.discount
+
         album_id = album.id
         #context['album_id'] = first_proxy.connector_id.album_id.id
         
         rpc_default_code = {}
         path_image_in = os.path.expanduser(album.path)
+        import pdb; pdb.set_trace()
         for item in self.browse(cr, uid, ids, context=db_context):
             # Readability:
             product = item.product_id
