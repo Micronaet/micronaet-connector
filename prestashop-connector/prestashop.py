@@ -77,7 +77,7 @@ class ProductProductWebServer(orm.Model):
         # TODO move in connector
         server_pool = self.pool.get('connector.server')
         if force_one:
-            server__ids = force_one
+            server_ids = force_one
         else:
             server_ids = server_pool.search(cr, uid, [
                 ('scheduled', '=', True),
