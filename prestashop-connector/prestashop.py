@@ -126,6 +126,7 @@ class ProductProductWebServer(orm.Model):
         path_image_in = os.path.expanduser(album.path)
 
         for item in self.browse(cr, uid, ids, context=db_context):
+            import pdb; pdb.set_trace()
             # Readability:
             product = item.product_id
 
@@ -136,6 +137,15 @@ class ProductProductWebServer(orm.Model):
                 product.default_code.replace(' ', '_'),
                 'jpg',
                 )
+            image_in_fullname = os.path.join(path_image_in, image_in)
+            if not os.path.isfile(image_in_fullname):
+                _logger.error('Image not found: %s' % image_in_fullname)
+                continue
+            
+            if not item.product_id.large_description:    
+                _logger.error('Image description not found: %s' % default_code)
+                continue
+                            
             # Enable log:
             sock.execute('system', 'log', True)
             
@@ -149,7 +159,7 @@ class ProductProductWebServer(orm.Model):
                     chown,
                     chmod,
                     connector.rsync_port,
-                    os.path.join(path_image_in, image_in), 
+                    image_in_fullname, 
                     connector.rsync_user, 
                     connector.host,
                     connector.rsync_path,
