@@ -77,10 +77,10 @@ class ConnectorServer(orm.Model):
             'Codice',
             'Nome',
             'Nome forzato',
-            'Prezzo pubblicato',
             'EAN',
             'Prezzo ODOO',
             'Prezzo forzato',
+            'Prezzo pubblicato',
             'Descrizione web',
             'Descrizione forzata',
             'Cat. stat.',
@@ -148,7 +148,7 @@ class ConnectorServer(orm.Model):
             price = force_price or (product.lst_price * discount)
             price *= vat_included
             if price <= min_price:
-                price = 'MIN'
+                price = 'MIN: %s' % price
             
             self.write_xls_line([                
                 published,
