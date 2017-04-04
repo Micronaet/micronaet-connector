@@ -9,6 +9,7 @@
                 <form string="Connector Server" version="7.0">        
                     <sheet>
                         <group col="4" colspan="4">
+                            <field name="scheduled" />
                             <field name="name" />                            
                             <field name="host" />                            
                             <field name="port" />
@@ -27,6 +28,7 @@
             <field name="model">connector.server</field>
             <field name="arch" type="xml">
                 <tree string="Connector Server" version="7.0">        
+                    <field name="scheduled" />
                     <field name="name" />                            
                     <field name="host" />                            
                     <field name="port" />

@@ -58,6 +58,8 @@ class ConnectorServer(orm.Model):
         return res
         
     _columns = {
+        'scheduled': fields.boolean(
+            'Scheduled', help='Auto import schedule operation'),
         'name': fields.char('Web server name', size=64, required=True),
         'host': fields.char('Host', size=100, required=True),
         'port': fields.integer('Port', required=True),

@@ -68,11 +68,18 @@ class ProductProductWebServer(orm.Model):
             value = value.replace(from_char, to_char)
         return value
 
+    def schedule_publish_prestashop_now_all(self, cr, uid, context=None):
+        ''' Search web server and publish
+        '''
+        self.search(cr, uid, [], context=context)
+        return True
+        
     def publish_now_prestashop(self, cr, uid, ids, context=None):
         ''' Publish procedure for prestashop element
         '''
         langs = ['it_IT', 'en_US']
         vat_included = 1.22 #.22
+        min_price = 10.0 # no article under this price
         # No category publish (get from Prestashop not created here!)
         _logger.info('Start publish prestashop product')        
         connector_pool = self.pool.get('connector.server')
@@ -128,6 +135,13 @@ class ProductProductWebServer(orm.Model):
             _logger.info('Launched: %s' % rsync_command)
 
             price = item.force_price or product.lst_price # XXX correct?
+            if price < min_price:
+                _logger.error('Price %s is under minimal, jump product: %s' % (
+                    price,
+                    default_code, 
+                    ))
+                continue # jump    
+                
             price *= vat_included # VAT price included
             #image = product.product_image_context # from album_id
             #public_categ_ids = [self.odoo_web_db.get(
