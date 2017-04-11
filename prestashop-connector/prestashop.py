@@ -68,11 +68,11 @@ class ProductProductWebServer(orm.Model):
         for from_char, to_char in replace_list.iteritems(): 
             value = value.replace(from_char, to_char)
         return value
-    
+
     def auto_select_product(self, cr, uid, connector_id, context=None):
         ''' Auto select product with son particular case
             Overrided depend on company rules
-        '''
+        '''        
         # Procedure that create connector product elements:
         # XXX overrided!
         return True
@@ -344,6 +344,12 @@ class ConnectorServer(orm.Model):
     """ Model name: ConnectorServer
     """    
     _inherit = 'connector.server'
+
+    def auto_select_product_button(self, cr, uid, ids, context=None):
+        ''' Auto select product with son particular case
+        '''        
+        return self.pool.get('product.product.web.server').auto_select_product(
+            cr, uid, ids[0], context=context)
     
     def publish_all_connector(self, cr, uid, ids, context=None):
         ''' Force publish all this elements
