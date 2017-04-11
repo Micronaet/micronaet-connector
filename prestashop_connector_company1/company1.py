@@ -75,7 +75,7 @@ class ProductProductWebServer(orm.Model):
                 cr, uid, product_ids, context=context):                
             # Log information:    
             i += 1
-            if i % 100:
+            if i % 100 == 0:
                 _logger.info('Product read: %s' % i)
 
             product_id = product.id
@@ -88,49 +88,53 @@ class ProductProductWebServer(orm.Model):
                 positive_ids.append(product_id)                
         _logger.info('Negative product: %s' % len(negative_ids))
         _logger.info('Positive product: %s' % len(positive_ids))
-        import pdb; pdb.set_trace()
         
         # ---------------------------------------------------------------------
         # Unactivate negative product:        
         # ---------------------------------------------------------------------
-        negative_product_ids = self.search(cr, uid, [
-            ('product_id', 'in', negative_ids)], context=context)
-        self.write(cr, uid, negative_product_ids, {
+        negative_connector_ids = self.search(cr, uid, [
+            ('connector_id', '=', connector_id),
+            ('product_id', 'in', negative_ids),
+            ], context=context)
+        self.write(cr, uid, negative_connector_ids, {
              'published': False, # XXX or force 0 quantity!!
              }, context=context)
         _logger.info(
-            'Negative connector product: %s' % len(negative_product_ids))
-        import pdb; pdb.set_trace()
+            'Negative connector product: %s' % len(negative_connector_ids))
 
         # ---------------------------------------------------------------------
         # Activate positive product:        
         # ---------------------------------------------------------------------
         # Yet present:
-        positive_product_ids = self.search(cr, uid, [
-            ('product_id', 'in', positive_ids)], context=context)
-        self.write(cr, uid, positive_product_ids, {
+        positive_connector_ids = self.search(cr, uid, [
+            ('connector_id', '=', connector_id),
+            ('product_id', 'in', positive_ids),
+            ], context=context)
+        self.write(cr, uid, positive_connector_ids, {
              'published': True, # XXX or force 0 quantity!!
              }, context=context)
         _logger.info(
-            'Positive connector product: %s' % len(positive_product_ids))
-        import pdb; pdb.set_trace()
+            'Positive connector product: %s' % len(positive_connector_ids))
 
         # ---------------------------------------------------------------------
         # All product yet present:
         # ---------------------------------------------------------------------
-        current_product_ids = self.search(cr, uid, [
-            ('product_id', 'in', product_ids)], context=context)
-        current_ids = [item['product_id'] for item in cr.fetchall()]
+        current_product_ids = [].extend(
+            negative_connector_ids).extend(positive_connector_ids)
+        current_ids = [item.product_id.id for item in self.browse(
+            cr, uid, current_product_ids, context=context)]
         _logger.info(
             'Current connector product: %s' % len(current_product_ids))
-        import pdb; pdb.set_trace()
+        _logger.info(
+            'Current product: %s' % len(current_ids))
         
         # ---------------------------------------------------------------------
         # Create product not present:
         # ---------------------------------------------------------------------
         i = 0
-        for item_id in positive_product_ids:
-            if item_id in currenct_product_ids:
+        import pdb; pdb.set_trace()
+        for item_id in positive_ids: # Create positive only
+            if item_id in current_ids:
                 continue # yet present
             i += 1    
             self.create(cr, uid, {
