@@ -75,7 +75,7 @@ class ProductProductWebServer(orm.Model):
                 cr, uid, product_ids, context=context):                
             # Log information:    
             i += 1
-            if i % 100 == 0:
+            if i % 50 == 0:
                 _logger.info('Product read: %s' % i)
 
             product_id = product.id
@@ -85,7 +85,7 @@ class ProductProductWebServer(orm.Model):
             if stock_status <= 0.0:
                 negative_ids.append(product_id)
             else: 
-                positive_ids.append(product_id)                
+                positive_ids.append(product_id)          
         _logger.info('Negative product: %s' % len(negative_ids))
         _logger.info('Positive product: %s' % len(positive_ids))
         
@@ -119,20 +119,21 @@ class ProductProductWebServer(orm.Model):
         # ---------------------------------------------------------------------
         # All product yet present:
         # ---------------------------------------------------------------------
-        current_product_ids = [].extend(
-            negative_connector_ids).extend(positive_connector_ids)
+        current_product_ids = []
+        current_product_ids.extend(negative_connector_ids)
+        current_product_ids.extend(positive_connector_ids)
+        
         current_ids = [item.product_id.id for item in self.browse(
             cr, uid, current_product_ids, context=context)]
         _logger.info(
-            'Current connector product: %s' % len(current_product_ids))
+            'Current connector product line: %s' % len(current_product_ids))
         _logger.info(
-            'Current product: %s' % len(current_ids))
+            'Current product selected (must be equal): %s' % len(current_ids))
         
         # ---------------------------------------------------------------------
         # Create product not present:
         # ---------------------------------------------------------------------
         i = 0
-        import pdb; pdb.set_trace()
         for item_id in positive_ids: # Create positive only
             if item_id in current_ids:
                 continue # yet present
@@ -143,6 +144,5 @@ class ProductProductWebServer(orm.Model):
                 'published': True,
                 }, context=context)
         _logger.info('New connector product: %s' % i)        
-        import pdb; pdb.set_trace()
         return True
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
