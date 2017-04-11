@@ -68,11 +68,21 @@ class ProductProductWebServer(orm.Model):
         for from_char, to_char in replace_list.iteritems(): 
             value = value.replace(from_char, to_char)
         return value
+    
+    def auto_select_product(self, cr, uid, connector_id, context=None):
+        ''' Auto select product with son particular case
+            Overrided depend on company rules
+        '''
+        # Procedure that create connector product elements:
+        # XXX overrided!
+        return True
         
     def schedule_publish_prestashop_now_all(self, cr, uid, context=None):
         ''' Search web server and publish 
             context: force_one is used for publish a connector via button
         '''
+        if context is None:
+            context = {}
         force_one = context.get('force_one', False)
         
         # TODO move in connector
@@ -84,12 +94,18 @@ class ProductProductWebServer(orm.Model):
                 ('scheduled', '=', True),
                 ], context=context)
                
-        for connector_id in server_ids:    
+        for connector_id in server_ids:
+            # Force selection when scheduled:            
+            if not force_one:
+                self.auto_select_product(
+                    cr, uid, connector_id, context=context)
+           
             product_ids = self.search(cr, uid, [
-                ('connector_id', 'in', server_ids),
+                ('connector_id', '=', connector_id),
                 ], context=context)
             if not product_ids:
-                _logger.error('No product tu publish, check scheduled in server!')
+                _logger.error(
+                    'No product tu publish, check scheduled in server!')
                 return False
         return self.publish_now_prestashop(
             cr, uid, product_ids, context=context)        
@@ -102,7 +118,7 @@ class ProductProductWebServer(orm.Model):
         # ---------------------------------------------------------------------
         # Log file:
         # ---------------------------------------------------------------------
-        filename = '/home/administrator/photo/xls/connector/log.xls'
+        filename = '/home/administrator/photo/xls/connector/log.xlsx'
         
         # Open file and write header
         WB = xlsxwriter.Workbook(filename)
@@ -114,7 +130,7 @@ class ProductProductWebServer(orm.Model):
         WS.write(0, 4, 'Errore')
 
         # No category publish (get from Prestashop not created here!)
-        _logger.info('Start publish prestashop product')        
+        _logger.info('Start publish prestashop product')
         connector_pool = self.pool.get('connector.server')
 
         if context is None:    
@@ -301,7 +317,6 @@ class ProductProductWebServer(orm.Model):
                 True, # update_image
                 availability, # availability
                 )
-
 
         _logger.info('Update other product lang:')
         return True
