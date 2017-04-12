@@ -54,6 +54,7 @@ class ProductPublishWebsiteWizard(orm.TransientModel):
         # Pool:
         product_pool = self.pool.get('product.product')
         connector_pool = self.pool.get('product.product.web.server')
+        category_pool = self.pool.get('product.public.category')
         
         wizard_browse = self.browse(cr, uid, ids, context=context)[0]
         
@@ -61,6 +62,11 @@ class ProductPublishWebsiteWizard(orm.TransientModel):
         mode = wizard_browse.mode
         webserver_id = wizard_browse.webserver_id.id
         published = wizard_browse.published
+        
+        # Get category database
+        import pdb; pdb.set_trace()
+        category_db = category_pool.load_product_category(
+            cr, uid, connector_id, context=context)
         
         # Create record if not present in product
         publish_ids = []
@@ -76,12 +82,23 @@ class ProductPublishWebsiteWizard(orm.TransientModel):
                 if server.connector_id.id == webserver_id:
                     publish_ids.append(server.id)
                     break
+
             else: # only if not found:
+                data = {
+                    'connector_id': webserver_id,
+                    'product_id': product.id,
+                    }
+                
+                # Assign category if present:    
+                default_code = product.default.code
+                if default_code and category_db:
+                    for start, category_id in category_db.iteritems():
+                        if default_code.startswith(start):
+                            data['public_categ_id'] = category_id
+                            break
+                        
                 publish_ids.append(
-                    connector_pool.create(cr, uid, {
-                        'connector_id': webserver_id,
-                        'product_id': product.id,
-                        }, context=context))
+                    connector_pool.create(cr, uid, data, context=context))
             
         if publish_ids:
             # Set all record for publish:                    

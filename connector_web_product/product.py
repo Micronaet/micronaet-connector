@@ -219,7 +219,7 @@ class ProductProductWebServer(orm.Model):
                 'q_x_pack': product.q_x_pack,
                 'vat_price': price * 1.22,      
                 'public_categ_ids': [(6, 0, public_categ_ids)],
-                }
+                }                
 
             # Check Web presence for product:
             if rpc_product_proxy:

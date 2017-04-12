@@ -51,6 +51,39 @@ class ProductPublicCategory(osv.osv):
         ['parent_id'])
         ]
 
+    # Utility:
+    def assign_product_category(
+            self, cr, uid, default_code, connector_id, context=None):
+        ''' Assign category to product selected
+        '''
+        #default_code = product.default_code
+        if not default_code:
+            return False
+            
+        category_ids = self.search(cr, uid, [
+            ('connector_id', '=', connector_id),
+            ('start_code', '!=', False)], context=context)
+        for category in self.browse(
+                cr, uid, category_ids, context=context):
+            for start in category.start_code.split('|'):
+                if default_code.startswith(start):
+                    return category.id
+        return False
+
+    def load_product_category(self, cr, uid, connector_id, context=None):
+        ''' Assign category to product selected
+        '''
+        res = {}
+        category_ids = self.search(cr, uid, [
+            ('connector_id', '=', connector_id),
+            ('start_code', '!=', False),
+            ], context=context)
+        for category in self.browse(
+                cr, uid, category_ids, context=context):
+            for start in category.start_code.split('|'):
+                res[start] = category.id
+        return res
+    
     def name_get(self, cr, uid, ids, context=None):
         res = []
         for cat in self.browse(cr, uid, ids, context=context):
@@ -118,6 +151,8 @@ class ProductPublicCategory(osv.osv):
         'connector_id': fields.many2one(
             'connector.server', 'Linked connector', 
             help='Connector linked where category was imported (no ODOO web)'),
+        'start_code': fields.text('Start code', 
+            help='Code start with...: separate with |, es: 127TX|027TX|029TX'),    
         }
     
 class ProductTemplate(orm.Model):

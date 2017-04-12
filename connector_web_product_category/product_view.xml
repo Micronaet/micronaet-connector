@@ -17,6 +17,8 @@
                                 <field name="parent_id"/>
                                 <field name="sequence"/>
                                 <field name="connector_id" />
+                                <separator string="Code" colspan="4"/>  
+                                <field name="start_code" nolabel="1" colspan="4" />
                             </group>
                         </div>
                     </sheet>
