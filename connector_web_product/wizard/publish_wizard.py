@@ -66,6 +66,7 @@ class ProductPublishWebsiteWizard(orm.TransientModel):
         # Get category database
         category_db = category_pool.load_product_category(
             cr, uid, webserver_id, context=context)
+        category_start = sorted(category_db, reverse=True)
         
         # Create record if not present in product
         publish_ids = []
@@ -91,9 +92,9 @@ class ProductPublishWebsiteWizard(orm.TransientModel):
                 # Assign category if present:    
                 default_code = product.default_code
                 if default_code and category_db:
-                    for start, category_id in category_db.iteritems():
+                    for start in category_start:
                         if default_code.startswith(start):
-                            data['public_categ_id'] = category_id
+                            data['public_categ_id'] = category_db[start]
                             break
                         
                 publish_ids.append(
