@@ -66,7 +66,7 @@ class ProductPublishWebsiteWizard(orm.TransientModel):
         # Get category database
         category_db = category_pool.load_product_category(
             cr, uid, webserver_id, context=context)
-        import pdb; pdb.set_trace()
+
         category_start = sorted(category_db, reverse=True)
         
         # Create record if not present in product
