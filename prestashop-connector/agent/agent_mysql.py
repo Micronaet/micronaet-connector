@@ -750,7 +750,21 @@ class mysql_connector():
         cr.execute(query)
         return [
             (item['id_category'], item['name']) for item in cr.fetchall()]
-        
+    
+    def get_cursor(self, ):
+        ''' Get or reactivate cursor
+        '''
+        # TODO check regenerate cursor
+        if not self._connection.cursor():
+            self._connection = MySQLdb.connect(
+                host=self._server,
+                user=self._user,
+                passwd=self._password,
+                db=self._database,
+                cursorclass=MySQLdb.cursors.DictCursor,
+                charset=self._charset,
+                )            
+        return self._connection.cursor()
     # -------------------------------------------------------------------------
     # Constructor:
     # -------------------------------------------------------------------------
