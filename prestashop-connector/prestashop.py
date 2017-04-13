@@ -81,7 +81,6 @@ class ProductProductWebServer(orm.Model):
         ''' Search web server and publish 
             context: force_one is used for publish a connector via button
         '''
-        import pdb; pdb.set_trace()
         if context is None:
             context = {}
         force_one = context.get('force_one', False)
@@ -180,19 +179,25 @@ class ProductProductWebServer(orm.Model):
                 )
             image_in_fullname = os.path.join(path_image_in, image_in)
             if not os.path.isfile(image_in_fullname):
-                WS.write(
-                    i, 4, 'Image not found: %s' % image_in_fullname)
+                error = 'Image not found: %s' % image_in_fullname
+                _logger.error(error)                
+                WS.write(i, 4, error)
                 continue
             
             if not item.product_id.large_description:    
-                WS.write(
-                    i, 4, 'Image description not found: %s' % default_code)
+                error = 'Image description not found: %s' % default_code
+                _logger.error(error)                
+                WS.write(i, 4, error)
                 continue
             
             if not item.public_categ_id:
-                WS.write(
-                    i, 4, 'No category: %s' % default_code)
-                continue                
+                error = 'No category: %s' % default_code
+                _logger.error(error)                
+                WS.write(i, 4, error)
+                continue               
+                
+            _log.info('Start publish: %s' % product.default_code)     
+            import pdb; pdb.set_trace()    
                             
             # Enable log:
             sock.execute('system', 'log', True)
@@ -394,7 +399,6 @@ class ConnectorServer(orm.Model):
     def publish_all_connector(self, cr, uid, ids, context=None):
         ''' Force publish all this elements
         '''
-        import pdb; pdb.set_trace()
         assert len(ids) == 1, 'Works only with one record a time'
         
         if context is None:
