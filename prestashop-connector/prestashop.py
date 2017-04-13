@@ -196,7 +196,7 @@ class ProductProductWebServer(orm.Model):
                 WS.write(i, 4, error)
                 continue               
                 
-            _log.info('Start publish: %s' % product.default_code)     
+            _logger.info('Start publish: %s' % product.default_code)     
             import pdb; pdb.set_trace()    
                             
             # Enable log:
