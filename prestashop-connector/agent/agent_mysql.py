@@ -198,7 +198,6 @@ class mysql_connector():
         '''
         #root_path = '/var/www/html/2015.redesiderio.it/site/public/https' 
         root_path = '/home/redesiderio/public_html'
-        import pdb; pdb.set_trace()
         # TODO 
 
         path_in = os.path.join(root_path, 'img/odoo')        
