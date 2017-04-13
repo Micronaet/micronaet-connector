@@ -200,7 +200,7 @@ class ProductProductWebServer(orm.Model):
             import pdb; pdb.set_trace()    
                             
             # Enable log:
-            #sock.execute('system', 'log', True)
+            sock.execute('system', 'log', True)
             
             # Rsync data image file: XXX choose if needed
             chown = ' --chown %s' % connector.rsync_chown if \
