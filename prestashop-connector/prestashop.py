@@ -354,11 +354,9 @@ class ConnectorServer(orm.Model):
         connector_pool = self.pool.get('product.product.web.server')
 
         # Get category database
-        import pdb; pdb.set_trace()
         category_db = category_pool.load_product_category(
-            cr, uid, webserver_id, context=context)
+            cr, uid, ids[0], context=context)
         category_start = sorted(category_db, reverse=True)
-        import pdb; pdb.set_trace()
         line_ids = connector_pool.search(cr, uid, [
             ('connector_id', '=', ids[0]),
             ], context=context)
@@ -384,7 +382,6 @@ class ConnectorServer(orm.Model):
             connector_pool.write(cr, uid, item_id, {
                 'public_categ_id': public_categ_id,
                 }, context=context)    
-        
         return True
 
     def auto_select_product_button(self, cr, uid, ids, context=None):
