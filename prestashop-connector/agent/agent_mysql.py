@@ -211,23 +211,33 @@ class mysql_connector():
                 self.ext_in,
                 ),
             )
-        # Get image info:
+            
+        # ---------------------------------------------------------------------
+        # Get input image info:
+        # ---------------------------------------------------------------------
         i_in = Image.open(image_in)
-        w_in, h_in = i_in.size
+        w1, h1 = i_in.size
+        rate_w = w1 >= h1 # W is greater
 
         # Create destination folder:
         key_image = str(id_image)
         key_folder = [item for item in key_image]
         path_image_out = os.path.join(path_out, *key_folder)
 
-        os.system('mkdir -p %s' % path_image_out) # Create all image folder if needed
+        # Create all image folder if needed
+        os.system('mkdir -p %s' % path_image_out) 
 
         image_list = self.id_image_type.iteritems()
 
         for image_type, size in image_list:
-            w, h = size
-            h *= w / w_in # proportinal h calculation
-            
+            if size:                
+                w2, h2 = size
+                if rate_w: # W greater
+                    h2 = w2 * h1 / w1 # proportinal h calculation
+                else: # H greater
+                    w2 = h2 * w1 / h1 # proportinal h calculation
+                size = (w2, h2) # new size
+                            
             image_out = os.path.join(
                 path_image_out,
                 '%s%s%s.%s' % (
@@ -238,9 +248,9 @@ class mysql_connector():
                     ),
                 )
             try:
-                self.resize_image(image_in, image_out, (w, h))                
-                print '[INFO] Resizing... (%s, %s) > (%s, %s)' % (
-                    w_in, h_in, w, h)
+                self.resize_image(image_in, image_out, size)
+                print '[INFO] Resizing... (%s, %s) > (%s)' % (
+                    w1, h1, size)
             except:
                  print '[ERROR] Cannot move image: %s' % image_in
                  continue
@@ -520,6 +530,7 @@ class mysql_connector():
             record: data of product
             lang_record: dict with ID lang: dict of valued
         '''
+        import pdb; pdb.set_trace()
         # Parameter liste explode:
         record_data = parameter[0]
         lang_record_db = parameter[1] 
