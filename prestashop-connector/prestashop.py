@@ -197,7 +197,6 @@ class ProductProductWebServer(orm.Model):
                 continue               
                 
             _logger.info('Start publish: %s' % product.default_code)     
-            import pdb; pdb.set_trace()    
                             
             # Enable log:
             sock.execute('system', 'log', True)
