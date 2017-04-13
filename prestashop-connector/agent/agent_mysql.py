@@ -211,6 +211,9 @@ class mysql_connector():
                 self.ext_in,
                 ),
             )
+        # Get image info:
+        i_in = Image.open(image_in)
+        w_in, h_in = i_in.size
 
         # Create destination folder:
         key_image = str(id_image)
@@ -222,6 +225,9 @@ class mysql_connector():
         image_list = self.id_image_type.iteritems()
 
         for image_type, size in image_list:
+            w, h = size
+            h *= w / w_in # proportinal h calculation
+            
             image_out = os.path.join(
                 path_image_out,
                 '%s%s%s.%s' % (
@@ -232,7 +238,7 @@ class mysql_connector():
                     ),
                 )
             try:
-                self.resize_image(image_in, image_out, size)
+                self.resize_image(image_in, image_out, (w, h))
             except:
                  print '[ERROR] Cannot move image: %s' % image_in
                  continue

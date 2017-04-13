@@ -76,7 +76,7 @@ class ProductProductWebServer(orm.Model):
         # Procedure that create connector product elements:
         # XXX overrided!
         return True
-        
+
     def schedule_publish_prestashop_now_all(self, cr, uid, context=None):
         ''' Search web server and publish 
             context: force_one is used for publish a connector via button
@@ -344,6 +344,48 @@ class ConnectorServer(orm.Model):
     """ Model name: ConnectorServer
     """    
     _inherit = 'connector.server'
+
+    def auto_set_category_connector(self, cr, uid, ids, context=None):
+        ''' Set category automatic for this connector
+        '''
+        assert len(ids) == 1, 'Works only with one record a time'
+
+        category_pool = self.pool.get('product.public.category')
+        connector_pool = self.pool.get('product.product.web.server')
+
+        # Get category database
+        import pdb; pdb.set_trace()
+        category_db = category_pool.load_product_category(
+            cr, uid, webserver_id, context=context)
+        category_start = sorted(category_db, reverse=True)
+        import pdb; pdb.set_trace()
+        line_ids = connector_pool.search(cr, uid, [
+            ('connector_id', '=', ids[0]),
+            ], context=context)
+        update = {}    
+        
+        # Search category depend on start code:
+        for line in connector_pool.browse(cr, uid, line_ids, context=context):
+            product = line.product_id
+            
+            # Assign category if present:    
+            default_code = product.default_code
+            if default_code and category_db:
+                public_categ_id = False
+                for start in category_start:
+                    if default_code.startswith(start):
+                        public_categ_id = category_db[start]
+                        break
+                if public_categ_id:
+                    update[line.id] = public_categ_id
+        
+        # Update operations:
+        for item_id, public_categ_id in update.iteritems():
+            connector_pool.write(cr, uid, item_id, {
+                'public_categ_id': public_categ_id,
+                }, context=context)    
+        
+        return True
 
     def auto_select_product_button(self, cr, uid, ids, context=None):
         ''' Auto select product with son particular case
