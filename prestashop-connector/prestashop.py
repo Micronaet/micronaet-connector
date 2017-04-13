@@ -81,6 +81,7 @@ class ProductProductWebServer(orm.Model):
         ''' Search web server and publish 
             context: force_one is used for publish a connector via button
         '''
+        import pdb; pdb.set_trace()
         if context is None:
             context = {}
         force_one = context.get('force_one', False)
@@ -393,6 +394,7 @@ class ConnectorServer(orm.Model):
     def publish_all_connector(self, cr, uid, ids, context=None):
         ''' Force publish all this elements
         '''
+        import pdb; pdb.set_trace()
         assert len(ids) == 1, 'Works only with one record a time'
         
         if context is None:
