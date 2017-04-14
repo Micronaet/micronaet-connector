@@ -796,6 +796,9 @@ class mysql_connector():
                 cursorclass=MySQLdb.cursors.DictCursor,
                 charset=self._charset,
                 )
+            #if self._log:
+            print '[INFO] Connected MySQL'
+                
             return self._connection
         except:
             self._status = error

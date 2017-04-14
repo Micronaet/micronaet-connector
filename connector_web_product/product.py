@@ -53,7 +53,7 @@ class ProductProductWebServer(orm.Model):
     _lang_db = 'en_US'
 
     # Utility:
-    def publish_category(self, cr, uid, rpc, context=None):
+    def publish_category(self, cr, uid, rpc, webserver_id, context=None):
         ''' Publish category (usually before publish product)
         '''
         if context is None:
@@ -92,7 +92,9 @@ class ProductProductWebServer(orm.Model):
         # Language default lang: it:
         # --------------------------
         _logger.info('Create category elements:')
-        categ_ids = categ_pool.search(cr, uid, [], context=db_context)        
+        categ_ids = categ_pool.search(cr, uid, [
+            ('webserver_id', '=', webserver_id),
+            ], context=db_context)        
         for item in categ_pool.browse(cr, uid, categ_ids, context=db_context):
             data = {
                 'name': item.name, 
@@ -157,15 +159,15 @@ class ProductProductWebServer(orm.Model):
 
         # Read first element only for setup parameters:        
         first_proxy = self.browse(cr, uid, ids, context=context)[0]
-        parameter = first_proxy.connector_id
+        connector = first_proxy.connector_id
         db_context['album_id'] = first_proxy.connector_id.album_id.id
         context['album_id'] = first_proxy.connector_id.album_id.id
 
         # Database access:
-        rpc_server = 'http://%s:%s' % (parameter.host, parameter.port)
-        rpc_database = parameter.database
-        rpc_username = parameter.username
-        rpc_password = parameter.password
+        rpc_server = 'http://%s:%s' % (connector.host, connector.port)
+        rpc_database = connector.database
+        rpc_username = connector.username
+        rpc_password = connector.password
         
         # Connect to web server:
         rpc = erppeek.Client(
@@ -173,7 +175,7 @@ class ProductProductWebServer(orm.Model):
         rpc_product = rpc.model('product.product')
 
         # Publish category before (only once):
-        self.publish_category(cr, uid, rpc, context=context)
+        self.publish_category(cr, uid, rpc, connector.id, context=context)
 
         rpc_default_code = {}
         for item in self.browse(cr, uid, ids, context=db_context):
