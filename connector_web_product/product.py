@@ -108,6 +108,8 @@ class ProductProductWebServer(orm.Model):
             else:
                 self.odoo_web_db[item.id] = rpc_categ.create(data).id
                 rpc_categ_db[item.name] = self.odoo_web_db[item.id] # update DB
+        _logger.info('Publish %s category!' % len(categ_ids))
+        
         
         # -----------------------
         # Update other languages:
@@ -153,7 +155,7 @@ class ProductProductWebServer(orm.Model):
         if context is None:    
             context = {}
             
-        # Context used here:    
+        # Context used here:
         db_context = context.copy()
         db_context['lang'] = self._lang_db
 
@@ -178,6 +180,7 @@ class ProductProductWebServer(orm.Model):
         self.publish_category(cr, uid, rpc, connector.id, context=context)
 
         rpc_default_code = {}
+        import pdb; pdb.set_trace()
         for item in self.browse(cr, uid, ids, context=db_context):
             # Readability:
             product = item.product_id
