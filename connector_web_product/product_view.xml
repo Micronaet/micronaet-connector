@@ -1,6 +1,18 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+        <!--connector_web_base.view_connector_server_tree-->
+        <record model="ir.ui.view" id="view_prestashop_connector_form">
+            <field name="name">connector.server.form</field>
+            <field name="model">connector.server</field>
+            <field name="inherit_id" ref="connector_web_base.view_connector_server_form"/>
+            <field name="arch" type="xml">
+                <button name="publish_all_connector" position="before">
+                    <button name="auto_set_category_connector" string="Force category" type="object" />
+                </button>
+            </field>
+        </record>
+    
         <record model="ir.ui.view" id="view_product_web_publish_form">
             <field name="name">produc.product.form</field>
             <field name="model">product.product</field>
