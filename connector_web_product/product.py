@@ -53,7 +53,7 @@ class ProductProductWebServer(orm.Model):
     _lang_db = 'en_US'
 
     # Utility:
-    def publish_category(self, cr, uid, rpc, webserver_id, context=None):
+    def publish_category(self, cr, uid, rpc, connector_id, context=None):
         ''' Publish category (usually before publish product)
         '''
         if context is None:
@@ -93,7 +93,7 @@ class ProductProductWebServer(orm.Model):
         # --------------------------
         _logger.info('Create category elements:')
         categ_ids = categ_pool.search(cr, uid, [
-            ('webserver_id', '=', webserver_id),
+            ('connector_id', '=', connector_id),
             ], context=db_context)        
         for item in categ_pool.browse(cr, uid, categ_ids, context=db_context):
             data = {
