@@ -21,15 +21,12 @@
                     <field name="prestashop" />
                 </field>
                 
-                <xpath expr="//sheet" position="before">
-                    <header>
-                        <button name="prestashop_import_category" string="Load category" type="object" attrs="{'invisible': [('prestashop','=',False)]}"/>
-                        <button name="prestashop_rsync_photo" string="Upload all photo" type="object" attrs="{'invisible': [('prestashop','=',False)]}"/>
-                        <button name="auto_select_product_button" string="Select stock product" type="object" attrs="{'invisible': [('prestashop','=',False)]}"/>
-                        <button name="auto_set_category_connector" string="Force category" type="object" />
-                        <button name="publish_all_connector" string="Publish all" type="object" attrs="{'invisible': [('prestashop','=',False)]}" assert="Upload is a long operation, confirm?"/>                       
-                    </header>
-                </xpath>
+                <button name="publish_all_connector" position="before">
+                    <button name="prestashop_import_category" string="Load category" type="object" attrs="{'invisible': [('prestashop','=',False)]}"/>
+                    <button name="prestashop_rsync_photo" string="Upload all photo" type="object" attrs="{'invisible': [('prestashop','=',False)]}"/>
+                    <button name="auto_select_product_button" string="Select stock product" type="object" attrs="{'invisible': [('prestashop','=',False)]}"/>
+                    <button name="auto_set_category_connector" string="Force category" type="object" />
+                </button>
 
                 <field name="password" position="after"> 
                     <group colspan="4" col="4" attrs="{'invisible': [('prestashop','=',False)]}">

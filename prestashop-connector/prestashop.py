@@ -395,20 +395,29 @@ class ConnectorServer(orm.Model):
         return self.pool.get('product.product.web.server').auto_select_product(
             cr, uid, ids[0], context=context)
     
+    # Override original function for check if is a prestashop connections:
     def publish_all_connector(self, cr, uid, ids, context=None):
         ''' Force publish all this elements
         '''
         assert len(ids) == 1, 'Works only with one record a time'
         
-        if context is None:
-            context = {}
+        current_proxy = self.browse(cr, uid, ids, context=context)[0]
+        if current_proxy.prestashop:
+            _logger.info('Force all Prestashop web publish:')
+            if context is None:
+                context = {}
+                
+            context_force = context.copy()
+            context_force['force_one'] = ids
             
-        context_force = context.copy()
-        context_force['force_one'] = ids
-        
-        product_pool = self.pool.get('product.product.web.server')
-        product_pool.schedule_publish_prestashop_now_all(
-            cr, uid, context=context_force)
+            product_pool = self.pool.get('product.product.web.server')
+            return product_pool.schedule_publish_prestashop_now_all(
+                cr, uid, context=context_force)
+            _logger.info('End all Prestashop web publish:')
+        else:
+            _logger.info('Redirect to ODOO web publish:')
+            return super(ConnectorServer, self).publish_all_connector(
+                cr, uid, ids, context=context)
     
     def get_prestashop_connector(self, cr, uid, ids, context=None):
         ''' Return XMLRPC connector with server

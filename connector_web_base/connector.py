@@ -45,6 +45,12 @@ class ConnectorServer(orm.Model):
     '''    
     _name = 'connector.server'
     _description = 'Connector Server'
+
+    def publish_all_connector(self, cr, uid, ids, context=None):
+        ''' Override publish operations
+        '''
+        _logger.error('Error not launchable procedure for publish!')
+        return True
     
     def clean_as_ascii(self, value):
         ''' Procedure for clean not ascii char in string

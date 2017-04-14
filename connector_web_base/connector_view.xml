@@ -6,8 +6,11 @@
             <field name="name">connector.server.form</field>
             <field name="model">connector.server</field>
             <field name="arch" type="xml">
-                <form string="Connector Server" version="7.0">        
-                    <sheet>
+                <form string="Connector Server" version="7.0">
+                    <header>
+                        <button name="publish_all_connector" string="Publish all" type="object" assert="Upload is a long operation, confirm?" class="oe_highlight"/>                        
+                    </header>
+                    <sheet>                        
                         <group col="4" colspan="4">
                             <field name="scheduled" />
                             <field name="name" />    

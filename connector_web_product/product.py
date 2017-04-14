@@ -40,6 +40,31 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 
 _logger = logging.getLogger(__name__)
 
+class ConnectorServer(orm.Model):
+    ''' Model name: Connector Server
+    '''    
+    _inherit = 'connector.server'
+
+    def publish_all_connector(self, cr, uid, ids, context=None):
+        ''' Override publish operations base elements 
+        '''
+        _logger.info('Force all ODOO web publish:')
+        
+        item_pool = self.pool.get('product.product.web.server')
+        item_ids = item_pool.search(cr, uid, [
+            ('connector_id', '=', ids[0]),
+            ], context=context)
+        
+        if not item_ids:            
+            _logger.error('Nothing to publish!')
+            return False
+            
+        # Call button event for publish all elements:
+        _logger.error('Publishing %s elements' % len(item_ids))
+        item_pool.publish_now(cr, uid, item_ids, context=context)
+        _logger.info('End all ODOO web publish:')
+        return True
+
 class ProductProductWebServer(orm.Model):
     """ Model name: ProductProductWebServer
     """
@@ -189,6 +214,11 @@ class ProductProductWebServer(orm.Model):
             image = product.product_image_context # from album_id
             public_categ_ids = [self.odoo_web_db.get(
                 c.id) for c in product.public_categ_ids]
+            if image:
+                published = item.published
+            else:
+                published = False
+                _logger.warning('No image for %s' % default_code)    
             
             # Open socket:
             rpc_product_proxy = rpc_product.browse(
@@ -204,7 +234,7 @@ class ProductProductWebServer(orm.Model):
                 'type_of_material': product.type_of_material,
 
                 'default_code': default_code,
-                'website_published': item.published,
+                'website_published': published,
                 'image': image,
                 'lst_price': price,
 
