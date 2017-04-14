@@ -92,9 +92,10 @@ class mysql_connector():
         query = query % (table, where)
         
         # Check if present
-        if not self._connection:
+        connection = self.get_connection()
+        if not connection:
             return False
-        cr = self._connection.cursor()
+        cr = connection.cursor()
         cr.execute(query)
         res = cr.fetchall()
         try: 
@@ -265,7 +266,8 @@ class mysql_connector():
     def write_image(self, record_data, reference, update_image=False):
         ''' Create image record for product and generate image in asked
         '''
-        if not self._connection:
+        connection = self.get_connection()
+        if not connection:
             return False
 
         id_product = record_data.get('id_product', False)
@@ -293,14 +295,13 @@ class mysql_connector():
                 
         query = self._prepare_mysql_query(
             update_where, record, 'image', field_quote)
-        cr = self._connection.cursor()
+        cr = connection.cursor()
         cr.execute(query)
         if update_where:
             id_image = search_id # from search query            
         else:
-            id_image = self._connection.insert_id()
-        
-        self._connection.commit()        
+            id_image = connection.insert_id()        
+        connection.commit()        
         
         # ---------------------------------------------------------------------
         # Create image_lang (now X lang empty fields)
@@ -322,9 +323,9 @@ class mysql_connector():
             #record.update(record_data)  
             query = self._prepare_mysql_query(
                 update_where, record, 'image_lang', field_quote)
-            cr = self._connection.cursor()
+            cr = connection.cursor()
             cr.execute(query)
-            self._connection.commit()        
+            connection.commit()        
 
         # ---------------------------------------------------------------------
         # Create image_shop
@@ -347,9 +348,9 @@ class mysql_connector():
         #record.update(record_data)  
         query = self._prepare_mysql_query(
             update_where, record, 'image_shop', field_quote)
-        cr = self._connection.cursor()
+        cr = connection.cursor()
         cr.execute(query)
-        self._connection.commit()        
+        connection.commit()        
 
         # ---------------------------------------------------------------------
         # Redim image in correct folder:
@@ -384,9 +385,10 @@ class mysql_connector():
         # ---------------------------------------------------------------------
         # Reset all product selected:
         # ---------------------------------------------------------------------
-        if not self._connection:
+        connection = self.get_connection()
+        if not connection:
             return False
-        cr = self._connection.cursor()
+        cr = connection.cursor()
         query = '''
             UPDATE %s_%s
             SET `quantity` = 0 
@@ -395,7 +397,7 @@ class mysql_connector():
         if self._log:
             print query
         cr.execute(query)
-        self._connection.commit()        
+        connection.commit()        
 
         # ---------------------------------------------------------------------
         # Search default attribute
@@ -424,7 +426,7 @@ class mysql_connector():
         if self._log:
             print query
         cr.execute(query)
-        self._connection.commit()        
+        connection.commit()        
         return True
             
     def write_category(self, record_data):
@@ -432,7 +434,8 @@ class mysql_connector():
             product_shop: id_product, id_category, position  
             category_product: price 
         '''
-        if not self._connection:
+        connection = self.get_connection()
+        if connection:
             return False
             
         # TODO check mandatory fields
@@ -465,9 +468,9 @@ class mysql_connector():
         query = self._prepare_mysql_query(update_where,
             record, 'category_product', field_quote)
 
-        cr = self._connection.cursor()
+        cr = connection.cursor()
         cr.execute(query)
-        self._connection.commit()
+        connection.commit()
         
         # ---------------------------------------------------------------------
         # product_shop
@@ -520,9 +523,9 @@ class mysql_connector():
         # Crete and execute query:
         query = self._prepare_mysql_query(update_where,
             record, 'product_shop', field_quote)
-        cr = self._connection.cursor()
+        cr = connection.cursor()
         cr.execute(query)
-        self._connection.commit()
+        connection.commit()
         return True
 
     def create(self, *parameter, **parameter_args):
@@ -530,7 +533,6 @@ class mysql_connector():
             record: data of product
             lang_record: dict with ID lang: dict of valued
         '''
-        import pdb; pdb.set_trace()
         # Parameter liste explode:
         record_data = parameter[0]
         lang_record_db = parameter[1] 
@@ -542,7 +544,8 @@ class mysql_connector():
         #update_image = parameter_args.get('update_image', False)
         reference = record_data.get('reference', False) # For image name
         
-        if not self._connection:
+        connection = self.get_connection()
+        if not connection:
             return False
 
         # ---------------------------------------------------------------------
@@ -636,13 +639,13 @@ class mysql_connector():
         
         query = self._prepare_mysql_query(
             update_where, record, 'product', field_quote)
-        cr = self._connection.cursor()
+        cr = connection.cursor()
         cr.execute(query)
         if update_where:
             id_product = search_id
         else:
-            id_product = self._connection.insert_id()
-        self._connection.commit()
+            id_product = connection.insert_id()
+        connection.commit()
         
         # ---------------------------------------------------------------------
         # Update lang product_lang:
@@ -689,9 +692,9 @@ class mysql_connector():
             # Prepare and run query:
             query = self._prepare_mysql_query(update_where,
                 record_lang_data, 'product_lang', field_quote)                
-            cr = self._connection.cursor()
+            cr = connection.cursor()
             cr.execute(query)
-            self._connection.commit()
+            connection.commit()
 
         # ---------------------------------------------------------------------
         # Update product category block:
@@ -733,10 +736,10 @@ class mysql_connector():
         ''' Search product
             parameter = [('field', 'operator', 'value')]
         '''
-        
-        if not self._connection:
+        connection = self.get_connection()        
+        if not connection:
             return False
-        cr = self._connection.cursor()
+        cr = connection.cursor()
         query = '''
             SELECT id_product
             FROM ps_product
@@ -754,10 +757,11 @@ class mysql_connector():
     def category_list(self, ):
         ''' Return list of category present in Prestashop
         '''
-        if not self._connection:
+        connection = self.get_connection()
+        if not connection:
             return False
             
-        cr = self._connection.cursor()
+        cr = connection.cursor()
         query = '''
             SELECT id_category, name
             FROM ps_category_lang
@@ -770,11 +774,20 @@ class mysql_connector():
         return [
             (item['id_category'], item['name']) for item in cr.fetchall()]
     
-    def get_cursor(self, ):
-        ''' Get or reactivate cursor
+    def get_connection(self, ):
+        ''' Regenerate connection every time:
         '''
-        # TODO check regenerate cursor
-        if not self._connection.cursor():
+        try:            
+            error = 'Error no MySQLdb installed'
+            import MySQLdb, MySQLdb.cursors
+            
+            error = 'Error connecting to database: %s:%s > %s [%s]' % (
+                self._server,
+                self._port,
+                self._database,
+                self._user,
+                )
+
             self._connection = MySQLdb.connect(
                 host=self._server,
                 user=self._user,
@@ -782,8 +795,13 @@ class mysql_connector():
                 db=self._database,
                 cursorclass=MySQLdb.cursors.DictCursor,
                 charset=self._charset,
-                )            
-        return self._connection.cursor()
+                )
+            return self._connection
+        except:
+            self._status = error
+            self._connected = False
+            return False
+        
     # -------------------------------------------------------------------------
     # Constructor:
     # -------------------------------------------------------------------------
@@ -800,32 +818,11 @@ class mysql_connector():
         self._charset = charset
         self._status = 'connected'
         self._connected = True
-        self._prefix = prefix
-        
+        self._prefix = prefix        
         self._log = False # no log
-        
-        try:            
-            error = 'Error no MySQLdb installed'
-            import MySQLdb, MySQLdb.cursors
 
-            error = 'Error connecting to database: %s:%s > %s [%s]' % (
-                self._server,
-                self._port,
-                self._database,
-                self._user,
-                )
-                
-            self._connection = MySQLdb.connect(
-                host=self._server,
-                user=self._user,
-                passwd=self._password,
-                db=self._database,
-                cursorclass=MySQLdb.cursors.DictCursor,
-                charset=self._charset,
-                )                        
-        except:
-            self._status = error
-            self._connected = False
+        # NOTE: not necessary but used for initial errore test
+        self.get_connection()    
         return
     
 # -----------------------------------------------------------------------------
