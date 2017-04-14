@@ -49,6 +49,7 @@ class ConnectorServer(orm.Model):
         ''' Set category automatic for this connector
         '''
         assert len(ids) == 1, 'Works only with one record a time'
+        _logger.info('Force auto assign of category depend on code')
 
         category_pool = self.pool.get('product.public.category')
         connector_pool = self.pool.get('product.product.web.server')
@@ -82,6 +83,7 @@ class ConnectorServer(orm.Model):
             connector_pool.write(cr, uid, item_id, {
                 'public_categ_id': public_categ_id,
                 }, context=context)    
+        _logger.info('End auto assign of category depend on code')
         return True
         
     def publish_all_connector(self, cr, uid, ids, context=None):
