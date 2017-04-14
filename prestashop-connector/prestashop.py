@@ -185,7 +185,7 @@ class ProductProductWebServer(orm.Model):
                 continue
             
             if not item.product_id.large_description:    
-                error = 'Image description not found: %s' % default_code
+                error = 'Web description not found: %s' % default_code
                 _logger.error(error)                
                 WS.write(i, 4, error)
                 continue
