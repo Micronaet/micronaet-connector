@@ -180,7 +180,6 @@ class ProductProductWebServer(orm.Model):
         self.publish_category(cr, uid, rpc, connector.id, context=context)
 
         rpc_default_code = {}
-        import pdb; pdb.set_trace()
         for item in self.browse(cr, uid, ids, context=db_context):
             # Readability:
             product = item.product_id
