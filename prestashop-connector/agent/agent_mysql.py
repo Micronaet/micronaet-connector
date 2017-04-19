@@ -429,7 +429,7 @@ class mysql_connector():
         connection.commit()        
         return True
             
-    def write_category(self, record_data):
+    def write_category(self, record_data, active=1):
         ''' Update product - category link if present or create
             product_shop: id_product, id_category, position  
             category_product: price 
@@ -484,6 +484,7 @@ class mysql_connector():
             'id_product': id_product,
             'id_shop': self.id_shop,
             'id_category_default': id_category,
+            'active': active,
             'id_tax_rules_group': 1,
             'on_sale': 0,
             'online_only': 0,
@@ -497,7 +498,6 @@ class mysql_connector():
             'customizable': 0,
             'uploadable_files': 0,
             'text_fields': 0,
-            'active': 1,
             'redirect_type': '404',
             'id_product_redirected': 0,
             'available_for_order': 1,
@@ -629,6 +629,7 @@ class mysql_connector():
             'pack_stock_type': 3,
             }        
         record.update(record_data) # Add field passed from ODOO
+        active = record.get('active', 1)
 
         # Check if insert or update
         update_where, search_id = self._search_table_key(
@@ -700,7 +701,7 @@ class mysql_connector():
         # Update product category block:
         # ---------------------------------------------------------------------
         record_category['id_product'] = id_product
-        self.write_category(record_category)
+        self.write_category(record_category, active)
         
         # ---------------------------------------------------------------------
         # Update product category block:
