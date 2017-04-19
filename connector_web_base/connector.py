@@ -74,6 +74,8 @@ class ConnectorServer(orm.Model):
         'password': fields.char('Password', size=100, required=True),
         'discount': fields.float('Discount', digits=(16, 3), 
             help='Discount on price not forced'),            
+        'availability_extra': fields.float('-Availability %', digits=(16, 3), 
+            help='Availability is stock - OC - Campaign - this%'),            
         'add_vat': fields.float('Add vat', digits=(16, 3), 
             help='If price need to be aumented with vat'),
         'min_price': fields.float('Min price', digits=(16, 3), 

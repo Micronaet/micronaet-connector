@@ -25,7 +25,9 @@
                             <field name="username" />
                             <field name="password" widget="password" />
                             <newline/>
+        
                             <field name="discount" />
+                            <field name="availability_extra" />
                             <field name="add_vat" />
                         </group>
                     </sheet>        
@@ -46,6 +48,7 @@
                     <field name="company_id" />                            
                     <field name="username" />
                     <field name="discount" />
+                    <field name="availability_extra" />
                     <field name="add_vat" />
                 </tree>
             </field>
