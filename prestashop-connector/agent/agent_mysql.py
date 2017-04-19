@@ -723,6 +723,7 @@ class mysql_connector():
 
     def write(self, **parameter):
         ''' Update record
+            Note: not used, create works as write if present
         '''
         id_product = parameter['id_product']
         record = parameter['record']
