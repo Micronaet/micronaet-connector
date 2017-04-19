@@ -18,7 +18,7 @@
 ###############################################################################
 
 {
-    'name': 'XMLRPC web connector Base',
+    'name': 'Website connector Base',
     'version': '0.1',
     'category': 'ETL',
     'description': '''        
