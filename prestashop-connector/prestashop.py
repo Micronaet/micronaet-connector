@@ -311,6 +311,11 @@ class ProductProductWebServer(orm.Model):
                 campaign = 0    
 
             availability = product.mx_net_qty - product.mx_oc_out - campaign
+            if connector.availability_extra:
+                availability -= round(
+                    availability * connector.availability_extra / 100.0, 
+                    0,
+                    )
             # TODO product.mx_net_mrp_qty (for materials)?
 
             WS.write(i, 3, availability)
