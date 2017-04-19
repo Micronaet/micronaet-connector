@@ -158,7 +158,7 @@ class ConnectorServer(orm.Model):
                 product.name,
                 force_name,
                 product.ean13,
-                '%s x % x %s' % (
+                '%s x %s x %s' % (
                     product.height,
                     product.width,
                     product.length,                    
