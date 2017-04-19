@@ -58,7 +58,8 @@ class ProductProductWebServer(orm.Model):
                 default_code  != '' AND 
                 length(default_code) > 6 AND
                 substring(default_code, 1,3) > '000' AND 
-                substring(default_code, 1,3) < '999' 
+                substring(default_code, 1,3) < '999' OR
+                substring(default_code, 1,2) in ('TL', 'PO', 'MT')
             ORDER BY default_code;
             '''
         cr.execute(query)
@@ -79,13 +80,16 @@ class ProductProductWebServer(orm.Model):
                 _logger.info('Product read: %s' % i)
 
             product_id = product.id
-            # mx_net_qty
-            stock_status = product.mx_net_mrp_qty - product.mx_oc_out
-            # No campaign here
-            if stock_status <= 0.0:
-                negative_ids.append(product_id)
-            else: 
-                positive_ids.append(product_id)          
+            if product.website_always_present:
+                positive_ids.append(product_id)
+            else:
+                # mx_net_qty
+                stock_status = product.mx_net_mrp_qty - product.mx_oc_out
+                # No campaign here
+                if stock_status <= 0.0:
+                    negative_ids.append(product_id)
+                else: 
+                    positive_ids.append(product_id)          
         _logger.info('Negative product: %s' % len(negative_ids))
         _logger.info('Positive product: %s' % len(positive_ids))
         
