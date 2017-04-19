@@ -38,44 +38,16 @@
                 </field>
             </field>
         </record>
-
-        <!--<record model="ir.ui.view" id="product_product_category_prestashop_form_view">
-            <field name="name">product.product.prestashop.category.form</field>
+        <record model="ir.ui.view" id="product_product_template_always_present_form_view">
+            <field name="name">product.product.product.website.always.form</field>
             <field name="model">product.product</field>
             <field name="inherit_id" ref="connector_web_product_category.product_product_template_form_view"/>
             <field name="arch" type="xml">
-                <xpath expr="//page[1]" position="after">
-                    <page string="Website">
-                        <group name="website" string="Website">
-                            <field name="public_categ_ids" widget="many2many_tags"/>
-                            <field name="alternative_product_ids" widget="many2many_tags"/>
-                            <field name="accessory_product_ids" widget="many2many_tags"/>
-                        </group>
-                    </page>
-                </xpath>    
+                <field name="accessory_product_ids" position="after">
+                    <field name="website_always_present" />                    
+                </field>                
             </field>
-        </record>-->
-                
-        <!--<record model="ir.ui.view" id="view_prestashop_category_tree">
-            <field name="name">product.public.category.tree</field>
-            <field name="model">product.public.category</field>
-            <field name="inherit_id" ref="connector_web_product_category.product_public_category_tree_view"/>
-            <field name="arch" type="xml">
-                <field name="sequence" position="before">
-                    <field name="prestashop" />
-                </field>
-            </field>
-        </record>
-        <record model="ir.ui.view" id="view_prestashop_category_form">
-            <field name="name">product.public.category.form</field>
-            <field name="model">product.public.category</field>
-            <field name="inherit_id" ref="connector_web_product_category.product_public_category_form_view"/>
-            <field name="arch" type="xml">
-                <field name="name" position="before">
-                    <field name="prestashop" />
-                </field>
-            </field>
-        </record>-->
+        </record>        
     </data>
 </openerp>
 
