@@ -78,6 +78,7 @@ class ConnectorServer(orm.Model):
             'Nome',
             'Nome forzato',
             'EAN',
+            'Dimensioni',
             'Prezzo ODOO',
             'Prezzo forzato',
             'Prezzo pubblicato',
@@ -157,6 +158,11 @@ class ConnectorServer(orm.Model):
                 product.name,
                 force_name,
                 product.ean13,
+                '%s x % x %s' % (
+                    product.height,
+                    product.width,
+                    product.length,                    
+                    ),
                 product.lst_price,
                 force_price,
                 price, # published
