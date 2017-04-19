@@ -248,7 +248,7 @@ class ProductProductWebServer(orm.Model):
                 'weight': product.weight,
                 'height': product.height,
                 'width': product.width,
-                'depth': product.height,
+                'depth': product.length,
                 'active': item.published,
                 # Extra:
                 #'q_x_pack': product.q_x_pack,
@@ -401,7 +401,7 @@ class ConnectorServer(orm.Model):
         return sock
 
     def prestashop_rsync_photo(self, cr, uid, ids, context=None):
-        ''' Read folder image and publich
+        ''' Read folder image and publish
         '''
         return True
         
