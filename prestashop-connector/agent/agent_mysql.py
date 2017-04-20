@@ -435,7 +435,7 @@ class mysql_connector():
             category_product: price 
         '''
         connection = self.get_connection()
-        if connection:
+        if not connection:
             return False
             
         # TODO check mandatory fields
