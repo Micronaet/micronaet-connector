@@ -184,6 +184,9 @@ def execute(model, operation, *parameter, **parameter_dict):
             mysql_db._log = parameter[0]
             res['result'] = 'Server log activated' if mysql_db._log \
                 else 'Server log not activated'
+                
+        elif operation == 'stop':
+            sys.exit()
 
     # -------------------------------------------------------------------------
     #                                 ERROR:
@@ -213,4 +216,3 @@ print 'Start XMLRPC server on %s:%s' % (
     
 server.serve_forever()
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-
