@@ -60,6 +60,7 @@ class ProductProductWebServer(orm.Model):
         '''
         replace_list = {
             '\'': '\'\'', # SQL problem with '
+            '"': '', # Link replace problem
             #',': ' ', # XXX
             #'.': ' ',# XXX
             '  ': ' ',
