@@ -113,32 +113,31 @@ class ProductProductWebServer(orm.Model):
     def publish_now_prestashop(self, cr, uid, ids, context=None):
         ''' Publish procedure for prestashop element
         '''
-        langs = ['it_IT', 'en_US']
-
-        # ---------------------------------------------------------------------
-        # Log file:
-        # ---------------------------------------------------------------------
-        filename = '/home/administrator/photo/xls/connector/log.xlsx'
+        def clean_partner_name(name):
+            ''' Clean partner name for log file
+            '''
+            if not name:
+                return ''
+            replace_list = (
+                (r'.', ''),
+                (r' ', '_'),
+                (r'/', ''),                
+                (r'\', ''),
+                )
+            name.replace(
         
-        # Open file and write header
-        WB = xlsxwriter.Workbook(filename)
-        WS = WB.add_worksheet('Prodotti')
-        WS.write(0, 0, 'Codice')
-        WS.write(0, 1, 'Prezzo')
-        WS.write(0, 2, 'Categoria')
-        WS.write(0, 3, 'Disponibilita')
-        WS.write(0, 4, 'Errore')
+        langs = ['it_IT', 'en_US']
 
         # No category publish (get from Prestashop not created here!)
         _logger.info('Start publish prestashop product')
         connector_pool = self.pool.get('connector.server')
-
         if context is None:    
             context = {}
-            
+
         # Context used here:    
         db_context = context.copy()
         db_context['lang'] = self._lang_db
+        
         # Read first element only for setup parameters:        
         first_proxy = self.browse(cr, uid, ids, context=context)[0]
         connector = first_proxy.connector_id
@@ -160,6 +159,22 @@ class ProductProductWebServer(orm.Model):
         
         rpc_default_code = {}
         path_image_in = os.path.expanduser(album.path)
+
+        # ---------------------------------------------------------------------
+        # Log file:
+        # ---------------------------------------------------------------------
+        filename = '/home/administrator/photo/xls/connector/log_%s.xlsx' % (
+            clean_partner_name(connector.company_id.partner_id.name),
+            )
+        
+        # Open file and write header
+        WB = xlsxwriter.Workbook(filename)
+        WS = WB.add_worksheet('Prodotti')
+        WS.write(0, 0, 'Codice')
+        WS.write(0, 1, 'Prezzo')
+        WS.write(0, 2, 'Categoria')
+        WS.write(0, 3, 'Disponibilita')
+        WS.write(0, 4, 'Errore')
 
         i = 0
         for item in self.browse(cr, uid, ids, context=db_context):

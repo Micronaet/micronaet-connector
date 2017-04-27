@@ -167,14 +167,15 @@ class mysql_connector():
             '''
             if not value:
                 return ''
-            replace_list = {
-                '  ': '-',
-                ' ': '-',
-                ',': ' ',
-                '.': ' ',
-                '\'': '',
-                }
-            for from_char, to_char in replace_list.iteritems(): 
+            replace_list = (
+                ('  ', ' '),
+                (' ', '-'),
+                (',', ''),
+                ('.', ''),
+                ('\'', ''),
+                ('"', ''),
+                )
+            for from_char, to_char in replace_list: 
                 value = value.replace(from_char, to_char)
             return value.lower()
             
@@ -188,7 +189,7 @@ class mysql_connector():
 
         link_rewrite = clean_metatags(name)
         data['link_rewrite'] = link_rewrite
-        data['meta_keywords'] = meta_description
+        data['meta_keywords'] = meta_description # TODO limit 160 char?
         data['description_short'] = '<p>%s</p>' % (meta_title or name)
         return
         
