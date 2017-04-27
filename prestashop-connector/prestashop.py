@@ -266,11 +266,10 @@ class ProductProductWebServer(orm.Model):
                 item_lang = self.browse(
                     cr, uid, item.id, context=context_lang)
                     
-                # Read data:    
+                # Read data:                
                 name = self.clean_metatags(item_lang.force_name or \
                     item_lang.product_id.name or '')
-                meta_title = self.clean_metatags(item_lang.force_name or \
-                    item_lang.product_id.name or '')
+                meta_title = name
                 meta_description = self.clean_metatags(
                     item_lang.force_description or \
                     item_lang.product_id.large_description or '')
