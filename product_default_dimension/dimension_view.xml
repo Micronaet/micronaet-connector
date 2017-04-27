@@ -6,7 +6,7 @@
             <field name="name">product.product.default.dimension.tree</field>
             <field name="model">product.product.default.dimension</field>
             <field name="arch" type="xml">
-                <tree string="String" editable="bottom">        
+                <tree string="String" editable="bottom">
                     <field name="name" />
                     <field name="h_seat" />
                     <field name="single" />
@@ -35,6 +35,7 @@
                         <button name="link_product_dimension" string="This dimension" type="object" icon="gtk-refresh"/>
                         <button name="link_all_unassigned_product" string="All unassigned product" type="object" icon="gtk-refresh"/>
                         <button name="link_all_product" string="All product" type="object" icon="gtk-refresh"/>                        
+                        <button name="import_dimension_from_excel" string="Import from Excel" type="object" />
                     </header>
                     <sheet>
                         <group colspan="4" col="6">
