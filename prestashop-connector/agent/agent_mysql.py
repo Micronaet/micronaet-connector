@@ -182,13 +182,14 @@ class mysql_connector():
             return {}        
         name = data.get('name', '')
         meta_title = data.get('meta_title', '')
-        data['description'] = '<p>%s</p>' % (meta_title or name)
-
         meta_description = data.get('meta_description', '')
+
+        data['description'] = '<p>%s</p>' % (meta_description)
+
         link_rewrite = clean_metatags(name)
         data['link_rewrite'] = link_rewrite
         data['meta_keywords'] = meta_description
-        data['description_short'] = '<p>%s</p>' % (meta_description)
+        data['description_short'] = '<p>%s</p>' % (meta_title or name)
         return
         
     # -------------------------------------------------------------------------
