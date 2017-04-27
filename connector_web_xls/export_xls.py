@@ -58,6 +58,7 @@ class ConnectorServer(orm.Model):
         ''' Export excel information for site product
         '''        
         #current_proxy = self.browse(cr, uid, ids, context=context)[0]
+        ws_product_pool = self.pool.get('product.product.web.server')
         
         # ---------------------------------------------------------------------
         # XLS file:
@@ -151,7 +152,7 @@ class ConnectorServer(orm.Model):
             price *= vat_included
             if price <= min_price:
                 price = 'MIN: %s' % price
-            
+            h, w, l = ws_product_pool.get_prestashop_dimension(product)
             self.write_xls_line([                
                 published,
                 image,
@@ -160,11 +161,7 @@ class ConnectorServer(orm.Model):
                 force_name,
                 product.ean13,
                 product.weight,
-                '%s x %s x %s' % (
-                    product.height,
-                    product.width,
-                    product.length,                    
-                    ),
+                '%s x %s x %s' % (h, w, l),
                 product.lst_price,
                 force_price,
                 price, # published
