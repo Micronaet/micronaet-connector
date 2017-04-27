@@ -184,13 +184,17 @@ class mysql_connector():
         name = data.get('name', '')
         meta_title = data.get('meta_title', '')
         meta_description = data.get('meta_description', '')
+        description_short = '%s%s' % (
+            meta_description[:150] or name,
+            '...' if len(meta_description) >= 150 else ''
+            )
 
         data['description'] = '<p>%s</p>' % (meta_description)
 
         link_rewrite = clean_metatags(name)
         data['link_rewrite'] = link_rewrite
         data['meta_keywords'] = meta_description # TODO limit 160 char?
-        data['description_short'] = '<p>%s</p>' % (meta_title or name)
+        data['description_short'] = '<p>%s</p>' % description_short
         return
         
     # -------------------------------------------------------------------------
