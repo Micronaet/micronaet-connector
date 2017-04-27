@@ -55,6 +55,15 @@ class ProductProductWebServer(orm.Model):
     """
     _inherit = 'product.product.web.server'
 
+    def get_prestashop_dimension(self, product):
+        ''' Use a function for override in particular case
+        '''
+        return (
+            product.height,
+            product.width,
+            product.length,
+            )
+        
     def clean_metatags(self, value):
         ''' Clean meta tags for problems with some char
         '''
@@ -259,19 +268,21 @@ class ProductProductWebServer(orm.Model):
             # -----------------------------------------------------------------
             # Standard record data:    
             # -----------------------------------------------------------------
+            h, w, l = self.get_prestashop_dimension(product) # TODO pack!
             record = {
                 'reference': default_code or '', 
                 'ean13': product.ean13 or '',
                 'weight': product.weight,
-                'height': product.height,
-                'width': product.width,
-                'depth': product.length,
+                'height': h,
+                'width': w,
+                'depth': l,
                 'active': item.published,
                 # Extra:
                 #'q_x_pack': product.q_x_pack,
                 #'vat_price': price,
                 #'public_categ_ids': [(6, 0, public_categ_ids)],
                 }
+                
 
             # -----------------------------------------------------------------
             # Lang record: 

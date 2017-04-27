@@ -42,6 +42,27 @@ class ProductProductWebServer(orm.Model):
     """ Model name: ProductProductWebServer
     """
     _inherit = 'product.product.web.server'
+
+    # Override dimension generation:
+    def get_prestashop_dimension(self, product):
+        ''' Use a function for override in particular case
+        '''
+        # Use dimension_id method and retur package dimension
+        if product.dimension_id:
+            _logger.info('Use dimension pack elements')
+            # Return dimension pack of parent element:
+            return (
+                product.dimension_id.height_pack,
+                product.dimension_id.width_pack,
+                product.dimension_id.length_pack,
+                )
+        else:        
+            # Return if present product dimension:
+            return (            
+                product.height,
+                product.width,
+                product.length,
+                )
         
     def auto_select_product(self, cr, uid, connector_id, context=None):
         ''' Auto select product with son particular case
