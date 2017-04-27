@@ -30,6 +30,7 @@
     'depends': [
         'base',
         'prestashop-connector',
+        'product_default_dimension',
         # campaign management?
         ],
     'init_xml': [],
