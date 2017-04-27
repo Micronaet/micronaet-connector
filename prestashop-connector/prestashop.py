@@ -124,7 +124,9 @@ class ProductProductWebServer(orm.Model):
                 (r'/', ''),                
                 (r'\', ''),
                 )
-            name.replace(
+            for old, new in replace_list:
+                name = name.replace(old, new)
+            return name    
         
         langs = ['it_IT', 'en_US']
 
