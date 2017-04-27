@@ -119,10 +119,10 @@ class ProductProductWebServer(orm.Model):
             if not name:
                 return ''
             replace_list = (
-                (r'.', ''),
-                (r' ', '_'),
-                (r'/', ''),                
-                (r'\', ''),
+                ('.', ''),
+                (' ', '_'),
+                ('/', ''),             
+                ('\\', ''),
                 )
             for old, new in replace_list:
                 name = name.replace(old, new)
