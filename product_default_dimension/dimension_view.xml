@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <!--product.product.default.dimension-->
+        <record model="ir.ui.view" id="view_product_product_default_dimension_tree">
+            <field name="name">product.product.default.dimension.tree</field>
+            <field name="model">product.product.default.dimension</field>
+            <field name="arch" type="xml">
+                <tree string="String" editable="bottom">        
+                    <field name="name" />
+                    <field name="h_seat" />
+                    <field name="single" />
+                    
+                    <field name="height" />
+                    <field name="width" />
+                    <field name="length" />
+
+                    <field name="height_pack" />
+                    <field name="width_pack" />
+                    <field name="length_pack" />
+                    <button name="link_product_dimension" string="This dimension" type="object" icon="gtk-refresh"/>
+                    <button name="link_all_unassigned_product" string="All unassigned product" type="object" icon="gtk-refresh"/>
+                    <button name="link_all_product" string="All product" type="object" icon="gtk-refresh"/>
+                    <button name="import_dimension_from_excel" string="Import from Excel" type="object" />
+                </tree>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_product_product_default_dimension_form">
+            <field name="name">product.product.default.dimension.form</field>
+            <field name="model">product.product.default.dimension</field>
+            <field name="arch" type="xml">
+                <form string="String" editable="bottom" version="7.0">
+                    <header>
+                        <button name="link_product_dimension" string="This dimension" type="object" icon="gtk-refresh"/>
+                        <button name="link_all_unassigned_product" string="All unassigned product" type="object" icon="gtk-refresh"/>
+                        <button name="link_all_product" string="All product" type="object" icon="gtk-refresh"/>                        
+                    </header>
+                    <sheet>
+                        <group colspan="4" col="6">
+                            <field name="name" />
+                            <field name="h_seat" />
+                            <field name="single" />
+                            
+                            <field name="height" />
+                            <field name="width" />
+                            <field name="length" />
+
+                            <field name="height_pack" />
+                            <field name="width_pack" />
+                            <field name="length_pack" />
+                       </group>     
+                    </sheet>   
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_product_product_default_dimension">
+            <field name="name">Default product dimension</field>
+            <field name="res_model">product.product.default.dimension</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_product_product_default_dimension_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+        
+        <menuitem 
+            parent="base.menu_product" 
+            id="menu_product_default_dimension" 
+            action="action_product_product_default_dimension"
+            sequence="90"
+            />
+        
+        
+    </data>
+</openerp>
+
