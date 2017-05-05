@@ -29,6 +29,8 @@
                             <field name="discount" />
                             <field name="availability_extra" />
                             <field name="add_vat" />
+
+                            <field name="approx" />
                         </group>
                     </sheet>        
                 </form>
@@ -50,6 +52,7 @@
                     <field name="discount" />
                     <field name="availability_extra" />
                     <field name="add_vat" />
+                    <field name="approx" />
                 </tree>
             </field>
         </record>        

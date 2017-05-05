@@ -253,6 +253,7 @@ class ProductProductWebServer(orm.Model):
 
             # Vat add or not:
             price *= vat_included
+            price = round(price, connector.approx)
 
             # Vat min price check:
             if price <= min_price:

@@ -150,6 +150,7 @@ class ConnectorServer(orm.Model):
             
             price = force_price or (product.lst_price * discount)
             price *= vat_included
+            price = round(price, connector.approx)
             if price <= min_price:
                 price = 'MIN: %s' % price
             h, w, l = ws_product_pool.get_prestashop_dimension(product)

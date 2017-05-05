@@ -80,7 +80,9 @@ class ConnectorServer(orm.Model):
         'add_vat': fields.float('Add vat', digits=(16, 3), 
             help='If price need to be aumented with vat'),
         'min_price': fields.float('Min price', digits=(16, 3), 
-            help='Min price for uploaded product'),            
+            help='Min price for uploaded product'),
+        'approx': fields.integer('Approx', 
+            help='Number of digits', required=True),
 
         'company_id': fields.many2one('res.company', 'Company', required=True),         
         'note': fields.text('Note'),
@@ -92,6 +94,7 @@ class ConnectorServer(orm.Model):
         'host': lambda *x: 'localhost',
         'port': lambda *x: 8069,
         'min_price': lambda *x: 10.0,
+        'approx': lambda *x: 2,
         #'company_id': lambda s, cr, uid, ctx: s.get_default_company(
         #    cr, uid, ctx),
         }    
