@@ -109,7 +109,8 @@ class ConnectorServer(orm.Model):
         if not product_ids:
             return False                    
         db_context = context.copy()
-        db_context['album_id'] = ws_proxy[0].connector_id.album_id.id
+        server = ws_proxy[0].connector_id
+        db_context['album_id'] = server.album_id.id
         
         # Read parameter from connector:
         discount = 1.0 - ws_proxy[0].connector_id.discount
@@ -150,7 +151,7 @@ class ConnectorServer(orm.Model):
             
             price = force_price or (product.lst_price * discount)
             price *= vat_included
-            price = round(price, connector.approx)
+            price = round(price, server.approx)
             if price <= min_price:
                 price = 'MIN: %s' % price
             h, w, l = ws_product_pool.get_prestashop_dimension(product)
