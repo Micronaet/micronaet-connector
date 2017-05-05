@@ -80,7 +80,7 @@ class ProductProductWebServer(orm.Model):
                 length(default_code) > 6 AND
                 substring(default_code, 1,3) > '000' AND 
                 substring(default_code, 1,3) < '999' OR
-                substring(default_code, 1,2) in ('TL', 'PO', 'MT')
+                substring(default_code, 1,2) in ('TL', 'BR', 'MT')
             ORDER BY default_code;
             '''
         cr.execute(query)
