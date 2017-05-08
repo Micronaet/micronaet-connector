@@ -352,6 +352,7 @@ class ProductProductWebServer(orm.Model):
         'force_name': fields.char('Force Name', size=64),
         'force_description': fields.text('Force Description'),
         'force_price': fields.float('Force price', digits=(16, 2)),
+        'force_stock': fields.float('Force stock', digits=(16, 2)),
         # TODO
         }
 

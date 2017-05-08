@@ -239,10 +239,13 @@ class mysql_connector():
         for image_type, size in image_list:
             if size:                
                 w2, h2 = size
-                if rate_w: # W greater
-                    h2 = w2 * h1 / w1 # proportinal h calculation
-                else: # H greater
-                    w2 = h2 * w1 / h1 # proportinal h calculation
+                # XXX keep the same for problem:
+                h2 = w2
+                #if rate_w: # W greater
+                #    h2 = w2 * h1 / w1 # proportinal h calculation
+                #else: # H greater
+                # XXX always calculate width (keep height as default)
+                w2 = h2 * w1 / h1 # proportinal h calculation
                 size = (w2, h2) # new size
                             
             image_out = os.path.join(
