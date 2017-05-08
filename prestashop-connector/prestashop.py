@@ -344,8 +344,12 @@ class ProductProductWebServer(orm.Model):
                     availability * connector.availability_extra / 100.0, 
                     0,
                     )
+                    
+            # Check if min stock is present:        
+            if item.force_min_stock and availability < item.force_min_stock:
+                availability = item.force_min_stock
+                        
             # TODO product.mx_net_mrp_qty (for materials)?
-
             WS.write(i, 3, availability)
 
             id_product = sock.execute(
