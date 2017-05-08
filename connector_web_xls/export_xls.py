@@ -75,6 +75,7 @@ class ConnectorServer(orm.Model):
             # TODO image #WS.insert_image('B5', 'logo.png')
             'Web',
             'Immagine',
+            'Sempre',
             'Codice',
             'Nome',
             'Nome forzato',
@@ -149,6 +150,15 @@ class ConnectorServer(orm.Model):
                 campaign = 0.0    
             availability = product.mx_net_qty - product.mx_oc_out - campaign
             
+            # TODO correct calc:
+            #if connector.availability_extra:
+            #    availability -= round(
+            #        availability * server.availability_extra / 100.0, 0)                    
+            ## Check if min stock is present:        
+            #if item.force_min_stock and availability < item.force_min_stock:
+            #    availability = item.force_min_stock
+
+            
             price = force_price or (product.lst_price * discount)
             price *= vat_included
             price = round(price, server.approx)
@@ -158,6 +168,7 @@ class ConnectorServer(orm.Model):
             self.write_xls_line([                
                 published,
                 image,
+                product.website_always_present,
                 product.default_code,
                 product.name,
                 force_name,
