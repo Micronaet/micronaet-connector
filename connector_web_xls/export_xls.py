@@ -168,7 +168,7 @@ class ConnectorServer(orm.Model):
             self.write_xls_line([                
                 published,
                 image,
-                product.website_always_present,
+                'X' if product.website_always_present else 'O',
                 product.default_code,
                 product.name,
                 force_name,
