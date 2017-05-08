@@ -352,7 +352,8 @@ class ProductProductWebServer(orm.Model):
         'force_name': fields.char('Force Name', size=64),
         'force_description': fields.text('Force Description'),
         'force_price': fields.float('Force price', digits=(16, 2)),
-        'force_stock': fields.float('Force stock', digits=(16, 2)),
+        'force_stock': fields.float('Force min. stock', digits=(16, 2), 
+            help='If product is always present set stock value when <=0'),
         # TODO
         }
 
