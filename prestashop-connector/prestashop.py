@@ -292,7 +292,6 @@ class ProductProductWebServer(orm.Model):
                 #'vat_price': price,
                 #'public_categ_ids': [(6, 0, public_categ_ids)],
                 }
-                
 
             # -----------------------------------------------------------------
             # Lang record: 
