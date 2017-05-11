@@ -31,6 +31,7 @@
                             <field name="add_vat" />
 
                             <field name="approx" />
+                            <field name="volume_weight" />
                         </group>
                     </sheet>        
                 </form>
@@ -53,6 +54,7 @@
                     <field name="availability_extra" />
                     <field name="add_vat" />
                     <field name="approx" />
+                    <field name="volume_weight" />
                 </tree>
             </field>
         </record>        
