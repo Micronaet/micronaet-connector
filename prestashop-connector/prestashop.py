@@ -275,6 +275,7 @@ class ProductProductWebServer(orm.Model):
             # Weight evaulation:
             # -----------------------------------------------------------------
             if connector.volume_weight and h and w and l:
+                import pdb; pdb.set_trace()
                 weight = h * w * l / connector.volume_weight
                 _logger.info('Weight: %s' % weight)
             else:
