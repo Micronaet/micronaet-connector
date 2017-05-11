@@ -61,9 +61,37 @@ class ConnectorServer(orm.Model):
         ws_product_pool = self.pool.get('product.product.web.server')
         
         # ---------------------------------------------------------------------
+        # Start export product:
+        # ---------------------------------------------------------------------
+        product_pool = self.pool.get('product.product')
+        
+        # Select only product in web server:
+        ws_pool = self.pool.get('product.product.web.server')
+        ws_ids = ws_pool.search(cr, uid, [
+            ('connector_id', '=', ids[0]),
+            ], context=context)
+        ws_proxy = ws_pool.browse(cr, uid, ws_ids, context=context)
+        product_ids = [item.product_id.id for item in ws_proxy]    
+
+        # Read album on connector from first product
+        if not product_ids:
+            return False                    
+        db_context = context.copy()
+        server = ws_proxy[0].connector_id
+        db_context['album_id'] = server.album_id.id        
+        
+        # Read parameter from connector:
+        discount = 1.0 - ws_proxy[0].connector_id.discount
+        vat_included = 1.0 + ws_proxy[0].connector_id.add_vat
+        min_price = ws_proxy[0].connector_id.min_price
+         
+        # ---------------------------------------------------------------------
         # XLS file:
         # ---------------------------------------------------------------------
-        xls_file = '/home/administrator/photo/xls/connector/product.xlsx'
+        company_name = server.company_id.partner_id.name
+        xls_file = '/home/administrator/photo/xls/connector/stato.%s.xlsx' % (
+            company_name)
+        
         _logger.warning('Start connector export: %s' % xls_file)        
 
         WB = xlsxwriter.Workbook(xls_file)
@@ -92,31 +120,6 @@ class ConnectorServer(orm.Model):
             'Magaz. - OC - camp',
             'Categoria principale',
             ])
-        
-        # ---------------------------------------------------------------------
-        # Start export product:
-        # ---------------------------------------------------------------------
-        product_pool = self.pool.get('product.product')
-        
-        # Select only product in web server:
-        ws_pool = self.pool.get('product.product.web.server')
-        ws_ids = ws_pool.search(cr, uid, [
-            ('connector_id', '=', ids[0]),
-            ], context=context)
-        ws_proxy = ws_pool.browse(cr, uid, ws_ids, context=context)
-        product_ids = [item.product_id.id for item in ws_proxy]    
-
-        # Read album on connector from first product
-        if not product_ids:
-            return False                    
-        db_context = context.copy()
-        server = ws_proxy[0].connector_id
-        db_context['album_id'] = server.album_id.id
-        
-        # Read parameter from connector:
-        discount = 1.0 - ws_proxy[0].connector_id.discount
-        vat_included = 1.0 + ws_proxy[0].connector_id.add_vat
-        min_price = ws_proxy[0].connector_id.min_price
          
         for product in product_pool.browse(
                 cr, uid, product_ids, context=db_context):
@@ -168,8 +171,8 @@ class ConnectorServer(orm.Model):
             h, w, l = ws_product_pool.get_prestashop_dimension(product)
 
             # Weight:
-            if connector.volume_weight and h and w and l:
-                weight = h * w *  l / volume_weight
+            if server.volume_weight and h and w and l:
+                weight = h * w *  l / server.volume_weight
             else:
                 weight = product.weight                
             
@@ -181,7 +184,7 @@ class ConnectorServer(orm.Model):
                 product.name,
                 force_name,
                 product.ean13,
-                '%s %s' % (weight, 'vol/w' if connector.volume_weight else ''),
+                '%s %s' % (weight, 'vol/w' if server.volume_weight else ''),
                 '%s x %s x %s' % (h, w, l),
                 product.lst_price,
                 force_price,
