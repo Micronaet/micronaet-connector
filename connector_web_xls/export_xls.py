@@ -159,12 +159,20 @@ class ConnectorServer(orm.Model):
             #    availability = item.force_min_stock
 
             
+            # Price:
             price = force_price or (product.lst_price * discount)
             price *= vat_included
             price = round(price, server.approx)
             if price <= min_price:
                 price = 'MIN: %s' % price
             h, w, l = ws_product_pool.get_prestashop_dimension(product)
+
+            # Weight:
+            if connector.volume_weight and h and w and l:
+                weight = h * w *  l / volume_weight
+            else:
+                weight = product.weight                
+            
             self.write_xls_line([                
                 published,
                 image,
@@ -173,7 +181,7 @@ class ConnectorServer(orm.Model):
                 product.name,
                 force_name,
                 product.ean13,
-                product.weight,
+                '%s %s' % (weight, 'vol/w' if connector.volume_weight else ''),
                 '%s x %s x %s' % (h, w, l),
                 product.lst_price,
                 force_price,

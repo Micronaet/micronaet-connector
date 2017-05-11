@@ -270,10 +270,19 @@ class ProductProductWebServer(orm.Model):
             # Standard record data:    
             # -----------------------------------------------------------------
             h, w, l = self.get_prestashop_dimension(product) # TODO pack!
+
+            # -----------------------------------------------------------------
+            # Weight evaulation:
+            # -----------------------------------------------------------------
+            if connector.volume_weight and h and w and l:
+                weight = h * w *  l / volume_weight
+            else:
+                weight = product.weight                
+            
             record = {
                 'reference': default_code or '', 
                 'ean13': product.ean13 or '',
-                'weight': product.weight,
+                'weight': weight,
                 'height': h,
                 'width': w,
                 'depth': l,
