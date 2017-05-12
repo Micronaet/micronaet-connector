@@ -108,6 +108,7 @@ class ConnectorServer(orm.Model):
             'Nome',
             'Nome forzato',
             'EAN',
+            'Q. x imb.',
             'Peso',
             'Dimensioni',
             'Prezzo ODOO',
@@ -171,8 +172,9 @@ class ConnectorServer(orm.Model):
             h, w, l = ws_product_pool.get_prestashop_dimension(product)
 
             # Weight:
+            q_x_pack = product.q_x_pack or 1.0
             if server.volume_weight and h and w and l:
-                weight = h * w *  l / server.volume_weight
+                weight = h * w *  l / server.volume_weight / q_x_pack
             else:
                 weight = product.weight                
             
@@ -184,6 +186,7 @@ class ConnectorServer(orm.Model):
                 product.name,
                 force_name,
                 product.ean13,
+                q_x_pack,
                 '%s %s' % (weight, 'vol/w' if server.volume_weight else ''),
                 '%s x %s x %s' % (h, w, l),
                 product.lst_price,

@@ -274,8 +274,9 @@ class ProductProductWebServer(orm.Model):
             # -----------------------------------------------------------------
             # Weight evaulation:
             # -----------------------------------------------------------------
+            q_x_pack = product.q_x_pack or 1
             if connector.volume_weight and h and w and l:
-                weight = h * w * l / connector.volume_weight
+                weight = h * w * l / connector.volume_weight / q_x_pack
             else:
                 weight = product.weight                
             
