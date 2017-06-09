@@ -122,6 +122,7 @@ class ProductProductWebServer(orm.Model):
     def publish_category(self, cr, uid, rpc, connector_id, context=None):
         ''' Publish category (usually before publish product)
         '''
+        import pdb; pdb.set_trace()
         if context is None:
             context = {}
         
@@ -256,8 +257,9 @@ class ProductProductWebServer(orm.Model):
             # Category:
             import pdb; pdb.set_trace()
             if product.public_categ_ids:
-                public_categ_ids = [self.odoo_web_db.get(
-                    c.id) for c in product.public_categ_ids]
+                public_categ_ids = []
+                for c in product.public_categ_ids:
+                    public_categ_ids.append(self.odoo_web_db.get(c.id))
                 public_categ_ids = [(6, 0, public_categ_ids)]
             else:
                 public_categ_ids = False
