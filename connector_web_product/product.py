@@ -164,7 +164,7 @@ class ProductProductWebServer(orm.Model):
         #                         REMOVE AND DO BETTER!!!!
         # *********************************************************************
         if connector_id == 5:
-            connector_id = 1: # for company 2 database ecommerce
+            connector_id = 1 # for company 2 database ecommerce
         # *********************************************************************
             
         categ_ids = categ_pool.search(cr, uid, [
