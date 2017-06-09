@@ -253,12 +253,14 @@ class ProductProductWebServer(orm.Model):
             default_code = product.default_code
             price = item.force_price or product.lst_price # XXX correct?
             image = product.product_image_context # from album_id
-            public_categ_ids = [self.odoo_web_db.get(
-                c.id) for c in product.public_categ_ids]
-            if public_categ_ids:
+            # Category:
+            if product.public_categ_ids:
+                public_categ_ids = [self.odoo_web_db.get(
+                    c.id) for c in product.public_categ_ids]
                 public_categ_ids = [(6, 0, public_categ_ids)]
             else:
                 public_categ_ids = False
+                
             if image:
                 published = item.published
             else:
