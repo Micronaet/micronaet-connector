@@ -159,6 +159,14 @@ class ProductProductWebServer(orm.Model):
         # Language default lang: it:
         # --------------------------
         _logger.info('Create category elements:')
+
+        # *********************************************************************
+        #                         REMOVE AND DO BETTER!!!!
+        # *********************************************************************
+        if connector_id == 5:
+            connector_id == 1: # for company 2 database ecommerce
+        # *********************************************************************
+            
         categ_ids = categ_pool.search(cr, uid, [
             ('connector_id', '=', connector_id),
             ], context=db_context)        
