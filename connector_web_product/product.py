@@ -122,7 +122,6 @@ class ProductProductWebServer(orm.Model):
     def publish_category(self, cr, uid, rpc, connector_id, context=None):
         ''' Publish category (usually before publish product)
         '''
-        import pdb; pdb.set_trace()
         if context is None:
             context = {}
         
@@ -263,7 +262,6 @@ class ProductProductWebServer(orm.Model):
             price = item.force_price or product.lst_price # XXX correct?
             image = product.product_image_context # from album_id
             # Category:
-            import pdb; pdb.set_trace()
             if product.public_categ_ids:
                 public_categ_ids = []
                 for c in product.public_categ_ids:
@@ -314,7 +312,6 @@ class ProductProductWebServer(orm.Model):
                 }                
 
             # Check Web presence for product:
-            import pdb; pdb.set_trace()
             if rpc_product_proxy:
                 product_ids = [p.id for p in rpc_product_proxy]
                 rpc_product.write(
