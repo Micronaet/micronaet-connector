@@ -297,6 +297,7 @@ class ProductProductWebServer(orm.Model):
                 }                
 
             # Check Web presence for product:
+            import pdb; pdb.set_trace()
             if rpc_product_proxy:
                 product_ids = [p.id for p in rpc_product_proxy]
                 rpc_product.write(
