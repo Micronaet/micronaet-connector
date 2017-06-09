@@ -255,6 +255,10 @@ class ProductProductWebServer(orm.Model):
             image = product.product_image_context # from album_id
             public_categ_ids = [self.odoo_web_db.get(
                 c.id) for c in product.public_categ_ids]
+            if public_categ_ids:
+                public_categ_ids = [(6, 0, public_categ_ids)]
+            else:
+                public_categ_ids = False
             if image:
                 published = item.published
             else:
@@ -293,7 +297,7 @@ class ProductProductWebServer(orm.Model):
                 # Extra:
                 'q_x_pack': product.q_x_pack,
                 'vat_price': price * 1.22,      
-                'public_categ_ids': [(6, 0, public_categ_ids)],
+                'public_categ_ids': public_categ_ids,
                 }                
 
             # Check Web presence for product:
