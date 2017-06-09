@@ -254,6 +254,7 @@ class ProductProductWebServer(orm.Model):
             price = item.force_price or product.lst_price # XXX correct?
             image = product.product_image_context # from album_id
             # Category:
+            import pdb; pdb.set_trace()
             if product.public_categ_ids:
                 public_categ_ids = [self.odoo_web_db.get(
                     c.id) for c in product.public_categ_ids]
