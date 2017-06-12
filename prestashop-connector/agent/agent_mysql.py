@@ -791,11 +791,11 @@ class mysql_connector():
         connection = self.get_connection()
         if not connection:
             return False
-            
+
         cr = connection.cursor()
         query = '''
             SELECT *
-            FROM ps_order
+            FROM ps_orders
             WHERE 1;
             '''# % (self.id_langs.get('it_IT', 1), )
 
@@ -803,7 +803,8 @@ class mysql_connector():
             print query
         cr.execute(query)
         
-        return ['%s' % item for item in cr.fetchall()]
+        import pdb; pdb.set_trace()        
+        return [item for item in cr.fetchall()]
     
     def get_connection(self, ):
         ''' Regenerate connection every time:

@@ -497,7 +497,6 @@ class ConnectorServer(orm.Model):
         ''' Prestashop import category
         '''
         assert len(ids) == 1, 'Works only with one record a time'
-        import pdb; pdb.set_trace()
         sock = self.get_prestashop_connector(cr, uid, ids, context=context)
         
         try:
@@ -507,7 +506,6 @@ class ConnectorServer(orm.Model):
                 _('XMRLPC'), 
                 _('Error connecting server, check xmlrpc listner!'),
                 )
-        import pdb; pdb.set_trace()
         return True
         
     _columns = {
