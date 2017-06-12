@@ -785,6 +785,26 @@ class mysql_connector():
         return [
             (item['id_category'], item['name']) for item in cr.fetchall()]
     
+    def order_list(self, ):
+        ''' Return order list from Prestashop
+        '''
+        connection = self.get_connection()
+        if not connection:
+            return False
+            
+        cr = connection.cursor()
+        query = '''
+            SELECT *
+            FROM ps_order
+            WHERE 1;
+            '''# % (self.id_langs.get('it_IT', 1), )
+
+        if self._log:
+            print query
+        cr.execute(query)
+        
+        return ['%s' % item for item in cr.fetchall()]
+    
     def get_connection(self, ):
         ''' Regenerate connection every time:
         '''

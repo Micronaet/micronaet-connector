@@ -493,6 +493,23 @@ class ConnectorServer(orm.Model):
             
         return True
 
+    def prestashop_order_import(self, cr, uid, ids, context=None):
+        ''' Prestashop import category
+        '''
+        assert len(ids) == 1, 'Works only with one record a time'
+
+        sock = self.get_prestashop_connector(cr, uid, ids, context=context)
+        
+        try:
+            order_list = sock.execute('order', 'list')
+        except:
+            raise osv.except_osv(
+                _('XMRLPC'), 
+                _('Error connecting server, check xmlrpc listner!'),
+                )
+        import pdb; pdb.set_trace()
+        return True
+        
     _columns = {
         'prestashop': fields.boolean(
             'Prestashop', help='Prestashop web server'),

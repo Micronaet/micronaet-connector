@@ -25,6 +25,8 @@
                     <button name="prestashop_import_category" string="Load category" type="object" attrs="{'invisible': [('prestashop','=',False)]}"/>
                     <button name="prestashop_rsync_photo" string="Upload all photo" type="object" attrs="{'invisible': [('prestashop','=',False)]}"/>
                     <button name="auto_select_product_button" string="Select stock product" type="object" attrs="{'invisible': [('prestashop','=',False)]}"/>
+                    
+                    <button name="prestashop_order_import" string="Order import" type="object" />
                 </button>
 
                 <field name="password" position="after"> 

@@ -175,7 +175,20 @@ def execute(model, operation, *parameter, **parameter_dict):
             res['error'] = 'Model %s operation %s not managed!' % (
                 model, operation)            
     
-    
+    # -------------------------------------------------------------------------
+    #                              ORDER OPERATIONS:
+    # -------------------------------------------------------------------------    
+    elif model == 'order':
+        # ----------------------
+        # 1. List of order from:
+        # ----------------------
+        if operation == 'list':
+            return mysql_db.order_list() # TODO parameter
+
+        else:
+            res['error'] = 'Model %s operation %s not managed!' % (
+                model, operation)            
+        
     # -------------------------------------------------------------------------
     #                             SYSTEM OPERATIONS:
     # -------------------------------------------------------------------------    
