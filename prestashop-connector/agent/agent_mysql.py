@@ -803,8 +803,12 @@ class mysql_connector():
             print query
         cr.execute(query)
         
-        import pdb; pdb.set_trace()        
-        return [item for item in cr.fetchall()]
+        res = []
+        for item in cr.fetchall():
+            res.append([])
+            for f, v in item.iteritems():
+                res[-1].append((f, '%s' % v))
+        return res
     
     def get_connection(self, ):
         ''' Regenerate connection every time:

@@ -501,6 +501,7 @@ class ConnectorServer(orm.Model):
         
         try:
             order_list = sock.execute('order', 'list')
+            import pdb; pdb.set_trace()
         except:
             raise osv.except_osv(
                 _('XMRLPC'), 
