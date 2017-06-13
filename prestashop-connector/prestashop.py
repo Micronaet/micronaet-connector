@@ -493,6 +493,12 @@ class ConnectorServer(orm.Model):
             
         return True
 
+    # -------------------------------------------------------------------------
+    # Scheduled action:
+    # -------------------------------------------------------------------------
+    def prestashop_order_import_scheduled(self, cr, uid,  context=None):
+        return prestashop_order_import(self, cr, uid, False, context=context)
+        
     def prestashop_order_import(self, cr, uid, ids, context=None):
         ''' Prestashop import category
         '''
@@ -508,6 +514,31 @@ class ConnectorServer(orm.Model):
                 _('XMRLPC'), 
                 _('Error connecting server, check xmlrpc listner!'),
                 )
+                
+        # Send email:        
+        partner_pool = self.pool.get('res.partner') # non necessary
+        action_pool = self.pool.get('ir.actions.report.xml')
+        date = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+
+        # Send mail with attachment:
+        group_pool = self.pool.get('res.groups')
+        model_pool = self.pool.get('ir.model.data')
+        thread_pool = self.pool.get('mail.thread')
+        group_id = model_pool.get_object_reference(
+            cr, uid, 'prestashop-connector', 'group_prestashop_order_admin')[1]    
+        partner_ids = []
+        for user in group_pool.browse(
+                cr, uid, group_id, context=context).users:
+            partner_ids.append(user.partner_id.id)
+            
+        thread_pool = self.pool.get('mail.thread')
+        thread_pool.message_post(cr, uid, False, 
+            type='email', 
+            body='Prestashop order', 
+            subject='Prestashop order: %s' % date,
+            partner_ids=[(6, 0, partner_ids)],
+            context=context,
+            )
         return True
         
     _columns = {

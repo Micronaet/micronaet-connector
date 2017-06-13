@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="group_prestashop_order_admin" model="res.groups">
+            <field name="name">Prestashop order admin</field>
+        </record>
+    </data>
+</openerp>

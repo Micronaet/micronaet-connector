@@ -36,7 +36,9 @@
     'init_xml': [],
     'demo': [],
     'data': [
-        #'security/ir.model.access.csv',    
+        'security/xml_groups.xml',
+        #'security/ir.model.access.csv', 
+       
         'prestashop_view.xml',
         'scheduler.xml',
         ],
