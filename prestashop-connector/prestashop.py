@@ -499,6 +499,8 @@ class ConnectorServer(orm.Model):
     def prestashop_order_import_scheduled(self, cr, uid, ids, context=None):
         ''' Prestashop import category
         '''
+        if type(ids) == int:
+            ids = (ids, )
         sock = self.get_prestashop_connector(cr, uid, ids, context=context)
         
         try:
