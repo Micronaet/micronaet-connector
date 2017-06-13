@@ -497,9 +497,6 @@ class ConnectorServer(orm.Model):
     # Scheduled action:
     # -------------------------------------------------------------------------
     def prestashop_order_import_scheduled(self, cr, uid,  context=None):
-        return prestashop_order_import(self, cr, uid, False, context=context)
-        
-    def prestashop_order_import(self, cr, uid, ids, context=None):
         ''' Prestashop import category
         '''
         assert len(ids) == 1, 'Works only with one record a time'
@@ -540,6 +537,7 @@ class ConnectorServer(orm.Model):
             'invoice_date': _('Invoice'),
             'delivery_date': _('Delivery'),            
             }
+        import pdb; pdb.set_trace()    
         order_body = ''
         for order in order_list:  
             res = ''
