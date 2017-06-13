@@ -496,7 +496,7 @@ class ConnectorServer(orm.Model):
     # -------------------------------------------------------------------------
     # Scheduled action:
     # -------------------------------------------------------------------------
-    def prestashop_order_import_scheduled(self, cr, uid, context=None):
+    def prestashop_order_import_scheduled(self, cr, uid, ids, context=None):
         ''' Prestashop import category
         '''
         sock = self.get_prestashop_connector(cr, uid, ids, context=context)
