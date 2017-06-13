@@ -794,10 +794,17 @@ class mysql_connector():
 
         cr = connection.cursor()
         query = '''
-            SELECT *
+            SELECT 
+                id_order, reference, id_customer, 
+                id_address_delivery, id_address_invoice, current_state, 
+                secure_key, payment, total_paid, total_paid_tax_incl,
+                total_paid_tax_excl, total_paid_real, total_product,
+                total_product_wt, total_shipping, delivery_number, invoice_date,
+                delivery_date, valid, date_add, date_upd
             FROM ps_orders
-            WHERE 1;
-            '''# % (self.id_langs.get('it_IT', 1), )
+            WHERE
+                valid = 1;
+            '''
 
         if self._log:
             print query
