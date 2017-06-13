@@ -507,7 +507,6 @@ class ConnectorServer(orm.Model):
         
         try:
             order_list = sock.execute('order', 'list')
-            import pdb; pdb.set_trace()
             # TODO
         except:
             raise osv.except_osv(
@@ -530,11 +529,30 @@ class ConnectorServer(orm.Model):
         for user in group_pool.browse(
                 cr, uid, group_id, context=context).users:
             partner_ids.append(user.partner_id.id)
+    
+        # Create body:
+        fields = {
+            'reference': _('Rif.'),
+            'id_customer': _('ID Cust.'),
+            'current_state': _('State'),
+            'payment': _('Payment'),
+            'total_paid': _('Paid'),
+            'invoice_date': _('Invoice'),
+            'delivery_date': _('Delivery'),            
+            }
+        order_body = ''
+        for order in order_list:  
+            res = ''
+            for field, value in order:
+                if field in fields:
+                    res += '<td>%s</td>' % value
+            order_body += '<tr>%s</tr>' % res    
+        body = '<table>%s</table>' % order_body
             
         thread_pool = self.pool.get('mail.thread')
         thread_pool.message_post(cr, uid, False, 
             type='email', 
-            body='Prestashop order', 
+            body=body, 
             subject='Prestashop order: %s' % date,
             partner_ids=[(6, 0, partner_ids)],
             context=context,
