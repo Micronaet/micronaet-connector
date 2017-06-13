@@ -496,10 +496,9 @@ class ConnectorServer(orm.Model):
     # -------------------------------------------------------------------------
     # Scheduled action:
     # -------------------------------------------------------------------------
-    def prestashop_order_import_scheduled(self, cr, uid,  context=None):
+    def prestashop_order_import_scheduled(self, cr, uid, context=None):
         ''' Prestashop import category
         '''
-        assert len(ids) == 1, 'Works only with one record a time'
         sock = self.get_prestashop_connector(cr, uid, ids, context=context)
         
         try:
