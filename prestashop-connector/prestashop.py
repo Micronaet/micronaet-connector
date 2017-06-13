@@ -499,7 +499,6 @@ class ConnectorServer(orm.Model):
     def prestashop_order_import_scheduled(self, cr, uid, ids, context=None):
         ''' Prestashop import category
         '''
-        import pdb; pdb.set_trace()
         if type(ids) in (long, int):
             ids = (ids, )
         sock = self.get_prestashop_connector(cr, uid, ids, context=context)
@@ -539,7 +538,7 @@ class ConnectorServer(orm.Model):
             'invoice_date': _('Invoice'),
             'delivery_date': _('Delivery'),            
             }
-        import pdb; pdb.set_trace()    
+
         order_body = ''
         for order in order_list:  
             res = ''
