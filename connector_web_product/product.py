@@ -307,7 +307,7 @@ class ProductProductWebServer(orm.Model):
 
                 # Extra:
                 'q_x_pack': item.force_q_x_pack or product.q_x_pack,
-                'ean13': product.ean13,
+                'barcode': item.force_ean13 or product.ean13,
                 'vat_price': price * 1.22,      
                 'public_categ_ids': public_categ_ids,
                 }                
@@ -368,6 +368,7 @@ class ProductProductWebServer(orm.Model):
         'force_name': fields.char('Force Name', size=64),
         'force_description': fields.text('Force Description'),
         'force_q_x_pack': fields.integer('Force q x pack'),
+        'force_ean13': fields.char('Force EAN13', size=13),
         'force_price': fields.float('Force price', digits=(16, 2)),
         'force_min_stock': fields.float('Force min. stock', digits=(16, 2), 
             help='If product is always present set stock value when <=0'),
