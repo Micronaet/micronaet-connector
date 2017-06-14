@@ -306,7 +306,8 @@ class ProductProductWebServer(orm.Model):
                 'pack_p': product.pack_p,
 
                 # Extra:
-                'q_x_pack': product.q_x_pack,
+                'q_x_pack': item.force_q_x_pack or product.q_x_pack,
+                'ean13': product.ean13,
                 'vat_price': price * 1.22,      
                 'public_categ_ids': public_categ_ids,
                 }                
