@@ -555,12 +555,12 @@ class ConnectorServer(orm.Model):
             res = ''
             for field, value in order:                
                 if field in fields:
-                    if not header_load
+                    if not header_load:
                         header += '<th>%s</th>' % field
                         
                     res += '<td>%s</td>' % value
             # Add header block:        
-            if not header_load
+            if not header_load:
                 order_body += '<tr>%s</tr>' % header
                 header_load = True            
                     
