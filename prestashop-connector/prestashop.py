@@ -531,21 +531,21 @@ class ConnectorServer(orm.Model):
         # Create body:
         fields = {
             # Header: 
-            'h.reference': _('Rif.'),
-            'h.id_customer': _('ID Cust.'),
-            'h.current_state': _('State'),
-            'h.payment': _('Payment'),
-            'h.total_paid': _('Paid'),
-            'h.delivery_number': _('Delivery numb.'),
-            'h.invoice_date': _('Invoice'),
-            'h.delivery_date': _('Delivery'),            
+            'reference': _('Rif.'),
+            'id_customer': _('ID Cust.'),
+            'current_state': _('State'),
+            'payment': _('Payment'),
+            'total_paid': _('Paid'),
+            'delivery_number': _('Delivery numb.'),
+            'invoice_date': _('Invoice'),
+            'delivery_date': _('Delivery'),            
             
             # Detail:
-            'd.product_name': _('Product'), 
-            'd.product_quantity': _('Q.'), 
-            'd.product_price': _('Price'), 
-            'd.product_reference': _('Code'), 
-            'd.total_price_tax_excl': _('Net total'),
+            'product_name': _('Product'), 
+            'product_quantity': _('Q.'), 
+            'product_price': _('Price'), 
+            'product_reference': _('Code'), 
+            'total_price_tax_excl': _('Net total'),
             }
 
         order_body = ''
