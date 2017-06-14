@@ -815,8 +815,8 @@ class mysql_connector():
                 h.id_order desc, d.id_order_detail;        
             '''
 
-        if self._log:
-            print query
+        #if self._log:
+        print query
         cr.execute(query)
         
         res = []
