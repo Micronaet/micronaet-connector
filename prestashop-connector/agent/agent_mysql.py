@@ -794,10 +794,25 @@ class mysql_connector():
 
         cr = connection.cursor()
         query = '''
-            SELECT *                
-            FROM ps_orders
-            WHERE
-                valid = 1;
+            SELECT 
+                h.id_order, d.id_order_detail, h.reference,
+                h.id_customer, h.id_address_delivery, h.id_address_invoice,                 
+                h.current_state, h.secure_key, h.payment, h.total_paid, 
+                h.delivery_number, h.invoice_date, h.delivery_date, 
+                h.valid, h.date_add, h.date_upd, 
+                
+                d.product_name, d.product_quantity, d.product_price, 
+                d.product_reference, d.total_price_tax_excl
+            FROM 
+                ps_order_detail d 
+                JOIN 
+                ps_orders h 
+                ON 
+                    (d.id_order = h.id_order) 
+            WHERE 
+                h.valid = 1 
+            ORDER BY 
+                h.id_order desc, d.id_order_detail;        
             '''
 
         if self._log:
