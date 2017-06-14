@@ -551,6 +551,7 @@ class ConnectorServer(orm.Model):
         order_body = ''
         header = ''
         header_load = False
+        import pdb; pdb.set_trace()
         for order in order_list:  
             res = ''
             for field, value in order:                
