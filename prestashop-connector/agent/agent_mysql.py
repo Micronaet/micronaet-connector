@@ -785,9 +785,18 @@ class mysql_connector():
         return [
             (item['id_category'], item['name']) for item in cr.fetchall()]
     
-    def order_list(self, ):
+    def order_list(self, parameters=None):
         ''' Return order list from Prestashop
         '''
+        if parameters is None:
+            parameters = []
+        
+        # Create where clause:    
+        where = 'h.valid = 1'
+        for (field, value) in parameters:
+            is_string = '\''
+            where += ' AND %s = %s%s%s' % (field, is_string, value, is_string)
+            
         connection = self.get_connection()
         if not connection:
             return False
@@ -810,10 +819,10 @@ class mysql_connector():
                 ON 
                     (d.id_order = h.id_order) 
             WHERE 
-                h.valid = 1 
+                 %s
             ORDER BY 
                 h.id_order desc, d.id_order_detail;        
-            '''
+            ''' % where
 
         #if self._log:
         print query

@@ -183,7 +183,7 @@ def execute(model, operation, *parameter, **parameter_dict):
         # 1. List of order from:
         # ----------------------
         if operation == 'list':
-            return mysql_db.order_list() # TODO parameter
+            return mysql_db.order_list(parameters)
 
         else:
             res['error'] = 'Model %s operation %s not managed!' % (

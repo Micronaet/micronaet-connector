@@ -504,7 +504,8 @@ class ConnectorServer(orm.Model):
         sock = self.get_prestashop_connector(cr, uid, ids, context=context)
         
         try:
-            order_list = sock.execute('order', 'list')
+            order_list = sock.execute(
+                'order', 'list', [('date_add', '2017-01-01')])
             # TODO
         except:
             raise osv.except_osv(
