@@ -535,7 +535,7 @@ class ConnectorServer(orm.Model):
     
         # Create body:
         order_body = ''
-        header = '''
+        header = _('''
             <th>Rif.</th>
             <th>Invoice date</th>
             <th>Delivery date</th>
@@ -550,7 +550,7 @@ class ConnectorServer(orm.Model):
             <th>Code</th>
             <th>Q.</th>
             <th>Price</th>
-            '''
+            ''')
 
         for order in order_list:
             order = dict(order)
