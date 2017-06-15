@@ -184,8 +184,7 @@ def execute(model, operation, *parameter, **parameter_dict):
         # 1. List of order from:
         # ----------------------
         if operation == 'list':
-            return mysql_db.order_list(parameter_dict.get('where', [])
-
+            return mysql_db.order_list(parameter[0])
         else:
             res['error'] = 'Model %s operation %s not managed!' % (
                 model, operation)            
