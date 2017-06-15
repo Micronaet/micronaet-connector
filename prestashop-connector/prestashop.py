@@ -535,7 +535,6 @@ class ConnectorServer(orm.Model):
     
         import pdb; pdb.set_trace()
         # Create body:
-        order_dict = dict(order_list)        
         order_body = ''
         header = '''
             <th>Rif.</th>
