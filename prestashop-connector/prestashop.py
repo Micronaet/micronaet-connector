@@ -533,7 +533,6 @@ class ConnectorServer(orm.Model):
                 cr, uid, group_id, context=context).users:
             partner_ids.append(user.partner_id.id)
     
-        import pdb; pdb.set_trace()
         # Create body:
         order_body = ''
         header = '''
