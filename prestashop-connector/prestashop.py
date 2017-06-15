@@ -557,20 +557,20 @@ class ConnectorServer(orm.Model):
             order = dict(order)
             order_body += '''
                 <tr>
-                    <th>%(reference)s</th>
-                    <th>%(invoice_date)s</th>
-                    <th>%(delivery_date)s</th>
-                    <th>%(delivery_number)s</th>
-                    <th>%(id_customer)s</th>
-                    <th>%(current_state)s</th>
-                    <th>%(payment)s</th>
-                    <th>%(total_paid)s</th>
-                    <th>%(total_price_tax_excl)s</th>
+                    <td>%(reference)s</td>
+                    <td>%(invoice_date)s</td>
+                    <td>%(delivery_date)s</td>
+                    <td>%(delivery_number)s</td>
+                    <td>%(id_customer)s</td>
+                    <td>%(current_state)s</td>
+                    <td>%(payment)s</td>
+                    <td>%(total_paid)s</td>
+                    <td>%(total_price_tax_excl)s</td>
                     
-                    <th>%(product_name)s</th>
-                    <th>%(product_reference)s</th>
-                    <th>%(product_quantity)s</th>
-                    <th>%(product_price)s</th>
+                    <td>%(product_name)s</td>
+                    <td>%(product_reference)s</td>
+                    <td>%(product_quantity)s</td>
+                    <td>%(product_price)s</td>
                 </tr>    
                 ''' % order
                     
