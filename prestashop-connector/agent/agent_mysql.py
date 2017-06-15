@@ -788,7 +788,6 @@ class mysql_connector():
     def order_list(self, parameter=None):
         ''' Return order list from Prestashop
         '''
-        import pdb; pdb.set_trace()
         if parameter is None:
             parameter = []
         

@@ -502,13 +502,16 @@ class ConnectorServer(orm.Model):
         if type(ids) in (long, int):
             ids = (ids, )
         sock = self.get_prestashop_connector(cr, uid, ids, context=context)
+
+        from_date = (datetime.now() - timedelta(days=40)).strftime(
+            DEFAULT_SERVER_DATE_FORMAT)
         
         try:
             order_list = sock.execute(
                 'order', 'list', 
-                [('date_add', '>=', '2017-01-01')], # parameter
+                [('date_add', '>=', from_date)], # parameter
                 )
-            # TODO
+            _logger.info('Order list from: %s' % from_date)
         except:
             raise osv.except_osv(
                 _('XMRLPC'), 
