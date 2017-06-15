@@ -533,45 +533,49 @@ class ConnectorServer(orm.Model):
                 cr, uid, group_id, context=context).users:
             partner_ids.append(user.partner_id.id)
     
+        import pdb; pdb.set_trace()
         # Create body:
-        fields = {
-            # Header: 
-            'reference': _('Rif.'),
-            'id_customer': _('ID Cust.'),
-            'current_state': _('State'),
-            'payment': _('Payment'),
-            'total_paid': _('Paid'),
-            'delivery_number': _('Delivery numb.'),
-            'invoice_date': _('Invoice'),
-            'delivery_date': _('Delivery'),            
-            
-            # Detail:
-            'product_name': _('Product'), 
-            'product_quantity': _('Q.'), 
-            'product_price': _('Price'), 
-            'product_reference': _('Code'), 
-            'total_price_tax_excl': _('Net total'),
-            }
-
+        order_dict = dict(order_list)        
         order_body = ''
-        header = ''
-        header_load = False
+        header = '''
+            <th>Rif.</th>
+            <th>Invoice date</th>
+            <th>Delivery date</th>
+            <th># Delivery</th>
+            <th>ID Customer</th>
+            <th>State</th>
+            <th>Payment</th>
+            <th>Total paid</th>
+            <th>Net total</th>
+            
+            <th>Product</th>
+            <th>Code</th>
+            <th>Q.</th>
+            <th>Price</th>
+            '''
 
-        for order in order_list:  
-            res = ''
-            for field, value in order:                
-                if field in fields:
-                    if not header_load:
-                        header += '<th>%s</th>' % field
-                        
-                    res += '<td>%s</td>' % value
-            # Add header block:        
-            if not header_load:
-                order_body += '<tr>%s</tr>' % header
-                header_load = True            
+        for order in order_list:
+            order = dict(order)
+            order_body += '''
+                <tr>
+                    <th>%(\'reference\')s</th>
+                    <th>%(\'invoice_date\')s</th>
+                    <th>%(\'delivery_date\')s</th>
+                    <th>%(\'delivery_number\')s</th>
+                    <th>%(\'id_customer\')s</th>
+                    <th>%(\'current_state\')s</th>
+                    <th>%(\'payment\')s</th>
+                    <th>%(\'total_paid\')s</th>
+                    <th>%(\'total_price_tax_excl\')s</th>
                     
-            order_body += '<tr>%s</tr>' % res
-        body = '<table>%s</table>' % order_body
+                    <th>%(\'product_name\')s</th>
+                    <th>%(\'product_reference\')s</th>
+                    <th>%(\'product_quantity\')s</th>
+                    <th>%(\'product_price\')s</th>
+                </tr>    
+                ''' % order
+                    
+        body = '<table>%s%s</table>' % (header, order_body)
             
         thread_pool = self.pool.get('mail.thread')
         thread_pool.message_post(cr, uid, False, 
