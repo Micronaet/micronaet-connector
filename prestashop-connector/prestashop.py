@@ -521,7 +521,6 @@ class ConnectorServer(orm.Model):
         # Send email:        
         partner_pool = self.pool.get('res.partner') # non necessary
         action_pool = self.pool.get('ir.actions.report.xml')
-        date = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
         # Send mail with attachment:
         group_pool = self.pool.get('res.groups')
@@ -578,7 +577,7 @@ class ConnectorServer(orm.Model):
         thread_pool.message_post(cr, uid, False, 
             type='email', 
             body=body, 
-            subject='Prestashop order: %s' % date,
+            subject=_('Prestashop order from %s') % from_date,
             partner_ids=[(6, 0, partner_ids)],
             context=context,
             )
