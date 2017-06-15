@@ -111,7 +111,6 @@ def execute(model, operation, *parameter, **parameter_dict):
         parameter: list of element used in operation
         parameter_dict: dict of parameter (name, data)
     '''
-    import pdb; pdb.set_trace()        
     # Setup result dict:
     res = {
         'result': False,

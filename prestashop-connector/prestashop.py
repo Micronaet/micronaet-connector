@@ -506,7 +506,7 @@ class ConnectorServer(orm.Model):
         try:
             order_list = sock.execute(
                 'order', 'list', 
-                [('date_add', '2017-01-01')], # parameter
+                [('date_add', '>=', '2017-01-01')], # parameter
                 )
             # TODO
         except:

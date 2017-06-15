@@ -794,9 +794,10 @@ class mysql_connector():
         
         # Create where clause:    
         where = 'h.valid = 1'
-        for (field, value) in parameter:
-            is_string = '\''
-            where += ' AND %s = %s%s%s' % (field, is_string, value, is_string)
+        for (field, operator, value) in parameter:
+            is_string = '\'' if type(value) == str else ''
+            where += ' AND %s %s %s%s%s' % (
+                field, operator, is_string, value, is_string)
             
         connection = self.get_connection()
         if not connection:
