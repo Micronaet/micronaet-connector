@@ -496,14 +496,16 @@ class ConnectorServer(orm.Model):
     # -------------------------------------------------------------------------
     # Scheduled action:
     # -------------------------------------------------------------------------
-    def prestashop_order_import_scheduled(self, cr, uid, ids, context=None):
+    def prestashop_order_import_scheduled(self, cr, uid, ids, days=7, 
+            context=None):
         ''' Prestashop import category
         '''
+        # Parameter:
         if type(ids) in (long, int):
             ids = (ids, )
         sock = self.get_prestashop_connector(cr, uid, ids, context=context)
 
-        from_date = (datetime.now() - timedelta(days=40)).strftime(
+        from_date = (datetime.now() - timedelta(days=days)).strftime(
             DEFAULT_SERVER_DATE_FORMAT)
         
         try:
