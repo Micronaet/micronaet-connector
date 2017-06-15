@@ -111,6 +111,7 @@ def execute(model, operation, *parameter, **parameter_dict):
         parameter: list of element used in operation
         parameter_dict: dict of parameter (name, data)
     '''
+    import pdb; pdb.set_trace()        
     # Setup result dict:
     res = {
         'result': False,
@@ -183,7 +184,7 @@ def execute(model, operation, *parameter, **parameter_dict):
         # 1. List of order from:
         # ----------------------
         if operation == 'list':
-            return mysql_db.order_list(parameters)
+            return mysql_db.order_list(parameter_dict.get('where', [])
 
         else:
             res['error'] = 'Model %s operation %s not managed!' % (

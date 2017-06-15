@@ -785,15 +785,16 @@ class mysql_connector():
         return [
             (item['id_category'], item['name']) for item in cr.fetchall()]
     
-    def order_list(self, parameters=None):
+    def order_list(self, parameter=None):
         ''' Return order list from Prestashop
         '''
-        if parameters is None:
-            parameters = []
+        import pdb; pdb.set_trace()
+        if parameter is None:
+            parameter = []
         
         # Create where clause:    
         where = 'h.valid = 1'
-        for (field, value) in parameters:
+        for (field, value) in parameter:
             is_string = '\''
             where += ' AND %s = %s%s%s' % (field, is_string, value, is_string)
             

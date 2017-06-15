@@ -505,7 +505,7 @@ class ConnectorServer(orm.Model):
         
         try:
             order_list = sock.execute(
-                'order', 'list', [('date_add', '2017-01-01')])
+                'order', 'list', where=[('date_add', '2017-01-01')])
             # TODO
         except:
             raise osv.except_osv(
