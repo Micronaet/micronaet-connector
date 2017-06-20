@@ -792,10 +792,11 @@ class mysql_connector():
             parameter = []
         
         # Create where clause:    
+        # Filter for ps_order_history y 
         where = 'id_order_state = 4' # spedito
         for (field, operator, value) in parameter:
             is_string = '\'' if type(value) == str else ''
-            where += ' AND %s %s %s%s%s' % (
+            where += ' AND y.%s %s %s%s%s' % (
                 field, operator, is_string, value, is_string)
             
         connection = self.get_connection()
@@ -809,22 +810,23 @@ class mysql_connector():
                 h.id_customer, h.id_address_delivery, h.id_address_invoice,                 
                 h.current_state, h.secure_key, h.payment, h.total_paid, 
                 h.delivery_number, h.invoice_date, h.delivery_date, 
-                h.valid, h.date_add, h.date_upd, 
-                
+                h.valid, h.date_upd, y.date_add,
+                                
                 d.product_name, d.product_quantity, d.product_price, 
                 d.product_reference, d.total_price_tax_excl
             FROM 
+                ps_order_history y
+                JOIN
                 ps_order_detail d 
+                ON 
+                    (y.id_order = h.id_order)
                 JOIN 
-                ps_orders h 
+                ps_orders h
                 ON 
                     (d.id_order = h.id_order) 
             WHERE 
                  h.valid = 1 AND
-                 h.id_order IN (
-                     SELECT id_order 
-                     FROM ps_order_history
-                     WHERE %s)
+                 %s
             ORDER BY 
                 h.id_order desc, 
                 d.id_order_detail;
