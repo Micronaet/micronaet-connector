@@ -826,6 +826,11 @@ class mysql_connector():
                     (y.id_order = d.id_order) 
             WHERE 
                  h.valid = 1 AND
+                 h.id_order not in (
+                     SELECT id_order 
+                     FROM ps_order_history                     
+                     WHERE id_order_state = 6
+                     ) AND
                  %s
             ORDER BY 
                 y.date_add desc,
