@@ -539,8 +539,8 @@ class ConnectorServer(orm.Model):
         order_body = ''
         header = _('''
             <th>Rif.</th>
-            <th>Invoice date</th>
             <th>Delivery date</th>
+            <th>Invoice date</th>
             <th># Delivery</th>
             <th>ID Customer</th>
             <th>State</th>
@@ -559,8 +559,8 @@ class ConnectorServer(orm.Model):
             order_body += '''
                 <tr>
                     <td>%(reference)s</td>
-                    <td>%(invoice_date)s</td>
                     <td>%(delivery_date)s</td>
+                    <td>%(invoice_date)s</td>
                     <td>%(delivery_number)s</td>
                     <td>%(id_customer)s</td>
                     <td>%(current_state)s</td>

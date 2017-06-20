@@ -793,7 +793,7 @@ class mysql_connector():
         
         # Create where clause:    
         # Filter for ps_order_history y 
-        where = 'id_order_state = 4' # spedito
+        where = 'y.id_order_state = 4' # spedito
         for (field, operator, value) in parameter:
             is_string = '\'' if type(value) == str else ''
             where += ' AND y.%s %s %s%s%s' % (
@@ -817,18 +817,19 @@ class mysql_connector():
             FROM 
                 ps_order_history y
                 JOIN
-                ps_order_detail d 
-                ON 
+                ps_orders h
+                ON
                     (y.id_order = h.id_order)
                 JOIN 
-                ps_orders h
-                ON 
-                    (d.id_order = h.id_order) 
+                ps_order_detail d 
+                ON
+                    (y.id_order = d.id_order) 
             WHERE 
                  h.valid = 1 AND
                  %s
             ORDER BY 
-                h.id_order desc, 
+                y.date_add desc,
+                h.id_order, 
                 d.id_order_detail;
             ''' % where
 
