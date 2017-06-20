@@ -792,7 +792,7 @@ class mysql_connector():
             parameter = []
         
         # Create where clause:    
-        where = 'h.valid = 1'
+        where = 'id_order_state = 4' # spedito
         for (field, operator, value) in parameter:
             is_string = '\'' if type(value) == str else ''
             where += ' AND %s %s %s%s%s' % (
@@ -820,9 +820,14 @@ class mysql_connector():
                 ON 
                     (d.id_order = h.id_order) 
             WHERE 
-                 %s
+                 h.valid = 1 AND
+                 h.id_order IN (
+                     SELECT id_order 
+                     FROM ps_order_history
+                     WHERE %s)
             ORDER BY 
-                h.id_order desc, d.id_order_detail;        
+                h.id_order desc, 
+                d.id_order_detail;
             ''' % where
 
         #if self._log:
