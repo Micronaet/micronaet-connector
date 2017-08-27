@@ -1,0 +1,211 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* connector_web_base
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-07-27 16:24+0000\n"
+"PO-Revision-Date: 2017-08-04 15:23+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: it\n"
+"X-Generator: Poedit 1.6.10\n"
+
+#. module: connector_web_base
+#: field:connector.server,availability_extra:0
+msgid "-Availability margin %"
+msgstr "-Margine disponibilità %"
+
+#. module: connector_web_base
+#: field:connector.server,add_vat:0
+msgid "Add vat"
+msgstr "Aggiungi IVA"
+
+#. module: connector_web_base
+#: field:connector.server,album_id:0
+msgid "Album"
+msgstr "Album"
+
+#. module: connector_web_base
+#: field:connector.server,approx:0
+msgid "Approx"
+msgstr "Approssimazione"
+
+#. module: connector_web_base
+#: help:connector.server,scheduled:0
+msgid "Auto import schedule operation"
+msgstr "Importa automaticamente nelle operazioni schedulate"
+
+#. module: connector_web_base
+#: help:connector.server,availability_extra:0
+msgid "Availability is stock - OC - Campaign - margin %"
+msgstr "Disponibilità nel magazzino - OC - Campagna - margine %"
+
+#. module: connector_web_base
+#: field:connector.server,company_id:0
+msgid "Company"
+msgstr "Azienda"
+
+#. module: connector_web_base
+#: model:ir.ui.menu,name:connector_web_base.menu_webserver_configuration
+msgid "Configuration"
+msgstr "Configurazione"
+
+#. module: connector_web_base
+#: view:connector.server:connector_web_base.view_connector_server_form
+#: view:connector.server:connector_web_base.view_connector_server_tree
+#: model:ir.actions.act_window,name:connector_web_base.action_connector_server
+#: model:ir.model,name:connector_web_base.model_connector_server
+msgid "Connector Server"
+msgstr "Server connettore"
+
+#. module: connector_web_base
+#: field:connector.server,create_uid:0
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: connector_web_base
+#: field:connector.server,create_date:0
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: connector_web_base
+#: field:connector.server,database:0
+msgid "Database"
+msgstr "Database"
+
+#. module: connector_web_base
+#: field:connector.server,discount:0
+msgid "Discount"
+msgstr "Sconto"
+
+#. module: connector_web_base
+#: help:connector.server,discount:0
+msgid "Discount on price not forced"
+msgstr "Sconto sul prezzo non forzato"
+
+#. module: connector_web_base
+#: help:connector.server,volume_weight:0
+msgid "For transport, volume / rate for weight/volumes"
+msgstr "Per trasporto, volume/tasso per peso/volume"
+
+#. module: connector_web_base
+#: field:connector.server,host:0
+msgid "Host"
+msgstr "Host"
+
+#. module: connector_web_base
+#: field:connector.server,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: connector_web_base
+#: help:connector.server,add_vat:0
+msgid "If price need to be aumented with vat"
+msgstr "Se il prezzo necessita di essere aumentato con IVA"
+
+#. module: connector_web_base
+#: field:connector.server,write_uid:0
+msgid "Last Updated by"
+msgstr "Aggiornato da"
+
+#. module: connector_web_base
+#: field:connector.server,write_date:0
+msgid "Last Updated on"
+msgstr "Aggiornato il"
+
+#. module: connector_web_base
+#: field:connector.server,min_price:0
+msgid "Min price"
+msgstr "Prezzo min."
+
+#. module: connector_web_base
+#: help:connector.server,min_price:0
+msgid "Min price for uploaded product"
+msgstr "Prezzo minimo per prodotti pubblicati"
+
+#. module: connector_web_base
+#: field:connector.server,note:0
+msgid "Note"
+msgstr "Note"
+
+#. module: connector_web_base
+#: help:connector.server,approx:0
+msgid "Number of digits"
+msgstr "Numero di cifre"
+
+#. module: connector_web_base
+#: field:connector.server,password:0
+msgid "Password"
+msgstr "Password"
+
+#. module: connector_web_base
+#: field:connector.server,port:0
+msgid "Port"
+msgstr "Porta"
+
+#. module: connector_web_base
+#: model:ir.ui.menu,name:connector_web_base.menu_webserver_product
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: connector_web_base
+#: view:connector.server:connector_web_base.view_connector_server_form
+msgid "Publish all"
+msgstr "Pubblica tutto"
+
+#. module: connector_web_base
+#: field:connector.server,scheduled:0
+msgid "Scheduled"
+msgstr "Schedulato"
+
+#. module: connector_web_base
+#: model:ir.ui.menu,name:connector_web_base.menu_connector_server
+msgid "Server"
+msgstr "Server"
+
+#. module: connector_web_base
+#: field:connector.server,username:0
+msgid "Username"
+msgstr "Utente"
+
+#. module: connector_web_base
+#: field:connector.server,volume_weight:0
+msgid "Volume weight rate"
+msgstr "Tasso volume peso"
+
+#. module: connector_web_base
+#: model:ir.ui.menu,name:connector_web_base.menu_webserver_root
+msgid "Web connector"
+msgstr "Connettore web"
+
+#. module: connector_web_base
+#: field:connector.server,name:0
+msgid "Web server name"
+msgstr "Nome server web"
+
+#. module: connector_web_base
+#: model:ir.module.category,name:connector_web_base.connector_group_category
+msgid "Website Connector"
+msgstr "Connettore sito web"
+
+#. module: connector_web_base
+#: model:res.groups,name:connector_web_base.group_connector_web_manager
+msgid "Website connector Manager"
+msgstr "Gestione connettore sito web"
+
+#. module: connector_web_base
+#: model:res.groups,name:connector_web_base.group_connector_web_user
+msgid "Website connector User"
+msgstr "Utente connettore web"
+
+#. module: connector_web_base
+#: model:ir.module.category,description:connector_web_base.connector_group_category
+msgid "Website connector management."
+msgstr "Gestore connettore web"

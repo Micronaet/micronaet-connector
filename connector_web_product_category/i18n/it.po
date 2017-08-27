@@ -1,0 +1,252 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* connector_web_product_category
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-07-27 16:24+0000\n"
+"PO-Revision-Date: 2017-08-04 15:44+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: it\n"
+"X-Generator: Poedit 1.6.10\n"
+
+#. module: connector_web_product_category
+#: model:ir.actions.act_window,help:connector_web_product_category.product_public_category_action
+msgid ""
+"<p class=\"oe_view_nocontent_create\">\n"
+"                Click to define a new category.\n"
+"              </p><p>\n"
+"                Categories are used to browse your products through the\n"
+"                touchscreen interface.\n"
+"              </p><p>\n"
+"                If you put a photo on the category, the layout of the\n"
+"                touchscreen interface will automatically. We suggest not to "
+"put\n"
+"                a photo on categories for small (1024x768) screens.\n"
+"              </p>\n"
+"            "
+msgstr ""
+"<p class=\"oe_view_nocontent_create\">\n"
+"                Clicca per definire una nuova categoria.\n"
+"              </p><p>\n"
+"                Le categorie sono usate per sfogliare i tuoi prodotti "
+"attraverso l'interfaccia touch screen.\n"
+"              </p><p>\n"
+"                Se metti una foto nella cateogira, il layout "
+"dell'interfaccia \n"
+"                touchscreen sara' aggiornata automaticamente. Suggeriamo non "
+"mettere una foto\n"
+"                per categorie per i piccoli (1024x768) schermi.\n"
+"              </p>\n"
+"            "
+
+#. module: connector_web_product_category
+#: field:product.template,accessory_product_ids:0
+msgid "Accessory Products"
+msgstr "Accessori prodotto"
+
+#. module: connector_web_product_category
+#: field:product.template,alternative_product_ids:0
+msgid "Alternative Products"
+msgstr "Prodotti alternativi"
+
+#. module: connector_web_product_category
+#: help:product.template,alternative_product_ids:0
+msgid "Appear on the product page"
+msgstr "Compare nella pagina prodotto"
+
+#. module: connector_web_product_category
+#: help:product.template,accessory_product_ids:0
+msgid "Appear on the shopping cart"
+msgstr "Compare nella lista della spesa"
+
+#. module: connector_web_product_category
+#: field:product.public.category,child_id:0
+msgid "Children Categories"
+msgstr "Categorie figlio"
+
+#. module: connector_web_product_category
+#: view:product.public.category:connector_web_product_category.product_public_category_form_view
+msgid "Code"
+msgstr "Codice"
+
+#. module: connector_web_product_category
+#: help:product.public.category,start_code:0
+msgid "Code start with...: separate with |, es: 127TX|027TX|029TX"
+msgstr ""
+"Codice comincia per ...: separare con il segno: |, es: 127TX|027TX|029TX"
+
+#. module: connector_web_product_category
+#: help:product.public.category,connector_id:0
+msgid "Connector linked where category was imported (no ODOO web)"
+msgstr "Connettore collegato dove categoria viene importato (no siti ODOO)"
+
+#. module: connector_web_product_category
+#: field:product.public.category,create_uid:0
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: connector_web_product_category
+#: field:product.public.category,create_date:0
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: connector_web_product_category
+#: field:product.public.category,enabled:0
+msgid "Enabled"
+msgstr "Abilitato"
+
+#. module: connector_web_product_category
+#: constraint:product.public.category:0
+msgid "Error ! You cannot create recursive categories."
+msgstr "Errore! Non è possibile creare categorie ricorsive."
+
+#. module: connector_web_product_category
+#: help:product.public.category,sequence:0
+msgid "Gives the sequence order when displaying a list of product categories."
+msgstr ""
+"Fornisce la sequenza di ordinamento quando viene presentata una lista di "
+"categorie prodotto."
+
+#. module: connector_web_product_category
+#: field:product.public.category,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: connector_web_product_category
+#: field:product.public.category,image:0
+msgid "Image"
+msgstr "Immagine"
+
+#. module: connector_web_product_category
+#: field:product.public.category,write_uid:0
+msgid "Last Updated by"
+msgstr "Aggiornato da"
+
+#. module: connector_web_product_category
+#: field:product.public.category,write_date:0
+msgid "Last Updated on"
+msgstr "Aggiornato il "
+
+#. module: connector_web_product_category
+#: field:product.public.category,connector_id:0
+msgid "Linked connector"
+msgstr "Connettore collegato"
+
+#. module: connector_web_product_category
+#: field:product.public.category,image_medium:0
+msgid "Medium-sized image"
+msgstr "Immagine taglio medio"
+
+#. module: connector_web_product_category
+#: help:product.public.category,image_medium:0
+msgid ""
+"Medium-sized image of the category. It is automatically resized as a "
+"128x128px image, with aspect ratio preserved. Use this field in form views "
+"or some kanban views."
+msgstr ""
+"Immagine taglio medio per la categoria. E' automaticamente ridimensionata "
+"come 128 x 128 px, rispettando la proporzione. utilizza questo campo per le "
+"viste e per le kanban."
+
+#. module: connector_web_product_category
+#: field:product.public.category,complete_name:0
+#: field:product.public.category,name:0
+msgid "Name"
+msgstr "Nome"
+
+#. module: connector_web_product_category
+#: field:product.public.category,parent_id:0
+msgid "Parent Category"
+msgstr "Categoria padre"
+
+#. module: connector_web_product_category
+#: view:product.public.category:connector_web_product_category.product_public_category_tree_view
+msgid "Product Product Categories"
+msgstr "Categorie prodotto"
+
+#. module: connector_web_product_category
+#: model:ir.model,name:connector_web_product_category.model_product_template
+msgid "Product Template"
+msgstr "Modello Prodotto"
+
+#. module: connector_web_product_category
+#: view:product.public.category:connector_web_product_category.product_public_category_form_view
+msgid "Public Categories"
+msgstr "Categorie pubbliche"
+
+#. module: connector_web_product_category
+#: model:ir.model,name:connector_web_product_category.model_product_public_category
+#: field:product.template,public_categ_ids:0
+msgid "Public Category"
+msgstr "Pubblica categoria"
+
+#. module: connector_web_product_category
+#: model:ir.actions.act_window,name:connector_web_product_category.product_public_category_action
+#: model:ir.ui.menu,name:connector_web_product_category.menu_product_public_category
+msgid "Public Product Categories"
+msgstr "Categorie prodotti pubbliche"
+
+#. module: connector_web_product_category
+#: field:product.public.category,website_id:0
+msgid "Publish ID"
+msgstr "ID pubblicazione"
+
+#. module: connector_web_product_category
+#: field:product.public.category,sequence:0
+msgid "Sequence"
+msgstr "Sequenza"
+
+#. module: connector_web_product_category
+#: field:product.public.category,image_small:0
+msgid "Smal-sized image"
+msgstr "Immagine taglio piccolo"
+
+#. module: connector_web_product_category
+#: help:product.public.category,image_small:0
+msgid ""
+"Small-sized image of the category. It is automatically resized as a 64x64px "
+"image, with aspect ratio preserved. Use this field anywhere a small image is "
+"required."
+msgstr ""
+"Immagine taglio piccolo per la categoria. E' automaticamente ridimensionata "
+"come 64 x 64 px, rispettando la proporzione. utilizza questo campo per le "
+"viste e per le kanban."
+
+#. module: connector_web_product_category
+#: field:product.public.category,start_code:0
+msgid "Start code"
+msgstr "Codice partenza"
+
+#. module: connector_web_product_category
+#: help:product.public.category,image:0
+msgid ""
+"This field holds the image used as image for the category, limited to "
+"1024x1024px."
+msgstr ""
+"Questo campo contiene l'immagine usata nella categorie, limite a 1024 x 1024 "
+"px."
+
+#. module: connector_web_product_category
+#: help:product.template,public_categ_ids:0
+msgid "Those categories are used to group similar products for e-commerce."
+msgstr ""
+"Queste categorie sono usate per raggruppare prodotti simile per il commercio "
+"elettronico"
+
+#. module: connector_web_product_category
+#: model:ir.ui.menu,name:connector_web_product_category.menu_connector_public_category_website
+msgid "Web category"
+msgstr "Categorie web"
+
+#. module: connector_web_product_category
+#: view:product.product:connector_web_product_category.product_product_template_form_view
+msgid "Website"
+msgstr "Sito web"

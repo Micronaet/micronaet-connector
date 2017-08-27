@@ -1,0 +1,231 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* connector_web_product
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-07-27 16:24+0000\n"
+"PO-Revision-Date: 2017-08-04 15:30+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: it\n"
+"X-Generator: Poedit 1.6.10\n"
+
+#. module: connector_web_product
+#: view:product.publish.website.wizard:connector_web_product.product_publish_website_wizard_view
+msgid "Cancel"
+msgstr "Annulla"
+
+#. module: connector_web_product
+#: field:product.product.web.server,public_categ_id:0
+msgid "Category"
+msgstr "Categoria"
+
+#. module: connector_web_product
+#: model:ir.model,name:connector_web_product.model_connector_server
+msgid "Connector Server"
+msgstr "Connettore server"
+
+#. module: connector_web_product
+#: field:product.product.web.server,create_uid:0
+#: field:product.publish.website.wizard,create_uid:0
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: connector_web_product
+#: field:product.product.web.server,create_date:0
+#: field:product.publish.website.wizard,create_date:0
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: connector_web_product
+#: field:product.product.web.server,force_description:0
+msgid "Force Description"
+msgstr "Forza descrizione"
+
+#. module: connector_web_product
+#: field:product.product.web.server,force_ean13:0
+msgid "Force EAN13"
+msgstr "Forza EAN13"
+
+#. module: connector_web_product
+#: field:product.product.web.server,force_name:0
+msgid "Force Name"
+msgstr "Forza nome"
+
+#. module: connector_web_product
+#: view:connector.server:connector_web_product.view_prestashop_connector_form
+msgid "Force category"
+msgstr "Forza categoria"
+
+#. module: connector_web_product
+#: field:product.product.web.server,force_min_stock:0
+msgid "Force min. stock"
+msgstr "Forza stock minimo"
+
+#. module: connector_web_product
+#: field:product.product.web.server,force_price:0
+msgid "Force price"
+msgstr "Forza prezzo"
+
+#. module: connector_web_product
+#: field:product.product.web.server,force_q_x_pack:0
+msgid "Force q x pack"
+msgstr "Forza q. x scatola"
+
+#. module: connector_web_product
+#: view:product.product.web.server:connector_web_product.view_product_web_server_search
+msgid "Group By..."
+msgstr "Raggruppa per..."
+
+#. module: connector_web_product
+#: field:product.product.web.server,id:0
+#: field:product.publish.website.wizard,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: connector_web_product
+#: help:product.product.web.server,force_min_stock:0
+msgid "If product is always present set stock value when <=0"
+msgstr ""
+"Se il prodotto è sempre presente imposta il valore magazzino quando <=0"
+
+#. module: connector_web_product
+#: help:product.publish.website.wizard,published:0
+msgid "In not check remove article from web site"
+msgstr "Se non spuntato rimuove l'articolo dal sito internet"
+
+#. module: connector_web_product
+#: field:product.product.web.server,write_uid:0
+#: field:product.publish.website.wizard,write_uid:0
+msgid "Last Updated by"
+msgstr "Aggiornato da"
+
+#. module: connector_web_product
+#: field:product.product.web.server,write_date:0
+#: field:product.publish.website.wizard,write_date:0
+msgid "Last Updated on"
+msgstr "Aggiornato il"
+
+#. module: connector_web_product
+#: field:product.publish.website.wizard,mode:0
+msgid "Mode"
+msgstr "Modalità"
+
+#. module: connector_web_product
+#: code:addons/connector_web_product/wizard/publish_wizard.py:79
+#, python-format
+msgid "No default code for product: %s"
+msgstr "Manca il codice prodotto: %s"
+
+#. module: connector_web_product
+#: view:product.product.web.server:connector_web_product.view_product_web_server_search
+msgid "Not published"
+msgstr "Non pubblicato"
+
+#. module: connector_web_product
+#: selection:product.publish.website.wizard,mode:0
+msgid "Only selection"
+msgstr "Solo selezione"
+
+#. module: connector_web_product
+#: model:ir.model,name:connector_web_product.model_product_product
+#: view:product.product.web.server:connector_web_product.view_product_web_server_publish_tree
+#: view:product.product.web.server:connector_web_product.view_product_web_server_search
+#: field:product.product.web.server,product_id:0
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: connector_web_product
+#: model:ir.ui.menu,name:connector_web_product.menu_product_variants
+msgid "Product Variants"
+msgstr "Variante prodotto"
+
+#. module: connector_web_product
+#: code:addons/connector_web_product/wizard/publish_wizard.py:78
+#, python-format
+msgid "Product error"
+msgstr "Errore prodotto"
+
+#. module: connector_web_product
+#: model:ir.model,name:connector_web_product.model_product_product_web_server
+msgid "Product web"
+msgstr "Prodotto web"
+
+#. module: connector_web_product
+#: view:product.publish.website.wizard:connector_web_product.product_publish_website_wizard_view
+#: selection:product.publish.website.wizard,mode:0
+msgid "Publish"
+msgstr "Pubblica"
+
+#. module: connector_web_product
+#: view:product.product.web.server:connector_web_product.view_product_web_server_publish_form
+#: view:product.product.web.server:connector_web_product.view_product_web_server_publish_tree
+msgid "Publish now"
+msgstr "Pubblica ora"
+
+#. module: connector_web_product
+#: model:ir.actions.act_window,name:connector_web_product.action_product_publish_website_wizard_form
+msgid "Publish wizard"
+msgstr "Wizard pubblicazione"
+
+#. module: connector_web_product
+#: model:ir.actions.act_window,name:connector_web_product.action_product_published
+#: model:ir.ui.menu,name:connector_web_product.menu_product_web_published
+#: view:product.product.web.server:connector_web_product.view_product_web_server_search
+#: field:product.product.web.server,published:0
+#: field:product.publish.website.wizard,published:0
+msgid "Published"
+msgstr "Pubblicato"
+
+#. module: connector_web_product
+#: view:product.product.web.server:connector_web_product.view_product_web_server_publish_form
+msgid "Server web"
+msgstr "Server web"
+
+#. module: connector_web_product
+#: field:product.product.web.server,connector_id:0
+msgid "Web Server"
+msgstr "Server Web"
+
+#. module: connector_web_product
+#: view:product.product.web.server:connector_web_product.view_product_web_server_search
+msgid "Web category"
+msgstr "Categoria web"
+
+#. module: connector_web_product
+#: view:product.product.web.server:connector_web_product.view_product_web_server_search
+msgid "Web product"
+msgstr "Prodotto web"
+
+#. module: connector_web_product
+#: model:ir.actions.act_window,name:connector_web_product.act_product_publish_website_wizard
+msgid "Web publish"
+msgstr "Pubblicazione web"
+
+#. module: connector_web_product
+#: field:product.product,web_server_ids:0
+#: view:product.product.web.server:connector_web_product.view_product_web_server_search
+msgid "Web server"
+msgstr "Server web"
+
+#. module: connector_web_product
+#: view:product.product:connector_web_product.view_product_web_publish_form
+msgid "Web server:"
+msgstr "Server web:"
+
+#. module: connector_web_product
+#: field:product.publish.website.wizard,webserver_id:0
+msgid "Webserver"
+msgstr "Server web"
+
+#. module: connector_web_product
+#: view:product.publish.website.wizard:connector_web_product.product_publish_website_wizard_view
+msgid "Wizard"
+msgstr "Wizard"

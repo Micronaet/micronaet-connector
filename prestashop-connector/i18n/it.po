@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-15 08:05+0000\n"
-"PO-Revision-Date: 2017-06-15 10:09+0100\n"
+"POT-Creation-Date: 2017-07-27 16:30+0000\n"
+"PO-Revision-Date: 2017-08-07 13:48+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Poedit 1.6.10\n"
 
 #. module: prestashop-connector
-#: code:addons/prestashop-connector/prestashop.py:538
+#: code:addons/prestashop-connector/prestashop.py:540
 #, python-format
 msgid ""
 "\n"
@@ -66,18 +66,13 @@ msgid "Always present in web site selection"
 msgstr "Sempre presente nella selezione del sito internet"
 
 #. module: prestashop-connector
-#: help:connector.server,scheduled:0
-msgid "Auto import schedule operation"
-msgstr "Importa automaticamente nelle operazioni schedulate"
-
-#. module: prestashop-connector
 #: model:ir.model,name:prestashop-connector.model_connector_server
 msgid "Connector Server"
 msgstr "Server connettore"
 
 #. module: prestashop-connector
 #: code:addons/prestashop-connector/prestashop.py:476
-#: code:addons/prestashop-connector/prestashop.py:518
+#: code:addons/prestashop-connector/prestashop.py:520
 #, python-format
 msgid "Error connecting server, check xmlrpc listner!"
 msgstr "Errore connettendosi al server, agente non in stato di attesa!"
@@ -86,16 +81,6 @@ msgstr "Errore connettendosi al server, agente non in stato di attesa!"
 #: view:connector.server:prestashop-connector.view_prestashop_connector_form
 msgid "Load category"
 msgstr "Carica categoria"
-
-#. module: prestashop-connector
-#: field:connector.server,min_price:0
-msgid "Min price"
-msgstr "Prezzo min."
-
-#. module: prestashop-connector
-#: help:connector.server,min_price:0
-msgid "Min price for uploaded product"
-msgstr "Prezzo minimo per prodotti pubblicati"
 
 #. module: prestashop-connector
 #: field:connector.server,prestashop:0
@@ -108,7 +93,7 @@ msgid "Prestashop order admin"
 msgstr "Prestashop amministratore ordini"
 
 #. module: prestashop-connector
-#: code:addons/prestashop-connector/prestashop.py:582
+#: code:addons/prestashop-connector/prestashop.py:584
 #, python-format
 msgid "Prestashop order from %s"
 msgstr "Ordini in Prestashop dalla data: %s"
@@ -116,7 +101,7 @@ msgstr "Ordini in Prestashop dalla data: %s"
 #. module: prestashop-connector
 #: help:connector.server,prestashop:0
 msgid "Prestashop web server"
-msgstr "Wed server Prestashop"
+msgstr "Web server Prestashop"
 
 #. module: prestashop-connector
 #: model:ir.model,name:prestashop-connector.model_product_product
@@ -159,11 +144,6 @@ msgid "Rsync user"
 msgstr "Rsync utente"
 
 #. module: prestashop-connector
-#: field:connector.server,scheduled:0
-msgid "Scheduled"
-msgstr "Schedulato"
-
-#. module: prestashop-connector
 #: view:connector.server:prestashop-connector.view_prestashop_connector_form
 msgid "Select stock product"
 msgstr "Seleziona prodotti magazzino"
@@ -175,7 +155,7 @@ msgstr "Upload tutte le foto"
 
 #. module: prestashop-connector
 #: code:addons/prestashop-connector/prestashop.py:475
-#: code:addons/prestashop-connector/prestashop.py:517
+#: code:addons/prestashop-connector/prestashop.py:519
 #, python-format
 msgid "XMRLPC"
 msgstr "XMRLPC"
