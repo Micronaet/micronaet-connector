@@ -378,6 +378,7 @@ class ProductProductWebServer(orm.Model):
         '''
         prestashop_ids = []
         odoo_ids = []
+        import pdb; pdb.set_trace()
         for product in self.browse(cr, uid, ids, context=context):
             if product.connector_id.prestashop:
                 prestashop_ids.append(product.id)
