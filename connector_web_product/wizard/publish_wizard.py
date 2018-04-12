@@ -48,7 +48,6 @@ class ProductPublishWebsiteWizard(orm.TransientModel):
     def action_publish(self, cr, uid, ids, context=None):
         ''' Event for button done
         '''
-        import pdb; pdb.set_trace()
         if context is None:
             context = {}        
         
