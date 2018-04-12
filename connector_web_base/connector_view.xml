@@ -29,6 +29,7 @@
                             <field name="discount" />
                             <field name="availability_extra" />
                             <field name="add_vat" />
+                            <field name="min_price" />
 
                             <field name="approx" />
                             <field name="volume_weight" />
@@ -54,6 +55,7 @@
                     <field name="availability_extra" />
                     <field name="add_vat" />
                     <field name="approx" />
+                    <field name="min_price" />
                     <field name="volume_weight" />
                 </tree>
             </field>
