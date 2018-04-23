@@ -333,11 +333,9 @@ class mysql_connector():
             query = self._prepare_mysql_query(
                 update_where, record, 'image_lang', field_quote)
             cr = connection.cursor()
-            try:
-                cr.execute(query)
-                connection.commit()        
-            except:
-                print '[ERROR] No updating image! %s' % query
+            # XXX
+            cr.execute(query)
+            connection.commit()        
 
         # ---------------------------------------------------------------------
         # Create image_shop
