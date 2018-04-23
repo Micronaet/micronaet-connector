@@ -87,20 +87,27 @@ class ProductProductWebServer(orm.Model):
         return True
 
     def schedule_publish_prestashop_now_all(self, cr, uid, only_selected=True,
-            context=None):
+            without_image=True, context=None):
         ''' Search web server and publish 
             context: force_one is used for publish a connector via button
         '''
         if context is None:
             context = {}
         
-        # Force only manual selection without recalc:
+        # ---------------------------------------------------------------------
+        # Parameter from schedule operation:
+        # ---------------------------------------------------------------------
+        # Setup context (write)
         if only_selected:
-            context['only_selected'] = True
-            
+            context['only_selected'] = only_selected
+        if without_image:
+            context['without_image'] = without_image
+
+        # Get from context (read):    
         force_one = context.get('force_one', False)
         
         # TODO move in connector
+        # Force only manual selection withuot recalc:
         server_pool = self.pool.get('connector.server')
         if force_one:
             server_ids = force_one
@@ -150,6 +157,7 @@ class ProductProductWebServer(orm.Model):
         connector_pool = self.pool.get('connector.server')
         if context is None:    
             context = {}
+        without_image = context.get('without_image', False)    
 
         # Context used here:    
         db_context = context.copy()
@@ -214,7 +222,8 @@ class ProductProductWebServer(orm.Model):
                 error = 'Image not found: %s' % image_in_fullname
                 _logger.error(error)                
                 WS.write(i, 4, error)
-                continue
+                if not without_image: # publish without image:
+                    continue 
             
             if not item.product_id.large_description:    
                 error = 'Web description not found: %s' % default_code
@@ -228,28 +237,33 @@ class ProductProductWebServer(orm.Model):
                 WS.write(i, 4, error)
                 continue               
                 
-            _logger.info('Start publish: %s' % product.default_code)     
-                            
             # Enable log:
+            _logger.info('Start publish: %s' % product.default_code)     
             sock.execute('system', 'log', True)
-            
-            # Rsync data image file: XXX choose if needed
-            chown = ' --chown %s' % connector.rsync_chown if \
-                connector.rsync_chown else ''
-            chmod = ' --chmod %s' % connector.rsync_chmod if \
-                connector.rsync_chmod else ''
-            rsync_command = \
-                'rsync%s%s -avh -e \'ssh -p %s\' \'%s\' %s@%s:%s' % (
-                    chown,
-                    chmod,
-                    connector.rsync_port,
-                    image_in_fullname, 
-                    connector.rsync_user, 
-                    connector.host,
-                    connector.rsync_path,
-                    )
-            os.system(rsync_command)
-            _logger.info('Launched: %s' % rsync_command)
+
+            # -----------------------------------------------------------------
+            # Publish image (test):
+            # -----------------------------------------------------------------
+            if without_image:
+                _logger.info('No image mode: %s' % product.default_code)                
+            else:
+                # Rsync data image file: XXX choose if needed
+                chown = ' --chown %s' % connector.rsync_chown if \
+                    connector.rsync_chown else ''
+                chmod = ' --chmod %s' % connector.rsync_chmod if \
+                    connector.rsync_chmod else ''
+                rsync_command = \
+                    'rsync%s%s -avh -e \'ssh -p %s\' \'%s\' %s@%s:%s' % (
+                        chown,
+                        chmod,
+                        connector.rsync_port,
+                        image_in_fullname, 
+                        connector.rsync_user, 
+                        connector.host,
+                        connector.rsync_path,
+                        )
+                os.system(rsync_command)
+                _logger.info('Launched: %s' % rsync_command)
 
             # -----------------------------------------------------------------
             # Price evaulation:
