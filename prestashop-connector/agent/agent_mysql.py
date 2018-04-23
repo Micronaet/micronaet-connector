@@ -275,7 +275,6 @@ class mysql_connector():
     def write_image(self, record_data, reference, update_image=False):
         ''' Create image record for product and generate image in asked
         '''
-        import pdb; pdb.set_trace()
         connection = self.get_connection()
         if not connection:
             return False
@@ -334,8 +333,11 @@ class mysql_connector():
             query = self._prepare_mysql_query(
                 update_where, record, 'image_lang', field_quote)
             cr = connection.cursor()
-            cr.execute(query)
-            connection.commit()        
+            try:
+                cr.execute(query)
+                connection.commit()        
+            except:
+                print '[ERROR] No updating image! %s' % query
 
         # ---------------------------------------------------------------------
         # Create image_shop
