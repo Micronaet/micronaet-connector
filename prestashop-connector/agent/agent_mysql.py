@@ -542,7 +542,6 @@ class mysql_connector():
             record: data of product
             lang_record: dict with ID lang: dict of valued
         '''
-        import pdb; pdb.set_trace()
         # Parameter liste explode:
         record_data = parameter[0]
         lang_record_db = parameter[1] 
