@@ -93,7 +93,6 @@ class ProductProductWebServer(orm.Model):
         '''
         if context is None:
             context = {}
-        import pdb; pdb.set_trace()    
         
         # Force only manual selection without recalc:
         if only_selected:
