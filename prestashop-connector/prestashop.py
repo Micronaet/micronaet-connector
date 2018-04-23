@@ -157,7 +157,8 @@ class ProductProductWebServer(orm.Model):
         connector_pool = self.pool.get('connector.server')
         if context is None:    
             context = {}
-        without_image = context.get('without_image', False)    
+        without_image = context.get('without_image', False)   
+        import pdb; pdb.set_trace() 
 
         # Context used here:    
         db_context = context.copy()
