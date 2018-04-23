@@ -275,6 +275,7 @@ class mysql_connector():
     def write_image(self, record_data, reference, update_image=False):
         ''' Create image record for product and generate image in asked
         '''
+        import pdb; pdb.set_trace()
         connection = self.get_connection()
         if not connection:
             return False
@@ -542,7 +543,6 @@ class mysql_connector():
             record: data of product
             lang_record: dict with ID lang: dict of valued
         '''
-        import pdb; pdb.set_trace()
         # Parameter liste explode:
         record_data = parameter[0]
         lang_record_db = parameter[1] 
