@@ -68,6 +68,12 @@ class ProductProductWebServer(orm.Model):
         ''' Auto select product with son particular case
             Overrided depend on company rules
         '''
+        if context is None:
+            context = {}
+        only_selected = context.get('only_selected')
+        if only_selected:
+            return True # Do nothing
+            
         product_pool = self.pool.get('product.product')
 
         # Procedure that create connector product elements:

@@ -86,12 +86,19 @@ class ProductProductWebServer(orm.Model):
         # XXX overrided!
         return True
 
-    def schedule_publish_prestashop_now_all(self, cr, uid, context=None):
+    def schedule_publish_prestashop_now_all(self, cr, uid, only_selected=True,
+            context=None):
         ''' Search web server and publish 
             context: force_one is used for publish a connector via button
         '''
         if context is None:
             context = {}
+        import pdb; pdb.set_trace()    
+        
+        # Force only manual selection without recalc:
+        if only_selected:
+            context['only_selected'] = True
+            
         force_one = context.get('force_one', False)
         
         # TODO move in connector
