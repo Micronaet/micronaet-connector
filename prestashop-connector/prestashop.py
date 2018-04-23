@@ -244,7 +244,6 @@ class ProductProductWebServer(orm.Model):
             # -----------------------------------------------------------------
             # Publish image (test):
             # -----------------------------------------------------------------
-            import pdb; pdb.set_trace()
             if without_image:
                 _logger.info('No image mode: %s' % product.default_code)                
             else:
@@ -380,7 +379,6 @@ class ProductProductWebServer(orm.Model):
                         
             # TODO product.mx_net_mrp_qty (for materials)?
             WS.write(i, 3, availability)
-            import pdb; pdb.set_trace()
             id_product = sock.execute(
                 # List parameters:
                 'product', 'create', # Operation
