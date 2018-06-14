@@ -91,7 +91,6 @@ class ProductProductWebServer(orm.Model):
         ''' Search web server and publish 
             context: force_one is used for publish a connector via button
         '''
-        import pdb; pdb.set_trace()
         if context is None:
             context = {}
         
@@ -203,6 +202,7 @@ class ProductProductWebServer(orm.Model):
         WS.write(0, 4, 'Errore')
 
         i = 0
+        import pdb; pdb.set_trace()
         for item in self.browse(cr, uid, ids, context=db_context):
             i += 1
 
@@ -220,7 +220,10 @@ class ProductProductWebServer(orm.Model):
                 )
             image_in_fullname = os.path.join(path_image_in, image_in)
             if not os.path.isfile(image_in_fullname):
-                error = 'Image not found: %s' % image_in_fullname
+                error = 'Image not found: %s%s' % (
+                    image_in_fullname,
+                    ' (not necessary)' if without_image else '',
+                    )
                 _logger.error(error)                
                 WS.write(i, 4, error)
                 if not without_image: # publish without image:
