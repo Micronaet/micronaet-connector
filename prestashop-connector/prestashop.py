@@ -202,7 +202,6 @@ class ProductProductWebServer(orm.Model):
         WS.write(0, 4, 'Errore')
 
         i = 0
-        import pdb; pdb.set_trace()
         for item in self.browse(cr, uid, ids, context=db_context):
             i += 1
 
