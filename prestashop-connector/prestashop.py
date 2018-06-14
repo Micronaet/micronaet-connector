@@ -91,6 +91,7 @@ class ProductProductWebServer(orm.Model):
         ''' Search web server and publish 
             context: force_one is used for publish a connector via button
         '''
+        import pdb; pdb.set_trace()
         if context is None:
             context = {}
         
