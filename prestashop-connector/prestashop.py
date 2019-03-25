@@ -630,8 +630,7 @@ class ProductPublicCategory(orm.Model):
     """
     
     _inherit = 'product.public.category'
-    
-    
+        
     _columns = {
         #'prestashop': fields.boolean('Prestashop', help='Prestashop category'),
         # Use website_id!

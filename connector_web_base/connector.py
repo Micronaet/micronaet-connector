@@ -62,16 +62,16 @@ class ConnectorServer(orm.Model):
             else:
                 res += '#'           
         return res
-        
+
     _columns = {
         'scheduled': fields.boolean(
             'Scheduled', help='Auto import schedule operation'),
         'name': fields.char('Web server name', size=64, required=True),
-        'host': fields.char('Host', size=100, required=True),
-        'port': fields.integer('Port', required=True),        
-        'database': fields.char('Database', size=100, required=True),
-        'username': fields.char('Username', size=100, required=True),
-        'password': fields.char('Password', size=100, required=True),        
+        'host': fields.char('Host', size=100),
+        'port': fields.integer('Port'),
+        'database': fields.char('Database', size=100),
+        'username': fields.char('Username', size=100),
+        'password': fields.char('Password', size=100),
         'discount': fields.float('Discount', digits=(16, 3), 
             help='Discount on price not forced'),            
         'volume_weight': fields.float('Volume weight rate', digits=(16, 3), 
