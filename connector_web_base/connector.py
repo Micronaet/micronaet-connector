@@ -89,7 +89,7 @@ class ConnectorServer(orm.Model):
         'company_id': fields.many2one('res.company', 'Company', required=True),         
         'note': fields.text('Note'),
         'album_id': fields.many2one(
-            'product.image.album', 'Album', required=True),
+            'product.image.album', 'Album'),
         }
 
     _defaults = {
