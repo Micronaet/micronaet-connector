@@ -3,6 +3,23 @@
     <data>
     
         <!-- Product Public Categories -->
+        <record model="ir.ui.view" id="view_product_public_category_search">
+            <field name="name">product.public.category.search</field>
+            <field name="model">product.public.category</field>
+            <field name="arch" type="xml">
+                <search string="String" version="7.0">        
+                    <field name="name" />                    
+                    <field name="parent_id" filter_domain="[('parent_id','=',self)]"/>
+                    <field name="connector_id" filter_domain="[('connector_id','=',self)]"/>
+                    <filter name="state_enabled" string="Enabled" domain="[('enabled','=',True)]"/>
+                    <filter name="state_disabled" string="Disabled" domain="[('enabled','=',False)]"/>
+                    <group expand="0" string="Group By...">
+                        <filter name="group_parent" string="Parent" context="{'group_by': 'parent_id'}"/>
+                        <filter name="group_connector" string="Connector" context="{'group_by': 'connector_id'}"/>
+                    </group>                
+                </search>
+            </field>
+        </record>
         <record id="product_public_category_form_view" model="ir.ui.view">
             <field name="name">product.public.category.form</field>
             <field name="model">product.public.category</field>
