@@ -313,24 +313,24 @@ class ProductProductWebServer(orm.Model):
                 }                
 
             # Check Web presence for product:
-                if rpc_product_proxy:
-                    product_ids = [p.id for p in rpc_product_proxy]
-                    try:
-                        rpc_product.write(
-                            product_ids, product_data)
-                        _logger.info('Update web %s product %s' % (
-                            rpc_database, default_code))
-                    except:
-                        _logger.error('Not update web %s product %s' % (
-                            rpc_database, default_code))
-                else:
-                    product_ids = rpc_product.create(product_data).id
-                    try:
-                        _logger.info('Create web %s product %s' % (
-                            rpc_database, default_code))
-                    except:
-                        _logger.error('Not created web %s product %s' % (
-                            rpc_database, default_code))
+            if rpc_product_proxy:
+                product_ids = [p.id for p in rpc_product_proxy]
+                try:
+                    rpc_product.write(
+                        product_ids, product_data)
+                    _logger.info('Update web %s product %s' % (
+                        rpc_database, default_code))
+                except:
+                    _logger.error('Not update web %s product %s' % (
+                        rpc_database, default_code))
+            else:
+                product_ids = rpc_product.create(product_data).id
+                try:
+                    _logger.info('Create web %s product %s' % (
+                        rpc_database, default_code))
+                except:
+                    _logger.error('Not created web %s product %s' % (
+                        rpc_database, default_code))
             rpc_default_code[default_code] = product_ids
                     
             # Language update loop data:
