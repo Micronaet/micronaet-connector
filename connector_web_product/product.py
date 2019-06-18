@@ -101,7 +101,7 @@ class ConnectorServer(orm.Model):
             return False
             
         # Call button event for publish all elements:
-        _logger.error('Publishing %s elements' % len(item_ids))
+        _logger.info('Publishing %s elements' % len(item_ids))
         item_pool.publish_now(cr, uid, item_ids, context=context)
         _logger.info('End all ODOO web publish:')
         return True
