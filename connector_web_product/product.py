@@ -324,8 +324,8 @@ class ProductProductWebServer(orm.Model):
                     _logger.error('Not update web %s product %s' % (
                         rpc_database, default_code))
             else:
-                product_ids = rpc_product.create(product_data).id
                 try:
+                    product_ids = rpc_product.create(product_data).id
                     _logger.info('Create web %s product %s' % (
                         rpc_database, default_code))
                 except:
