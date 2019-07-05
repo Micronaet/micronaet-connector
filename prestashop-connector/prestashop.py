@@ -202,8 +202,8 @@ class ProductProductWebServer(orm.Model):
         WS.write(0, 4, 'Errore')
 
         i = 0
-        # LOG: 
-        f_log_image = open('/tmp/prestashop_log_no_image', 'w')
+        # XXX LOG: 
+        # f_log_image = open('/tmp/prestashop_log_no_image', 'w')
         for item in self.browse(cr, uid, ids, context=db_context):
             i += 1
 
@@ -312,7 +312,7 @@ class ProductProductWebServer(orm.Model):
                 active = item.published
             else:
                 _logger.error('Deactivated for image: %s' % default_code)
-                f_log_image.write('Rimosso: %s' % default_code)
+                #f_log_image.write('Rimosso: %s' % default_code)
                 active = False
             record = {
                 'reference': default_code or '', 
