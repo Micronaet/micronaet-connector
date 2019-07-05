@@ -96,9 +96,12 @@ class ConnectorServer(orm.Model):
             ('connector_id', '=', ids[0]),
             ], context=context)
         
-        if not item_ids:            
+        if item_ids:                        
+            _logger.error('Update %s records!' % len(item_ids))
+        else: 
             _logger.error('Nothing to publish!')
             return False
+            
             
         # Call button event for publish all elements:
         _logger.info('Publishing %s elements' % len(item_ids))

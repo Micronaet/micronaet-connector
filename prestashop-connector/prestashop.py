@@ -218,15 +218,18 @@ class ProductProductWebServer(orm.Model):
                 'jpg',
                 )
             image_in_fullname = os.path.join(path_image_in, image_in)
+            image_found = True
             if not os.path.isfile(image_in_fullname):
+                image_found = False                
                 error = 'Image not found: %s%s' % (
                     image_in_fullname,
                     ' (not necessary)' if without_image else '',
                     )
                 _logger.error(error)                
                 WS.write(i, 4, error)
-                if not without_image: # publish without image:
-                    continue 
+                # XXX Changed for unpublish article
+                #if not without_image: # publish without image:
+                #    continue 
             
             if not item.product_id.large_description:    
                 error = 'Web description not found: %s' % default_code
@@ -302,6 +305,11 @@ class ProductProductWebServer(orm.Model):
             else:
                 weight = product.weight                
             
+            # XXX Only product with image will be published!
+            if image_found:
+                active = item.published
+            else:
+                active = False
             record = {
                 'reference': default_code or '', 
                 'ean13': product.ean13 or '',
@@ -309,7 +317,7 @@ class ProductProductWebServer(orm.Model):
                 'height': h,
                 'width': w,
                 'depth': l,
-                'active': item.published,
+                'active': active, # item.published,
                 # Extra:
                 #'q_x_pack': product.q_x_pack,
                 #'vat_price': price,
