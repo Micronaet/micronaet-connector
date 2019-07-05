@@ -309,6 +309,7 @@ class ProductProductWebServer(orm.Model):
             if image_found:
                 active = item.published
             else:
+                _logger.error('Deactivated for image: %s' % default_code)
                 active = False
             record = {
                 'reference': default_code or '', 
