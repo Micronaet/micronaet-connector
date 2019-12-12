@@ -115,7 +115,7 @@ class ProductProductWebServer(orm.Model):
 
     _name = 'product.product.web.server'
     _description = 'Product web'
-    _rec_name = 'connector_id'
+    _rec_name = 'product_id'
     
     # XXX Parematers:
     _langs = ['it_IT', 'en_US']
