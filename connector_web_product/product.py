@@ -376,8 +376,8 @@ class ProductProductWebServer(orm.Model):
         # TODO extra list of category?    
         
         # Force field
-        'force_name': fields.char('Force Name', size=64),
-        'force_description': fields.text('Force Description'),
+        'force_name': fields.char('Force Name', size=64, translate=True),
+        'force_description': fields.text('Force Description', translate=True),
         'force_q_x_pack': fields.integer('Force q x pack'),
         'force_ean13': fields.char('Force EAN13', size=13),
         'force_price': fields.float('Force price', digits=(16, 2)),
