@@ -110,6 +110,9 @@ class ProductPublicCategory(osv.osv):
             'image': tools.image_resize_image_big(value)}, context=context)
 
     _columns = {
+        'code': fields.char(
+            'Sigla', size=10, required=True,
+            help='Sigla utilizzata nelle importazioni'),
         'enabled': fields.boolean('Enabled'),
         'name': fields.char('Name', required=True, translate=True),
         'complete_name': fields.function(
@@ -154,6 +157,7 @@ class ProductPublicCategory(osv.osv):
         'start_code': fields.text('Start code', 
             help='Code start with...: separate with |, es: 127TX|027TX|029TX'),    
         }
+
     
 class ProductTemplate(orm.Model):
     ''' Model name: Product template extra for website
