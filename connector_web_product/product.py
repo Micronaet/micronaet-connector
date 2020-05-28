@@ -381,6 +381,10 @@ class ProductProductWebServer(orm.Model):
         'force_q_x_pack': fields.integer('Force q x pack'),
         'force_ean13': fields.char('Force EAN13', size=13),
         'force_price': fields.float('Force price', digits=(16, 2)),
+        'force_discounted': fields.float(
+            'Forza prezzo scontato', digits=(16, 2), 
+            help='''Indicare il prezzo scontato per fare vedere quello 
+                    ufficiale barrato sul front end'''),
         'force_min_stock': fields.float('Force min. stock', digits=(16, 2), 
             help='If product is always present set stock value when <=0'),
         # TODO

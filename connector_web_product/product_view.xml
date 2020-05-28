@@ -58,6 +58,7 @@
                     <field name="force_q_x_pack" />
                     <field name="force_ean13" />
                     <field name="force_price" />
+                    <field name="force_discounted" />
                     <field name="force_min_stock" />
                     <button name="publish_now" string="Publish now" type="object" />
                 </tree>
@@ -81,6 +82,7 @@
                             <field name="force_q_x_pack" />
                             <field name="force_ean13" />
                             <field name="force_price" />
+                            <field name="force_discounted" />
                             <field name="force_min_stock" />
                         </group>    
                     </sheet>
