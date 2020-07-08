@@ -398,7 +398,6 @@ class ProductProductWebServer(orm.Model):
        'published': lambda *a: True,
         }
 
-
 class ProductProduct(orm.Model):
     """ Model name: ProductProduct
     """
