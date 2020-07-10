@@ -60,6 +60,7 @@
                     <field name="force_price" />
                     <field name="force_discounted" />
                     <field name="force_min_stock" />
+                    <field name="force_manual_stock" />
                     <field name="force_this_stock" />
                     <button name="publish_now" string="Publish now" type="object" />
                 </tree>
@@ -85,6 +86,7 @@
                             <field name="force_price" />
                             <field name="force_discounted" />
                             <field name="force_min_stock" />
+                            <field name="force_manual_stock" />
                             <field name="force_this_stock" />
                         </group>    
                     </sheet>

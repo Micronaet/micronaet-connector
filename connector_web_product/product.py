@@ -387,6 +387,9 @@ class ProductProductWebServer(orm.Model):
                     ufficiale barrato sul front end (ivato)'''),
         'force_min_stock': fields.float('Force min. stock', digits=(16, 2), 
             help='If product is always present set stock value when <=0'),
+        'force_manual_stock':fields.boolean(
+            'Gestione manuale magazzino', 
+            help='Attiva la gestione manuale del magazzino')
         'force_this_stock': fields.float(
             'Forza questo magazzino', digits=(16, 2), 
             help='Viene forzato la quantità indicata come magazzino '
